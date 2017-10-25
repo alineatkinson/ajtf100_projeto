@@ -8,68 +8,111 @@ public class Screen {
 
 		Printer printer = new Printer();
 		Console reader = new Console();
-		int resposta1, resposta2, resposta3, respBarCodeItem, respCodeSupermarket;
+		int resposta1, resposta2, resposta3, resposta4, respBarCodeItem, respCodeSupermarket;
 		int codeSupermarket, codeBarItem;
 		String codeUser;
-		ItemController controllerItem = new ItemController();
-		SupermarketController controllerSuperarket = new SupermarketController();
-		UserController controllerUser = new UserController();
+		ItemControllerConsole controllerItemConsole = new ItemControllerConsole();
+		SupermarketControllerConsole controllerSuperarketConsole = new SupermarketControllerConsole();
+		UserControllerConsole controllerUserConsole = new UserControllerConsole();
+		TakingPriceControllerConsole controladorTomadaPrecoConsole = new TakingPriceControllerConsole();
 
 		do {
 
 			printer.printMsg("Digite o que deseja fazer: \n" + "1. Cadastrar usuário \n" + "2. Cadastrar item \n"
-					+ "3. Cadastrar supermercado \n" + "4. Comparar preços \n" + "5. Calcular compra \n" + "6. Cadastrar tomada de preço \n");
+					+ "3. Cadastrar supermercado \n" + "4. Comparar preços \n" + "5. Calcular compra \n"
+					+ "6. Cadastrar tomada de preço \n" + "7. Editar um item. \n" + "8. Editar um usuário. \n"
+					+ "9. Editar um supermercado. \n" + "10. Editar uma tomada de preço. \n" + "11. Excluir um item. \n"
+					+ "12. Excluir um usuário. \n" + "13. Excluir um supermercado. \n"
+					+ "14. Excluir uma tomada de preço. \n" + "15. Imprime todos os itens. \n"
+					+ "16. Imprime todos os usuários. \n" + "17. Imprime todos os supermercados. \n"
+					+ "18. Imprime todas as tomadas de preço. ");
 			resposta1 = reader.readNumber();
 
 			switch (resposta1) {
 			case 1:
-				System.out.println("Opção 1 selecionada: 1. Cadastrar usuário");
-				codeUser = controllerUser.createUser();
+				System.out.println("Opção 1 selecionada: 1. Cadastrar usuário. ");
+				codeUser = controllerUserConsole.createUser();
 				break;
-
 			case 2:
-				System.out.println("Opção 2 selecionada: 2. Cadastrar item");
-				codeBarItem = controllerItem.createItem();
+				System.out.println("Opção 2 selecionada: 2. Cadastrar item. ");
+				codeBarItem = controllerItemConsole.createItem();
 				break;
-
 			case 3:
-				System.out.println("Opção 3 selecionada: 3. Cadastrar supermercado");
-				codeSupermarket = controllerSuperarket.createSupermarket();
+				System.out.println("Opção 3 selecionada: 3. Cadastrar supermercado. ");
+				codeSupermarket = controllerSuperarketConsole.createSupermarket();
 				break;
-
 			case 4:
-				System.out.println("Opção 4 selecionada: 4. Comparar preços");
+				System.out.println("Opção 4 selecionada: 4. Comparar preços. ");
 				break;
-
 			case 5:
-				System.out.println("Opção 5 selecionada: 5. Calcular compra");
+				System.out.println("Opção 5 selecionada: 5. Calcular compra. ");
 				break;
-
 			case 6:
 				printer.printMsg(
-						"Opção 6. Você deseja cadastrar o preço do item para futuras comparações? (1 = SIM | 2 = Não)");
+						"Opção 6. Você deseja cadastrar o preço do item para futuras comparações? (1 = SIM | 2 = Não). ");
 				resposta3 = reader.readNumber();
 				if (resposta3 == 1) {
-					TakingPriceController controladorTomadaPreco = new TakingPriceController();
-					controllerSuperarket.imprimeDados();
+					controllerSuperarketConsole.printData();
 					printer.printMsg("Selecione o código do supermercado do item: ");
 					respBarCodeItem = reader.readNumber();
 
-					controllerItem.imprimeDados();
+					controllerItemConsole.printData();
 					printer.printMsg("Selecione o código do item: ");
 					respCodeSupermarket = reader.readNumber();
-					controladorTomadaPreco.createTomadaDePreco(respBarCodeItem, respCodeSupermarket);
-					controladorTomadaPreco.imprimeDados();
+					controladorTomadaPrecoConsole.createTomadaDePreco(respBarCodeItem, respCodeSupermarket);
+					controladorTomadaPrecoConsole.printData();
 				}
-			default:
-				printer.printMsg("Nenhuma opção válida foi digitada.");
-			}
+				break;
+			case 7:
+				printer.printMsg("Opção 7 selecionada: Editar um item. ");
+				break;
+			case 8:
+				printer.printMsg("Opção 8 selecionada: Editar um usuário. ");
+				controllerUserConsole.editUser();
+				break;
+			case 9:
+				printer.printMsg("Opção 9 selecionada: Editar um supermercado. ");
+				break;
+			case 10:
+				printer.printMsg("Opção 10 selecionada: Editar uma tomada de preço. ");
+				break;
+			case 11:
+				printer.printMsg("Opção 11 selecionada: Excluir um item. ");
+				break;
+			case 12:
+				printer.printMsg("Opção 12 selecionada: Excluir um usuário. ");
+				controllerUserConsole.deleteUser();
+				break;
+			case 13:
+				printer.printMsg("Opção 13 selecionada: Excluir um supermercado.");
+				break;
+			case 14:
+				printer.printMsg("Opção 14 selecionada: Excluir uma tomada de preço.");
+				break;
+			case 15:
+				printer.printMsg("Opção 15 selecionada: Imprime todos os itens");
+				controllerItemConsole.printData();
+				break;
+			case 16:
+				printer.printMsg("Opção 16 selecionada: Imprime todos os usuários.");
+				// codeUser = controllerUserConsole.createUser();
+				controllerUserConsole.listUsers();
+				break;
+			case 17:
+				printer.printMsg("Opção 17 selecionada: Imprime todos os supermercados.");
+				controllerSuperarketConsole.printData();
+				break;
+			case 18:
+				printer.printMsg("Opção 18 selecionada: Imprime todas as tomadas de preço.");
+				controladorTomadaPrecoConsole.printData();
+				break;
 
-			printer.printMsg("Deseja rever o menu? (1 = SIM | 2 = Não)");
+			default:
+				printer.printMsg("Nenhuma opção válida foi digitada.\n");
+			}
+			printer.printMsg("Deseja utilizar a aplicação novamente? (1 = SIM | 2 = Não) \n");
 			resposta2 = reader.readNumber();
 		} while (resposta2 != 2);
-
-		printer.printMsg("Deseja utilizar a aplicação novamente? (1 = SIM | 2 = Não)");
 
 	}
 }

@@ -4,27 +4,27 @@ public class Printer {
 	 * Print a message
 	 */
 	public void printMsg(String msg) {
-		System.out.print(msg);
+		System.out.println(msg);
 	}
 
 	/**
 	 * Print a integer number
 	 */
 	public void printMsg(int number) {
-		System.out.print(number);
+		System.out.println(number);
 	}
 
 	/**
 	 * Print a long number
 	 */
 	public void printMsg(long number) {
-		System.out.print(number);
+		System.out.println(number);
 	}
 
 	/**
 	 * Print a character
 	 */
 	public void printMsg(char character) {
-		System.out.print(character);
+		System.out.println(character);
 	}
 }

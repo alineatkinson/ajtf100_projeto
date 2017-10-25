@@ -16,7 +16,7 @@ public class User {
 	/**
 	 * @return Name's User
 	 */
-	public String getNome() {
+	public String getName() {
 		return name;
 	}
 }
