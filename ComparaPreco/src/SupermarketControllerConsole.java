@@ -10,13 +10,11 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class SupermarketControllerConsole {
 
-	// Supermarket[] supermarket = new Supermarket[20];
-	// Collection supermercados = new ArrayList();
-	ConcurrentHashMap supermarkets = new ConcurrentHashMap();
 	Printer printer = new Printer();
 	Console reader = new Console();
+	SupermarketDAO supermarketDao = new SupermarketDAOCollections();
 
-	public int createSupermarket() {
+	public void createSupermarket() {
 
 		Supermarket supermarket;
 
@@ -35,20 +33,83 @@ public class SupermarketControllerConsole {
 
 		// Create the supermarket with the name, address and code supermarket number
 		supermarket = new Supermarket(nameSuper, cepSuper, codeSupermarket);
-		//supermarkets.put(supermarket.getCode(), supermarket);
-		return codeSupermarket;
+		supermarketDao.save(codeSupermarket, supermarket);
 	}
 
-	public void printData() {
-		System.out.println("\n ======= Impressão do Map ======= \n");
-		Set keys = supermarkets.keySet();
-		Iterator i = keys.iterator();
+	/*
+	 * Edit the data of a supermarket
+	 */
+	public void editSupermarket() {
 
-		while (i.hasNext()) {
-			System.out.println("Item código Barra: ");
-			Integer key = (Integer) i.next();
-			System.out.println("[Chave]: " + key);
-			System.out.println(supermarkets.get(key) + "\n");
+		printer.printMsg("Digite o código do supermercado a ser alterado: ");
+		int supermarketKey = reader.readNumber();
+		Supermarket supermarket = null;
+
+		if (supermarketDao.checksExistence(supermarketKey)) {
+			supermarket = (Supermarket) supermarketDao.get(supermarketKey);
+			String nameSupermarket = supermarket.getName();
+			int cepSupermarket = supermarket.getCEP();
+			printer.printMsg(" O supermercado selecionado contém os seguintes dados: ");
+			printer.printMsg(" Nome : " + nameSupermarket);
+			printer.printMsg(" Código : " + supermarketKey);
+			printer.printMsg(" CEP : " + cepSupermarket);
+			printer.printMsg(" Digite para alterar: 1 -> Nome do item, 2 -> Código do supermercado, 3 -> CEP");
+			int respEdit = 0;
+			respEdit = reader.readNumber();
+
+			supermarketDao.delete(supermarketKey);
+
+			do {
+				if (respEdit == 1) {
+					printer.printMsg(" Digite o novo nome do supermercado: ");
+					String newNome = new String();
+					newNome = " ";
+					newNome = reader.readText();
+					newNome = reader.readText();
+					Supermarket newSupermarket = new Supermarket(newNome, cepSupermarket, supermarketKey);
+					supermarketDao.save(supermarketKey, newSupermarket);
+				} else if (respEdit == 2) {
+					printer.printMsg(" Digite o novo código do supermercado: ");
+					int newCodeSupermarket = 0;
+					newCodeSupermarket = reader.readNumber();
+					Supermarket newSupermarket = new Supermarket(nameSupermarket, cepSupermarket, newCodeSupermarket);
+					supermarketDao.save(newCodeSupermarket, newSupermarket);
+				} else if (respEdit == 3) {
+					printer.printMsg(" Digite o novo CEP do supermercado: ");
+					int newCEPSupermarket = 0;
+					newCEPSupermarket = reader.readNumber();
+					Supermarket newSupermarket = new Supermarket(nameSupermarket, newCEPSupermarket, supermarketKey);
+					supermarketDao.save(supermarketKey, newSupermarket);
+				} else {
+					printer.printMsg("Nenhuma alternativa válida foi digitada. Tente outra vez!");
+				}
+			} while (respEdit != 1 & respEdit != 2 & respEdit != 3);
+
+		} else {
+			printer.printMsg("Não existe supermercado com este código cadastrado.");
 		}
 	}
+
+	/*
+	 * List all supermarkets
+	 */
+	public void listSupermarkets() {
+		supermarketDao.list();
+	}
+
+	/*
+	 * Delete a supermarket
+	 */
+	public void deleteSupermarket() {
+		printer.printMsg("Digite o código do supermercado a ser deletado: ");
+		int supermarketKey = 0;
+		supermarketKey = reader.readNumber();
+
+		if (supermarketDao.checksExistence(supermarketKey)) {
+			supermarketDao.delete(supermarketKey);
+		} else {
+			printer.printMsg("Não existe supermercado com este código.");
+		}
+	}
+
 }

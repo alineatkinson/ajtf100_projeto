@@ -7,7 +7,7 @@ public class UserControllerConsole {
 	Console reader = new Console();
 	UserDAO userDao = new UserDAOCollections();
 
-	public String createUser() {
+	public void createUser() {
 
 		int rg = 0;
 		User newUser;
@@ -26,7 +26,6 @@ public class UserControllerConsole {
 		if (adicionado) {
 			printer.printMsg("Usuário adicionado!\n");
 		}
-		return cpfUser;
 	}
 
 	public void editUser() {
@@ -44,7 +43,7 @@ public class UserControllerConsole {
 			printer.printMsg(" Digite para alterar: 1 -> Nome, 2 -> CPF");
 			int respEdit = 0;
 			respEdit = reader.readNumber();
-			boolean adicionado = false;
+			boolean included = false;
 
 			userDao.delete(userKey);
 
@@ -54,19 +53,19 @@ public class UserControllerConsole {
 					String newNome = new String();
 					newNome = reader.readText();
 					User newUser = new User(newNome, userKey);
-					adicionado = userDao.save(userKey, newUser);
+					included = userDao.save(userKey, newUser);
 				} else if (respEdit == 2) {
 					printer.printMsg(" Digite o novo CPF: ");
 					String newCPF = new String();
 					newCPF = reader.readText();
 					User newUser = new User(nameUser, newCPF);
-					adicionado = userDao.save(newCPF, newUser);
+					included = userDao.save(newCPF, newUser);
 				} else {
 					printer.printMsg("Nenhuma alternativa válida foi digitada. Tente outra vez!");
 				}
 			} while (respEdit != 1 & respEdit != 2);
 
-			if (adicionado) {
+			if (included) {
 				printer.printMsg("Usuário modificado com sucesso!\n");
 			}
 		} else {

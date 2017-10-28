@@ -6,32 +6,34 @@ public class TakingPrice {
 
 	int codeBarItem;
 	// Date dateTP;
-	int price;
+	double price;
 	int codeSupermarket;
 
-	public TakingPrice(int codeBarItem, int price, int codeSupermarket) {
+	public TakingPrice(int codeBarItem, double price, int codeSupermarket) {
 		this.codeBarItem = codeBarItem;
 		// this.dateTP = dateTP;
 		this.price = price;
 		this.codeSupermarket = codeSupermarket;
 	}
 
-	// public void setSupermercado(int supermercado){
-	// this.supermercado = supermercado;
-	// }
-	/*
-	 * Return the attribute
-	 */
-	// public int getSupermarket() {
-	// return supermarket;
-	// }
 	/*
 	 * Assign the variable price as attribute
 	 */
-	public void setPreco(int price) {
+	public void setPrice(int price) {
 		this.price = price;
 	}
-
+	/*
+	 * Return the attribute price
+	 */
+	public int getCodeSupermarket() {
+		return codeSupermarket;
+	}
+	/*
+	 * Return the attribute price
+	 */
+	public int getCodeBarItem() {
+		return codeBarItem;
+	}
 	/*
 	 * Return the attribute price
 	 */
@@ -42,6 +44,7 @@ public class TakingPrice {
 	/*
 	 * Print TomadaPreco's attribute
 	 */
+	/*
 	public void print() {
 		// Object formatter to brazilian monetary formatter
 		NumberFormat monetaryFormatter = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
@@ -51,4 +54,5 @@ public class TakingPrice {
 		System.out.println("Código do item :" + this.codeBarItem);
 		System.out.println("------------------------------------");
 	}
+	*/
 }

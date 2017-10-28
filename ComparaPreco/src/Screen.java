@@ -14,7 +14,7 @@ public class Screen {
 		ItemControllerConsole controllerItemConsole = new ItemControllerConsole();
 		SupermarketControllerConsole controllerSuperarketConsole = new SupermarketControllerConsole();
 		UserControllerConsole controllerUserConsole = new UserControllerConsole();
-		TakingPriceControllerConsole controladorTomadaPrecoConsole = new TakingPriceControllerConsole();
+		TakingPriceControllerConsole controllerTakingPriceConsole = new TakingPriceControllerConsole();
 
 		do {
 
@@ -31,15 +31,15 @@ public class Screen {
 			switch (resposta1) {
 			case 1:
 				System.out.println("Opção 1 selecionada: 1. Cadastrar usuário. ");
-				codeUser = controllerUserConsole.createUser();
+				controllerUserConsole.createUser();
 				break;
 			case 2:
 				System.out.println("Opção 2 selecionada: 2. Cadastrar item. ");
-				codeBarItem = controllerItemConsole.createItem();
+				controllerItemConsole.createItem();
 				break;
 			case 3:
 				System.out.println("Opção 3 selecionada: 3. Cadastrar supermercado. ");
-				codeSupermarket = controllerSuperarketConsole.createSupermarket();
+				controllerSuperarketConsole.createSupermarket();
 				break;
 			case 4:
 				System.out.println("Opção 4 selecionada: 4. Comparar preços. ");
@@ -48,23 +48,12 @@ public class Screen {
 				System.out.println("Opção 5 selecionada: 5. Calcular compra. ");
 				break;
 			case 6:
-				printer.printMsg(
-						"Opção 6. Você deseja cadastrar o preço do item para futuras comparações? (1 = SIM | 2 = Não). ");
-				resposta3 = reader.readNumber();
-				if (resposta3 == 1) {
-					controllerSuperarketConsole.printData();
-					printer.printMsg("Selecione o código do supermercado do item: ");
-					respBarCodeItem = reader.readNumber();
-
-					controllerItemConsole.printData();
-					printer.printMsg("Selecione o código do item: ");
-					respCodeSupermarket = reader.readNumber();
-					controladorTomadaPrecoConsole.createTomadaDePreco(respBarCodeItem, respCodeSupermarket);
-					controladorTomadaPrecoConsole.printData();
-				}
+				printer.printMsg("Opção 6. Você deseja cadastrar tomadas de preços para futuras comparações?");
+				controllerTakingPriceConsole.createTakingPrice();
 				break;
 			case 7:
 				printer.printMsg("Opção 7 selecionada: Editar um item. ");
+				controllerItemConsole.editItem();
 				break;
 			case 8:
 				printer.printMsg("Opção 8 selecionada: Editar um usuário. ");
@@ -72,12 +61,15 @@ public class Screen {
 				break;
 			case 9:
 				printer.printMsg("Opção 9 selecionada: Editar um supermercado. ");
+				controllerSuperarketConsole.editSupermarket();
 				break;
 			case 10:
 				printer.printMsg("Opção 10 selecionada: Editar uma tomada de preço. ");
+				controllerTakingPriceConsole.editTakingPrice();
 				break;
 			case 11:
 				printer.printMsg("Opção 11 selecionada: Excluir um item. ");
+				controllerItemConsole.deleteItem();
 				break;
 			case 12:
 				printer.printMsg("Opção 12 selecionada: Excluir um usuário. ");
@@ -85,26 +77,27 @@ public class Screen {
 				break;
 			case 13:
 				printer.printMsg("Opção 13 selecionada: Excluir um supermercado.");
+				controllerSuperarketConsole.deleteSupermarket();
 				break;
 			case 14:
 				printer.printMsg("Opção 14 selecionada: Excluir uma tomada de preço.");
+				controllerTakingPriceConsole.deleteTakingPrice();
 				break;
 			case 15:
 				printer.printMsg("Opção 15 selecionada: Imprime todos os itens");
-				controllerItemConsole.printData();
+				controllerItemConsole.listItems();
 				break;
 			case 16:
 				printer.printMsg("Opção 16 selecionada: Imprime todos os usuários.");
-				// codeUser = controllerUserConsole.createUser();
 				controllerUserConsole.listUsers();
 				break;
 			case 17:
 				printer.printMsg("Opção 17 selecionada: Imprime todos os supermercados.");
-				controllerSuperarketConsole.printData();
+				controllerSuperarketConsole.listSupermarkets();
 				break;
 			case 18:
 				printer.printMsg("Opção 18 selecionada: Imprime todas as tomadas de preço.");
-				controladorTomadaPrecoConsole.printData();
+				controllerTakingPriceConsole.listTakingPrice();
 				break;
 
 			default:

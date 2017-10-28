@@ -5,14 +5,18 @@ public class Item {
 	/*
 	 * Constructor of the item
 	 */
-	public Item(int barCode) {
+	public Item (int barCode, String name) {
+		this.setName(name);
 		this.barCode = barCode;
+	}
+	public Item(int barCode) {
+		this(barCode, null);
 	}
 
 	/*
 	 * Assign the variable name
 	 */
-	public void setNome(String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
