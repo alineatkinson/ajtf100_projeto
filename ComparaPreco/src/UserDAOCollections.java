@@ -8,6 +8,7 @@ public class UserDAOCollections implements UserDAO {
 
 	public boolean save(String cpfUser, User user) {
 		users.put(cpfUser, user);
+		System.out.println("Usuário adicionado");
 		return true;
 	}
 
