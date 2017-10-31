@@ -34,62 +34,66 @@ interface Handler {
 }
 
 
-abstract class ItemUserHandler {
-	UserControllerConsole controllerUserConsole;
+//abstract class ItemUserHandler {
+	//UserControllerConsole controllerUserConsole;
 	
-}
+//}
 
 
-class Item1Handler extends ItemUserHandler implements Handler {
-//	UserControllerConsole controllerUserConsole;
+class Item1Handler implements Handler {
+UserControllerConsole controllerUserConsole;
 	
 	public Item1Handler(UserControllerConsole controllerUserConsole) {
-		//super();
-		super.controllerUserConsole = controllerUserConsole;
+		super();
+		this.controllerUserConsole = controllerUserConsole;
 	}
 
 	public void execute() {
-		super.controllerUserConsole.createUser();	
+		System.out.println(this.controllerUserConsole.hashCode());
+		this.controllerUserConsole.createUser();	
 		
 	}
 }
 
-class Item2Handler extends ItemUserHandler implements Handler {
-	//UserControllerConsole controllerUserConsole;
+class Item2Handler implements Handler {
+	UserControllerConsole controllerUserConsole;
 
 	public Item2Handler(UserControllerConsole controllerUserConsole) {
-		//super();
-	super.controllerUserConsole = controllerUserConsole;
+		super();
+		this.controllerUserConsole = controllerUserConsole;
 	}
 
 	public void execute() {
-		super.controllerUserConsole.editUser();
+		System.out.println(this.controllerUserConsole.hashCode());
+		this.controllerUserConsole.editUser();
 	}
 }
 
-class Item3Handler extends ItemUserHandler implements Handler {
-	//UserControllerConsole controllerUserConsole;
+class Item3Handler implements Handler {
+	UserControllerConsole controllerUserConsole;
 
 	public Item3Handler(UserControllerConsole controllerUserConsole) {
-		//super();
-		super.controllerUserConsole = controllerUserConsole;
+		super();
+		this.controllerUserConsole = controllerUserConsole;
 	}
 
 	public void execute() {
-		super.controllerUserConsole.deleteUser();
+		System.out.println(this.controllerUserConsole.hashCode());
+		this.controllerUserConsole.deleteUser();
 	}
 }
 
-class Item4Handler extends ItemUserHandler implements Handler {
-	//UserControllerConsole controllerUserConsole;
+class Item4Handler implements Handler {
+	UserControllerConsole controllerUserConsole;
 
 	public Item4Handler(UserControllerConsole controllerUserConsole) {
-		//super();
-	//	super.controllerUserConsole = controllerUserConsole;
+		super();
+	    this.controllerUserConsole = controllerUserConsole;
 	}
 
 	public void execute() {
-		super.controllerUserConsole.listUsers();
+		System.out.println(this.controllerUserConsole.hashCode());
+		this.controllerUserConsole.listUsers();
 	}
 }
 
