@@ -43,6 +43,7 @@ public class TakingPriceDAOCollections implements TakingPriceDAO {
 			printer.printMsg("[Código do item:] :" + chave);
 			printer.printMsg("Código do Supermercado :" + tpPrint.getCodeSupermarket() + "\n");
 			printer.printMsg("Preço do item :" + monetaryFormatter.format(tpPrint.getPrice()));
+			printer.printMsg("Data da tomada de preço :" + tpPrint.getDate());
 			printer.printMsg("------------------------------------");
 		}
 	}

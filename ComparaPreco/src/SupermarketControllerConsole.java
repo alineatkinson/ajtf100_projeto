@@ -13,10 +13,19 @@ public class SupermarketControllerConsole {
 	Printer printer = new Printer();
 	Console reader = new Console();
 	SupermarketDAO supermarketDao = new SupermarketDAOCollections();
+	SupermarketDAOJDBC supermarketJDBC = new SupermarketDAOJDBC();
 
 	public void createSupermarket() {
 
 		Supermarket supermarket;
+		
+		try {
+			supermarketJDBC.createTable();
+			System.out.println("Tabelas criadas");
+		} catch (ConnectionException e) {
+			System.out.println("Falha ao criar tabelas");
+			e.printStackTrace();
+		}
 
 		// Assign supermarket name attribute to the item
 		printer.printMsg("Qual o código do supermercado? (Código int) \n");
@@ -33,7 +42,14 @@ public class SupermarketControllerConsole {
 
 		// Create the supermarket with the name, address and code supermarket number
 		supermarket = new Supermarket(nameSuper, cepSuper, codeSupermarket);
+		
 		supermarketDao.save(codeSupermarket, supermarket);
+		try {
+			supermarketJDBC.save(supermarket);
+		} catch (ConnectionException e) {
+			System.out.println("erro ao salvar o supermercado no banco");
+			e.printStackTrace();
+		}
 	}
 
 	/*
@@ -95,6 +111,7 @@ public class SupermarketControllerConsole {
 	 */
 	public void listSupermarkets() {
 		supermarketDao.list();
+		
 	}
 
 	/*

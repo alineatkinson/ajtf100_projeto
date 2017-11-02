@@ -29,9 +29,7 @@ public class MenuItem {
 // String feedback = "Opção 1 selecionada: ";
 // UserControllerConsole controllerUserConsole = new UserControllerConsole();
 
-interface Handler {
-	void execute();
-}
+
 
 
 //abstract class ItemUserHandler {
@@ -39,6 +37,9 @@ interface Handler {
 	
 //}
 
+interface Handler {
+	void execute();
+}
 
 class Item1Handler implements Handler {
 UserControllerConsole controllerUserConsole;

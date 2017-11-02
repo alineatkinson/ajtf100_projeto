@@ -66,12 +66,6 @@ public class Menu {
 			map.put(menu.option, menu);
 		}
 	}
-	/*
-	 * public static void main(String[] args) { Menu menu = new Menu();
-	 * menu.toShow(); int resp = menu.readAnswer(); menu.executeOption(resp);
-	 * 
-	 * // menu.execute(); }
-	 */
 
 	public void toShow() {
 		System.out.println("Digite o que deseja fazer:");

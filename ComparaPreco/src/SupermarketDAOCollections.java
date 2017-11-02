@@ -1,4 +1,5 @@
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -9,7 +10,7 @@ public class SupermarketDAOCollections implements SupermarketDAO {
 	
 	public void save(int chave, Supermarket supermarket) {
 		supermarkets.put(chave , supermarket);
-		System.out.println("Supermercado incluído");
+		System.out.println("Supermercado incluído no dao collections");
 	}
 	public void list() {
 		Set keys = supermarkets.keySet();
@@ -23,6 +24,18 @@ public class SupermarketDAOCollections implements SupermarketDAO {
 		printer.printMsg("Nome do supermercado: "+ supermarketPrint.getName()); 
 		printer.printMsg("CEP do supermercado: "+ supermarketPrint.getCEP()+ "\n");			
 		}	
+		
+		SupermarketDAOJDBC supermarketJDBC = new SupermarketDAOJDBC();
+		try {
+			List listaSuper = supermarketJDBC.getAllSupermarkets();
+			String lista = listaSuper.toString();
+			printer.printMsg(lista);
+		} catch (ConnectionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 	public boolean checksExistence(int key) {
 		if (supermarkets.containsKey(key))

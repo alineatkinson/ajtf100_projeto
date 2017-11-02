@@ -41,7 +41,7 @@ public class TakingPriceControllerConsole {
 		LocalDateTime now = LocalDateTime.now();
 		System.out.println(dtf.format(now)); //2016/11/16 12:08:43
 		
-		takingPrice = new TakingPrice(codeBarItem, priceItem, codeSupermarket); 
+		takingPrice = new TakingPrice(codeBarItem, priceItem, codeSupermarket, now); 
 		takingPriceDao.save(codeBarItem, takingPrice);
 	}
 
@@ -59,11 +59,13 @@ public class TakingPriceControllerConsole {
 			tp = (TakingPrice) takingPriceDao.get(codeBarItem);
 			int codeSupermarket = tp.getCodeSupermarket();
 			double priceItem = tp.getPrice();
+			LocalDateTime dateTP = tp.getDate();
 			printer.printMsg(" A tomada de preço selecionada contém os seguintes dados: ");
 			printer.printMsg(" Código do item: " + codeBarItem);
 			printer.printMsg(" Código do supermercado : " + codeSupermarket);
 			NumberFormat monetaryFormatter = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
 			printer.printMsg("Preço do item :" + monetaryFormatter.format(priceItem));
+			printer.printMsg("Data da tomada de preço :" + dateTP);
 			printer.printMsg(" Digite para alterar: 1 -> Código do item, 2 -> Código do supermercado, 3 -> Preço do item");
 			int respEdit = 0;
 			respEdit = reader.readNumber();
@@ -75,19 +77,19 @@ public class TakingPriceControllerConsole {
 					printer.printMsg(" Digite o novo código do item: ");
 					int newCodeItem = 0;
 					newCodeItem = reader.readNumber();
-					TakingPrice newTP = new TakingPrice(newCodeItem, priceItem, codeSupermarket);
+					TakingPrice newTP = new TakingPrice(newCodeItem, priceItem, codeSupermarket, dateTP);
 					takingPriceDao.save(newCodeItem, newTP);
 				} else if (respEdit == 2) {
 					printer.printMsg(" Digite o novo código do supermercado: ");
 					int newCodeSupermarket = 0;
 					newCodeSupermarket = reader.readNumber();
-					TakingPrice newTP = new TakingPrice(codeBarItem, priceItem, newCodeSupermarket);
+					TakingPrice newTP = new TakingPrice(codeBarItem, priceItem, newCodeSupermarket, dateTP);
 					takingPriceDao.save(codeBarItem, newTP);
 				} else if (respEdit == 3) {
 					printer.printMsg(" Digite o novo preço do item: ");
 					double newPriceItem = 0;
 					newPriceItem = reader.readNumberDouble();
-					TakingPrice newTP = new TakingPrice(codeBarItem, newPriceItem, codeSupermarket);
+					TakingPrice newTP = new TakingPrice(codeBarItem, newPriceItem, codeSupermarket, dateTP);
 					takingPriceDao.save(codeBarItem, newTP);
 				} else {
 					printer.printMsg("Nenhuma alternativa válida foi digitada. Tente outra vez!");
