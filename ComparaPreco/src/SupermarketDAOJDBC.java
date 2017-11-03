@@ -1,4 +1,5 @@
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -45,6 +46,9 @@ sql += " )";
 	public void save(Supermarket supermarket) throws ConnectionException {
 		Statement stmt = null;
 		String sql = null;
+		ResultSet rs = null;
+		DatabaseMetaData dbmd; // apagar
+		String schemas; // apagar
 		// Se o id for igual a zero o produto ainda não existe no banco,
 		// portanto
 		// faremos um INSERT caso contrário faremos um UPDATE
@@ -67,6 +71,10 @@ sql += " )";
 			stmt = conn.createStatement();
 			stmt.executeUpdate(sql);
 			System.out.println("SQL = " + sql);
+			dbmd = conn.getMetaData();
+			rs =  dbmd.getSchemas();
+			schemas = rs.toString();
+			System.out.println(schemas);
 		} catch (SQLException e) {
 			throw new ConnectionException("Erro na execucao da query " + sql, e);
 		} finally {
@@ -80,14 +88,21 @@ sql += " )";
 		Statement stmt = null;
 		ResultSet rs = null;
 		Supermarket supermarket = null;
+		DatabaseMetaData dbmd; // apagar
+		String schemas; // apagar
 		try {
 			conn = ConnectionManager.getConnection();
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
+			dbmd = conn.getMetaData();
+			rs =  dbmd.getSchemas();
+			schemas = rs.toString();
+			System.out.println(schemas);
 			if (rs.next()) {
 				String name = rs.getString("name");
 				int cepSuper = rs.getInt("cep");
 				supermarket = new Supermarket (name, cepSuper, code_supermarket);
+				System.out.println("name: "+ name + "Cep Super: "+ cepSuper+ "Code_supermarket :"+ code_supermarket);
 			}
 		} catch (SQLException e) {
 			throw new ConnectionException("Erro na execucao do select: " + sql,
@@ -127,11 +142,14 @@ sql += " )";
 		PreparedStatement stmt = null;
 		String sql = "DELETE FROM supermarkets WHERE code_supermarket = "+ code_supermarket;
 		int qtdRemovidos = 0;
+		
+		
 		try {
 			conn = ConnectionManager.getConnection();
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, code_supermarket);
 			qtdRemovidos = stmt.executeUpdate();
+			System.out.println("supermercado exclu�do do banco com sucesso!"+qtdRemovidos+" linhas excluidas");
 		} catch (SQLException e) {
 			String errorMsg = "Erro ao tentar remover supermercado de code_supermarket " + code_supermarket;
 			throw new ConnectionException(errorMsg, e);

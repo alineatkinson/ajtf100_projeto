@@ -18,7 +18,7 @@ public class SupermarketControllerConsole {
 	public void createSupermarket() {
 
 		Supermarket supermarket;
-		
+
 		try {
 			supermarketJDBC.createTable();
 			System.out.println("Tabelas criadas");
@@ -42,7 +42,7 @@ public class SupermarketControllerConsole {
 
 		// Create the supermarket with the name, address and code supermarket number
 		supermarket = new Supermarket(nameSuper, cepSuper, codeSupermarket);
-		
+
 		supermarketDao.save(codeSupermarket, supermarket);
 		try {
 			supermarketJDBC.save(supermarket);
@@ -111,7 +111,7 @@ public class SupermarketControllerConsole {
 	 */
 	public void listSupermarkets() {
 		supermarketDao.list();
-		
+
 	}
 
 	/*
@@ -122,8 +122,17 @@ public class SupermarketControllerConsole {
 		int supermarketKey = 0;
 		supermarketKey = reader.readNumber();
 
+		try {
+			System.out.println("entrou no cathc");
+			int qtd = supermarketJDBC.delete(supermarketKey);
+			System.out.println("número supermercados excluídos: " + qtd);
+		} catch (ConnectionException e) {
+			System.out.println("Falha ao excluir supermercado...");
+			e.printStackTrace();
+		}
 		if (supermarketDao.checksExistence(supermarketKey)) {
 			supermarketDao.delete(supermarketKey);
+
 		} else {
 			printer.printMsg("Não existe supermercado com este código.");
 		}
