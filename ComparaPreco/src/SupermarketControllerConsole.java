@@ -1,3 +1,4 @@
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -12,20 +13,12 @@ public class SupermarketControllerConsole {
 
 	Printer printer = new Printer();
 	Console reader = new Console();
-	SupermarketDAO supermarketDao = new SupermarketDAOCollections();
-	SupermarketDAOJDBC supermarketJDBC = new SupermarketDAOJDBC();
+	ComparePriceDAO supermarketDao = new SupermarketDAOCollections();
+	// SupermarketDAOJDBC supermarketDao = new SupermarketDAOJDBC();
 
 	public void createSupermarket() {
 
 		Supermarket supermarket;
-
-		try {
-			supermarketJDBC.createTable();
-			System.out.println("Tabelas criadas");
-		} catch (ConnectionException e) {
-			System.out.println("Falha ao criar tabelas");
-			e.printStackTrace();
-		}
 
 		// Assign supermarket name attribute to the item
 		printer.printMsg("Qual o código do supermercado? (Código int) \n");
@@ -43,13 +36,7 @@ public class SupermarketControllerConsole {
 		// Create the supermarket with the name, address and code supermarket number
 		supermarket = new Supermarket(nameSuper, cepSuper, codeSupermarket);
 
-		supermarketDao.save(codeSupermarket, supermarket);
-		try {
-			supermarketJDBC.save(supermarket);
-		} catch (ConnectionException e) {
-			System.out.println("erro ao salvar o supermercado no banco");
-			e.printStackTrace();
-		}
+		supermarketDao.save(supermarket);
 	}
 
 	/*
@@ -65,17 +52,20 @@ public class SupermarketControllerConsole {
 			supermarket = (Supermarket) supermarketDao.get(supermarketKey);
 			String nameSupermarket = supermarket.getName();
 			int cepSupermarket = supermarket.getCEP();
-			printer.printMsg(" O supermercado selecionado contém os seguintes dados: ");
-			printer.printMsg(" Nome : " + nameSupermarket);
-			printer.printMsg(" Código : " + supermarketKey);
-			printer.printMsg(" CEP : " + cepSupermarket);
-			printer.printMsg(" Digite para alterar: 1 -> Nome do item, 2 -> Código do supermercado, 3 -> CEP");
-			int respEdit = 0;
-			respEdit = reader.readNumber();
 
-			supermarketDao.delete(supermarketKey);
+			int respEdit = 0;
 
 			do {
+				printer.printMsg(" O supermercado selecionado contém os seguintes dados: ");
+				printer.printMsg(" Nome : " + nameSupermarket);
+				printer.printMsg(" Código : " + supermarketKey);
+				printer.printMsg(" CEP : " + cepSupermarket);
+				printer.printMsg(
+						" Digite para alterar: 1 -> Nome do supermercado, 2 -> Código do supermercado, 3 -> CEP");
+				respEdit = reader.readNumber();
+
+				supermarketDao.delete(supermarketKey);
+
 				if (respEdit == 1) {
 					printer.printMsg(" Digite o novo nome do supermercado: ");
 					String newNome = new String();
@@ -83,19 +73,19 @@ public class SupermarketControllerConsole {
 					newNome = reader.readText();
 					newNome = reader.readText();
 					Supermarket newSupermarket = new Supermarket(newNome, cepSupermarket, supermarketKey);
-					supermarketDao.save(supermarketKey, newSupermarket);
+					supermarketDao.save(newSupermarket);
 				} else if (respEdit == 2) {
 					printer.printMsg(" Digite o novo código do supermercado: ");
 					int newCodeSupermarket = 0;
 					newCodeSupermarket = reader.readNumber();
 					Supermarket newSupermarket = new Supermarket(nameSupermarket, cepSupermarket, newCodeSupermarket);
-					supermarketDao.save(newCodeSupermarket, newSupermarket);
+					supermarketDao.save(newSupermarket);
 				} else if (respEdit == 3) {
 					printer.printMsg(" Digite o novo CEP do supermercado: ");
 					int newCEPSupermarket = 0;
 					newCEPSupermarket = reader.readNumber();
 					Supermarket newSupermarket = new Supermarket(nameSupermarket, newCEPSupermarket, supermarketKey);
-					supermarketDao.save(supermarketKey, newSupermarket);
+					supermarketDao.save(newSupermarket);
 				} else {
 					printer.printMsg("Nenhuma alternativa válida foi digitada. Tente outra vez!");
 				}
@@ -110,8 +100,18 @@ public class SupermarketControllerConsole {
 	 * List all supermarkets
 	 */
 	public void listSupermarkets() {
-		supermarketDao.list();
+		Map supermarkets = supermarketDao.getAll();
+		Set keys = supermarkets.keySet();
+		Iterator i = keys.iterator();
+		Supermarket supermarketPrint = null;
 
+		while (i.hasNext()) {
+			int key = (Integer) i.next();
+			supermarketPrint = (Supermarket) supermarkets.get(key);
+			printer.printMsg("[Código do Supermercado] : " + supermarketPrint.getCode());
+			printer.printMsg("Nome do supermercado: " + supermarketPrint.getName());
+			printer.printMsg("CEP do supermercado: " + supermarketPrint.getCEP() + "\n");
+		}
 	}
 
 	/*
@@ -122,20 +122,18 @@ public class SupermarketControllerConsole {
 		int supermarketKey = 0;
 		supermarketKey = reader.readNumber();
 
-		try {
-			System.out.println("entrou no cathc");
-			int qtd = supermarketJDBC.delete(supermarketKey);
-			System.out.println("número supermercados excluídos: " + qtd);
-		} catch (ConnectionException e) {
-			System.out.println("Falha ao excluir supermercado...");
-			e.printStackTrace();
-		}
-		if (supermarketDao.checksExistence(supermarketKey)) {
-			supermarketDao.delete(supermarketKey);
-
-		} else {
-			printer.printMsg("Não existe supermercado com este código.");
-		}
+		supermarketDao.delete(supermarketKey);
+		/*
+		 * try { System.out.println("entrou no cathc"); int qtd =
+		 * supermarketJDBC.delete(supermarketKey);
+		 * System.out.println("número supermercados excluídos: " + qtd); } catch
+		 * (ConnectionException e) {
+		 * System.out.println("Falha ao excluir supermercado..."); e.printStackTrace();
+		 * } if (supermarketDao.checksExistence(supermarketKey)) {
+		 * supermarketDao.delete(supermarketKey);
+		 * 
+		 * } else { printer.printMsg("Não existe supermercado com este código."); }
+		 */
 	}
 
 }

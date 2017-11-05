@@ -1,11 +1,13 @@
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class UserControllerConsole {
 	Printer printer = new Printer();
 	Console reader = new Console();
-	UserDAO userDao = new UserDAOCollections();
+	//UserDAO userDao = new UserDAOCollections();
+	UserDAO userDao = new UserDAOJDBC();
 
 	public void createUser() {
 
@@ -21,11 +23,8 @@ public class UserControllerConsole {
 		String cpfUser = reader.readText();
 
 		// save the user
-		newUser = new User(nameUser, cpfUser);
-		boolean adicionado = userDao.save(cpfUser, newUser);
-		if (adicionado) {
-			printer.printMsg("Usuário adicionado!\n");
-		}
+		userDao.save(new User(nameUser, cpfUser));
+
 	}
 
 	public void editUser() {
@@ -43,7 +42,6 @@ public class UserControllerConsole {
 			printer.printMsg(" Digite para alterar: 1 -> Nome, 2 -> CPF");
 			int respEdit = 0;
 			respEdit = reader.readNumber();
-			boolean included = false;
 
 			userDao.delete(userKey);
 
@@ -52,22 +50,20 @@ public class UserControllerConsole {
 					printer.printMsg(" Digite o novo nome: ");
 					String newNome = new String();
 					newNome = reader.readText();
-					User newUser = new User(newNome, userKey);
-					included = userDao.save(userKey, newUser);
+					newNome = reader.readText();
+					userDao.save(new User(newNome, userKey));
 				} else if (respEdit == 2) {
 					printer.printMsg(" Digite o novo CPF: ");
 					String newCPF = new String();
+					newCPF = " ";
 					newCPF = reader.readText();
-					User newUser = new User(nameUser, newCPF);
-					included = userDao.save(newCPF, newUser);
+					newCPF = reader.readText();
+					userDao.save(new User(nameUser, newCPF));
 				} else {
 					printer.printMsg("Nenhuma alternativa válida foi digitada. Tente outra vez!");
 				}
 			} while (respEdit != 1 & respEdit != 2);
 
-			if (included) {
-				printer.printMsg("Usuário modificado com sucesso!\n");
-			}
 		} else {
 			printer.printMsg("Não existe usuário com este número de cpf cadastrado.");
 		}
@@ -76,21 +72,24 @@ public class UserControllerConsole {
 	// public void deleteUser();
 	public void listUsers() {
 
-		userDao.list();
+		Map users = userDao.getAll();
+		Set keys = users.keySet();
+		Iterator i = keys.iterator();
+		User userPrint = null;
 
+		while (i.hasNext()) {
+			String key = (String) i.next();
+			userPrint = (User) users.get(key);
+			printer.printMsg("[CPF do usuário] : " + userPrint.getCpf());
+			printer.printMsg("Nome do usuário: " + userPrint.getName() + "\n");
+		}
 	}
 
 	public void deleteUser() {
-
-		printer.printMsg("Digite o cpf do usuário a ser deletado: ");
+		printer.printMsg("Digite o cpf do usuário a ser excluído: ");
 		String userKey = new String();
 		userKey = reader.readText();
-		User user = null;
 
-		if (userDao.checksExistence(userKey)) {
-			userDao.delete(userKey);
-		} else {
-			printer.printMsg("Não existe usuário com este número de cpf cadastrado.");
-		}
+		userDao.delete(userKey);
 	}
 }

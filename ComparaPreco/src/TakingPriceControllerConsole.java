@@ -6,13 +6,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class TakingPriceControllerConsole {
 	Printer printer = new Printer();
 	Console reader = new Console();
-	TakingPriceDAO takingPriceDao = new TakingPriceDAOCollections();
+	//ComparePriceDAO takingPriceDao = new TakingPriceDAOCollections();
+	ComparePriceDAO takingPriceDao = new TakingPriceDAOJDBC();
 
 	public void createTakingPrice() {
 
@@ -42,7 +44,7 @@ public class TakingPriceControllerConsole {
 		System.out.println(dtf.format(now)); //2016/11/16 12:08:43
 		
 		takingPrice = new TakingPrice(codeBarItem, priceItem, codeSupermarket, now); 
-		takingPriceDao.save(codeBarItem, takingPrice);
+		takingPriceDao.save(takingPrice);
 	}
 
 	/*
@@ -78,19 +80,19 @@ public class TakingPriceControllerConsole {
 					int newCodeItem = 0;
 					newCodeItem = reader.readNumber();
 					TakingPrice newTP = new TakingPrice(newCodeItem, priceItem, codeSupermarket, dateTP);
-					takingPriceDao.save(newCodeItem, newTP);
+					takingPriceDao.save(newTP);
 				} else if (respEdit == 2) {
 					printer.printMsg(" Digite o novo código do supermercado: ");
 					int newCodeSupermarket = 0;
 					newCodeSupermarket = reader.readNumber();
 					TakingPrice newTP = new TakingPrice(codeBarItem, priceItem, newCodeSupermarket, dateTP);
-					takingPriceDao.save(codeBarItem, newTP);
+					takingPriceDao.save(newTP);
 				} else if (respEdit == 3) {
 					printer.printMsg(" Digite o novo preço do item: ");
 					double newPriceItem = 0;
 					newPriceItem = reader.readNumberDouble();
 					TakingPrice newTP = new TakingPrice(codeBarItem, newPriceItem, codeSupermarket, dateTP);
-					takingPriceDao.save(codeBarItem, newTP);
+					takingPriceDao.save(newTP);
 				} else {
 					printer.printMsg("Nenhuma alternativa válida foi digitada. Tente outra vez!");
 				}
@@ -105,8 +107,38 @@ public class TakingPriceControllerConsole {
 	 * List all supermarkets
 	 */
 	public void listTakingPrice() {
-		takingPriceDao.list();
+				
+		Map takingPrices = takingPriceDao.getAll();
+		Set keys = takingPrices.keySet();
+		Iterator i = keys.iterator();
+		TakingPrice tpPrint = null;
+
+		while (i.hasNext()) {
+			int key = (Integer) i.next();
+			tpPrint = (TakingPrice) takingPrices.get(key);
+			printer.printMsg("[Código do item] : " + tpPrint.getCodeBarItem());
+			printer.printMsg("[Código do Supermercado]: " + tpPrint.getCodeSupermarket());
+			printer.printMsg("Preço: " + tpPrint.getPrice());
+			printer.printMsg("Data: " + tpPrint.getDate() + "\n");
+		}
+		
+
+		NumberFormat monetaryFormatter = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+
+		System.out.println("Teste list dao colecctions");
+		while (i.hasNext()) {
+			int chave = (int) i.next();
+			tpPrint = (TakingPrice) takingPrices.get(chave);
+			printer.printMsg("------------------------------------");
+			printer.printMsg("[Código do item:] :" + chave);
+			printer.printMsg("Código do Supermercado :" + tpPrint.getCodeSupermarket() + "\n");
+			printer.printMsg("Preço do item :" + monetaryFormatter.format(tpPrint.getPrice()));
+			printer.printMsg("Data da tomada de preço :" + tpPrint.getDate());
+			printer.printMsg("------------------------------------");
+		}
 	}
+		
+	
 
 	/*
 	 * Delete a supermarket

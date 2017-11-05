@@ -1,4 +1,5 @@
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -6,10 +7,10 @@ public class UserDAOCollections implements UserDAO {
 	ConcurrentHashMap users = new ConcurrentHashMap();
 	Printer printer = new Printer();
 
-	public boolean save(String cpfUser, User user) {
-		users.put(cpfUser, user);
+	public void save (Object objUser) {
+		User user = (User)objUser;
+		users.put(user.getCpf(),user);
 		System.out.println("Usuário adicionado");
-		return true;
 	}
 
 	public boolean checksExistence(String cpfUser) {
@@ -27,18 +28,9 @@ public class UserDAOCollections implements UserDAO {
 		User user = (User) users.remove(cpfUser);
 	}
 
-	public void list() {
-		Set chaves = users.keySet();
-		Iterator i = chaves.iterator();
-		User userPrint = null;
-		
-		while (i.hasNext()) {
-		String chave = (String) i.next();
-		printer.printMsg("[CPF] : " + chave);
-		userPrint = (User)users.get(chave);
-		printer.printMsg("Nome: "+ userPrint.getName()+"\n"); 
-					
-		}	
+	@Override
+	public Map getAll() {
+		return this.users;
 	}
 
 }
