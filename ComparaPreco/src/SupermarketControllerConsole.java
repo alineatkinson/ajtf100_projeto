@@ -13,8 +13,8 @@ public class SupermarketControllerConsole {
 
 	Printer printer = new Printer();
 	Console reader = new Console();
-	ComparePriceDAO supermarketDao = new SupermarketDAOCollections();
-	// SupermarketDAOJDBC supermarketDao = new SupermarketDAOJDBC();
+	//ComparePriceDAO supermarketDao = new SupermarketDAOCollections();
+	SupermarketDAOJDBC supermarketDao = new SupermarketDAOJDBC();
 
 	public void createSupermarket() {
 

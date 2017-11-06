@@ -29,8 +29,9 @@ public class TakingPriceDAOJDBC implements ComparePriceDAO {
 		sql += " (codebar_item int NOT NULL,";
 		sql += " code_supermarket int NOT NULL, ";
 		sql += " price DECIMAL(18,2) NOT NULL, ";
-		sql += " date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)";
-
+		sql += " date varchar(50) )";
+		
+		
 		System.out.println("Entrou no create table");
 
 		try {
@@ -68,7 +69,7 @@ public class TakingPriceDAOJDBC implements ComparePriceDAO {
 		DatabaseMetaData dbmd = null;
 		try {
 			dbmd = conn.getMetaData();
-			rs = dbmd.getTables(null, "ALINE", "taking_prices", null);
+			rs = dbmd.getTables(null, "ALINE", "TAKING_PRICES", null);
 			if (!rs.next()) {
 				this.createTable();
 			}
@@ -87,11 +88,12 @@ public class TakingPriceDAOJDBC implements ComparePriceDAO {
 			sql += taking_price.getCodeSupermarket() + ", ";
 			sql += taking_price.getPrice() + ", '";
 			sql += taking_price.getDate() + "' )";
+			//sql = "DROP TABLE taking_prices";
 
 		} else {
 			System.out.println("Entrou no else");
 			sql = "UPDATE taking_prices SET code_supermarket = " + taking_price.getCodeSupermarket() + ",";
-			sql += " price = '" + taking_price.getPrice() + "',";
+			sql += " price = " + taking_price.getPrice() + ",";
 			sql += " date = '" + taking_price.getDate() + "'";
 			sql += " WHERE codebar_item = " + taking_price.getCodeBarItem();
 		}
@@ -137,8 +139,9 @@ public class TakingPriceDAOJDBC implements ComparePriceDAO {
 				System.out.println("ENTROU NO IF DO GET TakingPrice");
 				double price = rs.getDouble("price");
 				int code_supermarket = rs.getInt("code_supermarket");
-				Timestamp date = rs.getTimestamp("date");
-				taking_price = new TakingPrice((Integer)codebar_item, price, code_supermarket, null);
+				String date = rs.getString("date");
+				//Timestamp date = rs.getTimestamp("date");
+				taking_price = new TakingPrice((Integer)codebar_item, price, code_supermarket, date);
 				System.out
 						.println("cod_item: " + codebar_item + "code_supermarket: " + code_supermarket + "price :" + price + "date :" + date );
 			}
@@ -177,8 +180,9 @@ public class TakingPriceDAOJDBC implements ComparePriceDAO {
 				int codebar_item = rs.getInt("codebar_item");
 				double price = rs.getDouble("price");
 				int code_supermarket = rs.getInt("code_supermarket");
-				Timestamp date = rs.getTimestamp("date");
-				takingprices.put(codebar_item, new TakingPrice(codebar_item, price, code_supermarket, null));
+				String date = rs.getString("date");
+				//Timestamp date = rs.getTimestamp("date");
+				takingprices.put(codebar_item, new TakingPrice(codebar_item, price, code_supermarket, date));
 			}
 		} catch (SQLException e) {
 			try {

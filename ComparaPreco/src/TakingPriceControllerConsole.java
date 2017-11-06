@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
@@ -13,8 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TakingPriceControllerConsole {
 	Printer printer = new Printer();
 	Console reader = new Console();
-	//ComparePriceDAO takingPriceDao = new TakingPriceDAOCollections();
-	ComparePriceDAO takingPriceDao = new TakingPriceDAOJDBC();
+	ComparePriceDAO takingPriceDao = new TakingPriceDAOCollections();
+	//ComparePriceDAO takingPriceDao = new TakingPriceDAOJDBC();
 
 	public void createTakingPrice() {
 
@@ -39,11 +40,20 @@ public class TakingPriceControllerConsole {
 		//Calendar cal = Calendar.getInstance();
 		//System.out.println(dateFormat.format(cal)); //31/01/2017 16 12:08:43
 		
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-		LocalDateTime now = LocalDateTime.now();
-		System.out.println(dtf.format(now)); //2016/11/16 12:08:43
+		//DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+		//LocalDateTime now = LocalDateTime.now();
+		//System.out.println(dtf.format(now)); //2016/11/16 12:08:43
+		//System.out.println(now);
 		
-		takingPrice = new TakingPrice(codeBarItem, priceItem, codeSupermarket, now); 
+		SimpleDateFormat parser = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+		java.util.Date now = new Date();
+		String dStr = java.text.DateFormat.getDateInstance(DateFormat.LONG).format(now);
+         //Convertendo de String para Date                                  
+       // Date dataf = parser.parse(data);             
+         //Convertendo para o tipo sql.Date (formato: yyyy-MM-dd)
+     //   java.sql.Date dataSql = new java.sql.Date(dataf.getTime());
+		System.out.println(dStr);
+		takingPrice = new TakingPrice(codeBarItem, priceItem, codeSupermarket, dStr); 
 		takingPriceDao.save(takingPrice);
 	}
 
@@ -61,7 +71,7 @@ public class TakingPriceControllerConsole {
 			tp = (TakingPrice) takingPriceDao.get(codeBarItem);
 			int codeSupermarket = tp.getCodeSupermarket();
 			double priceItem = tp.getPrice();
-			LocalDateTime dateTP = tp.getDate();
+			String dateTP = tp.getDate();
 			printer.printMsg(" A tomada de preço selecionada contém os seguintes dados: ");
 			printer.printMsg(" Código do item: " + codeBarItem);
 			printer.printMsg(" Código do supermercado : " + codeSupermarket);

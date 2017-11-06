@@ -9,9 +9,9 @@ public class TakingPrice {
 	// Date dateTP;
 	double price;
 	int codeSupermarket;
-	LocalDateTime date;
+	String date;
 
-	public TakingPrice(int codeBarItem, double price, int codeSupermarket, LocalDateTime date) {
+	public TakingPrice(int codeBarItem, double price, int codeSupermarket, String date) {
 		this.codeBarItem = codeBarItem;
 		// this.dateTP = dateTP;
 		this.price = price;
@@ -46,7 +46,7 @@ public class TakingPrice {
 	/*
 	 * Return the attribute date
 	 */
-	public LocalDateTime getDate() {
+	public String getDate() {
 		return date;
 	}
 	/*
