@@ -29,5 +29,10 @@ public class Supermarket {
 	}
 	// fazer método equals
 	// fazer método compareTo
-
+	public int hashCode() {
+		return code;
+	}
+	public String getNameClass(){
+		return "Supermarket";
+	}
 }

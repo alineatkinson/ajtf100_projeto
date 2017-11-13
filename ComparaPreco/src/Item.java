@@ -51,6 +51,12 @@ public class Item {
 		return description;
 	}
 	/*
+	 * Return the attribute barCode
+	 */
+	public int hashCode() {
+		return barCode;
+	}
+	/*
 	 * Print all items' attribute
 	 */
 	public void print() {

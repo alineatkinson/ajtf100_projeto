@@ -1,7 +1,4 @@
-import java.sql.Date;
-import java.text.NumberFormat;
-import java.time.LocalDateTime;
-import java.util.Locale;
+import java.util.Date;
 
 public class TakingPrice {
 
@@ -9,9 +6,9 @@ public class TakingPrice {
 	// Date dateTP;
 	double price;
 	int codeSupermarket;
-	String date;
+	Date date;
 
-	public TakingPrice(int codeBarItem, double price, int codeSupermarket, String date) {
+	public TakingPrice(int codeBarItem, double price, int codeSupermarket, Date date) {
 		this.codeBarItem = codeBarItem;
 		// this.dateTP = dateTP;
 		this.price = price;
@@ -46,8 +43,12 @@ public class TakingPrice {
 	/*
 	 * Return the attribute date
 	 */
-	public String getDate() {
+	public Date getDate() {
 		return date;
+	}
+	
+	public int hashCode() {
+		return codeBarItem;
 	}
 	/*
 	 * Print TomadaPreco's attribute

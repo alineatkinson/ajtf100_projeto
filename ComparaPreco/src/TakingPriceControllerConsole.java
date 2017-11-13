@@ -14,8 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TakingPriceControllerConsole {
 	Printer printer = new Printer();
 	Console reader = new Console();
-	ComparePriceDAO takingPriceDao = new TakingPriceDAOCollections();
-	//ComparePriceDAO takingPriceDao = new TakingPriceDAOJDBC();
+	//ComparePriceDAO takingPriceDao = new TakingPriceDAOCollections();
+	ComparePriceDAO takingPriceDao = new DAOFactory().getTakingPriceDAO();
 
 	public void createTakingPrice() {
 
@@ -45,7 +45,7 @@ public class TakingPriceControllerConsole {
 		//System.out.println(dtf.format(now)); //2016/11/16 12:08:43
 		//System.out.println(now);
 		
-		SimpleDateFormat parser = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+		
 		java.util.Date now = new Date();
 		String dStr = java.text.DateFormat.getDateInstance(DateFormat.LONG).format(now);
          //Convertendo de String para Date                                  
@@ -53,7 +53,7 @@ public class TakingPriceControllerConsole {
          //Convertendo para o tipo sql.Date (formato: yyyy-MM-dd)
      //   java.sql.Date dataSql = new java.sql.Date(dataf.getTime());
 		System.out.println(dStr);
-		takingPrice = new TakingPrice(codeBarItem, priceItem, codeSupermarket, dStr); 
+		takingPrice = new TakingPrice(codeBarItem, priceItem, codeSupermarket, now); 
 		takingPriceDao.save(takingPrice);
 	}
 
@@ -71,7 +71,7 @@ public class TakingPriceControllerConsole {
 			tp = (TakingPrice) takingPriceDao.get(codeBarItem);
 			int codeSupermarket = tp.getCodeSupermarket();
 			double priceItem = tp.getPrice();
-			String dateTP = tp.getDate();
+			Date dateTP = tp.getDate();
 			printer.printMsg(" A tomada de preço selecionada contém os seguintes dados: ");
 			printer.printMsg(" Código do item: " + codeBarItem);
 			printer.printMsg(" Código do supermercado : " + codeSupermarket);

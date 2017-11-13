@@ -9,7 +9,8 @@ public class ItemControllerConsole {
 	Printer printer = new Printer();
 	Console reader = new Console();
 	//ComparePriceDAO itemDao = new ItemDAOCollections();
-	ComparePriceDAO itemDao = new ItemDAOJDBC();
+	//ComparePriceDAO itemDao = new ItemDAOJDBC();
+	ComparePriceDAO itemDao = new DAOFactory().getItemDAO();
 
 	/*
 	 * Create the item

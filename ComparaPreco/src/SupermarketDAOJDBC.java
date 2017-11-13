@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class SupermarketDAOJDBC implements ComparePriceDAO {
+public class SupermarketDAOJDBC implements ComparePriceDAO<Supermarket> {
 
 	public void createTable() {
 		Connection conn = null;
@@ -34,19 +34,13 @@ public class SupermarketDAOJDBC implements ComparePriceDAO {
 			stmt.executeUpdate(sql);
 			System.out.println("Tabela 'supermarkets' criada com sucesso");
 		} catch (SQLException e) {
-			try {
-				throw new ConnectionException("Erro na criacao da tabela 'supermarkets'", e);
-			} catch (ConnectionException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			throw new RuntimeException("Erro na criacao da tabela 'supermarkets'", e);
 		} finally {
 			ConnectionManager.close(conn, stmt);
 		}
 	}
 
-	public void save(Object objSuper) {
-		Supermarket supermarket = (Supermarket) objSuper;
+	public void save(Supermarket supermarket) {
 		Statement stmt = null;
 		String sql = null;
 		ResultSet rs = null;
@@ -71,7 +65,7 @@ public class SupermarketDAOJDBC implements ComparePriceDAO {
 			// TODO Auto-generated catch block
 			e3.printStackTrace();
 		}
-		
+
 		Supermarket supermarketGet = null;
 		supermarketGet = (Supermarket) this.get(supermarket.getCode());
 
@@ -99,18 +93,13 @@ public class SupermarketDAOJDBC implements ComparePriceDAO {
 			// schemas = rs.toString();
 			// System.out.println(schemas);
 		} catch (SQLException e) {
-			try {
-				throw new ConnectionException("Erro na execucao da query " + sql, e);
-			} catch (ConnectionException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			throw new RuntimeException("Erro na execucao da query " + sql, e);
 		} finally {
 			ConnectionManager.close(conn, stmt);
 		}
 	}
-
-	public Object get(Number code_supermarket) {
+/*
+	public Supermarket antigoget(Number code_supermarket) {
 		String sql = "SELECT * FROM supermarkets WHERE code_supermarket = " + code_supermarket;
 		Connection conn = null;
 		Statement stmt = null;
@@ -130,27 +119,26 @@ public class SupermarketDAOJDBC implements ComparePriceDAO {
 				System.out.println("ENTROU NO IF DO GET SUPERMAKET");
 				String name = rs.getString("name");
 				int cepSuper = rs.getInt("cep");
-				supermarket = new Supermarket(name, cepSuper, (Integer)code_supermarket);
+				supermarket = new Supermarket(name, cepSuper, (Integer) code_supermarket);
 				System.out
 						.println("name: " + name + "Cep Super: " + cepSuper + "Code_supermarket :" + code_supermarket);
 			}
 		} catch (SQLException e) {
-			try {
-				throw new ConnectionException("Erro na execucao do select: " + sql, e);
-			} catch (ConnectionException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		} catch (ConnectionException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
+			throw new RuntimeException("Erro na execucao do select: " + sql, e);
 		} finally {
 			ConnectionManager.close(conn, stmt, rs);
 		}
 		return supermarket;
 	}
+*/
+	public Supermarket get(Number code_supermarket) {
+		String sql = "SELECT * FROM supermarkets WHERE code_supermarket = " + code_supermarket;
+		return (Supermarket) executeQueryMap(sql, new SupermarketRowMapper());
+	}
 
-	public Map getAll() {
+
+/*
+	public Map getAllAntigo() {
 		String sql = "SELECT * FROM supermarkets";
 		Connection conn = null;
 		Statement stmt = null;
@@ -172,19 +160,38 @@ public class SupermarketDAOJDBC implements ComparePriceDAO {
 				supermarkets.put(code_supermarket, new Supermarket(name, cepSuper, code_supermarket));
 			}
 		} catch (SQLException e) {
-			try {
-				throw new ConnectionException("Erro na execucao do select: " + sql, e);
-			} catch (ConnectionException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			throw new RuntimeException("Erro na execucao do select: " + sql, e);
 		} finally {
 			ConnectionManager.close(conn, stmt, rs);
 		}
 		return supermarkets;
 	}
+	*/
 
-	public void delete(Number code_supermarket) {
+	public Map getAll() {
+		String sql = "SELECT * FROM supermarkets";
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		Map<Number, Supermarket> supermarkets = new ConcurrentHashMap<>();
+		try {
+			conn = ConnectionManager.getConnection();
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				int code_supermarket = rs.getInt("code_supermarket");
+				supermarkets.put(code_supermarket, this.get(code_supermarket));
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException("Erro na execucao do select: " + sql, e);
+		} finally {
+			ConnectionManager.close(conn, stmt, rs);
+		}
+		return supermarkets;
+	}
+	
+	/*
+	public void deleteAntigo(Number code_supermarket) {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		String sql = "DELETE FROM supermarkets WHERE code_supermarket = " + code_supermarket;
@@ -196,21 +203,24 @@ public class SupermarketDAOJDBC implements ComparePriceDAO {
 			// stmt.setInt(1, code_supermarket);
 			qtdRemovidos = stmt.executeUpdate();
 			System.out.println("supermercado excluído do banco com sucesso!" + qtdRemovidos + " linhas excluidas");
-		} catch (ConnectionException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+
 		} catch (SQLException e) {
-			String errorMsg = "Erro ao tentar remover supermercado de code_supermarket " + code_supermarket;
-			try {
-				throw new ConnectionException(errorMsg, e);
-			} catch (ConnectionException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			throw new RuntimeException("Erro ao tentar remover supermercado de code_supermarket " + code_supermarket, e);
 		} finally {
 			ConnectionManager.close(conn, stmt);
 		}
-		System.out.println(" Total de linhas removidas: "+qtdRemovidos);
+		System.out.println(" Total de linhas removidas: " + qtdRemovidos);
+	}
+	*/
+
+	public void delete(Number code_supermarket) {
+		
+		String sql = "DELETE FROM supermarkets WHERE code_supermarket = " + code_supermarket;
+		int qtdRemovidos = 0;
+	
+			qtdRemovidos = this.executeQueryDelete(sql);
+			System.out.println("supermercado excluído do banco com sucesso!" + qtdRemovidos + " linhas excluidas");
+
 	}
 
 	public boolean checksExistence(Number code_supermarket) {
@@ -225,5 +235,6 @@ public class SupermarketDAOJDBC implements ComparePriceDAO {
 		}
 
 	}
+
 
 }

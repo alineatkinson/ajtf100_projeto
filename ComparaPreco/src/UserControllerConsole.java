@@ -6,8 +6,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class UserControllerConsole {
 	Printer printer = new Printer();
 	Console reader = new Console();
-	//UserDAO userDao = new UserDAOCollections();
-	UserDAO userDao = new UserDAOJDBC();
+	//UserDAO userDao = new UserDAOCollections();= new UserDAOJDBC();
+	UserDAO userDao = new DAOFactory().getUserDAO();
 
 	public void createUser() {
 

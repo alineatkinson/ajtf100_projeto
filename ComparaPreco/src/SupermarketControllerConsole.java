@@ -13,8 +13,9 @@ public class SupermarketControllerConsole {
 
 	Printer printer = new Printer();
 	Console reader = new Console();
-	//ComparePriceDAO supermarketDao = new SupermarketDAOCollections();
-	SupermarketDAOJDBC supermarketDao = new SupermarketDAOJDBC();
+	// ComparePriceDAO supermarketDao = new SupermarketDAOCollections(); new
+	// SupermarketDAOJDBC();
+	ComparePriceDAO supermarketDao = new DAOFactory().getSupermarketDAO();
 
 	public void createSupermarket() {
 
@@ -36,6 +37,7 @@ public class SupermarketControllerConsole {
 		// Create the supermarket with the name, address and code supermarket number
 		supermarket = new Supermarket(nameSuper, cepSuper, codeSupermarket);
 
+		// fazer try catch
 		supermarketDao.save(supermarket);
 	}
 
@@ -123,17 +125,7 @@ public class SupermarketControllerConsole {
 		supermarketKey = reader.readNumber();
 
 		supermarketDao.delete(supermarketKey);
-		/*
-		 * try { System.out.println("entrou no cathc"); int qtd =
-		 * supermarketJDBC.delete(supermarketKey);
-		 * System.out.println("número supermercados excluídos: " + qtd); } catch
-		 * (ConnectionException e) {
-		 * System.out.println("Falha ao excluir supermercado..."); e.printStackTrace();
-		 * } if (supermarketDao.checksExistence(supermarketKey)) {
-		 * supermarketDao.delete(supermarketKey);
-		 * 
-		 * } else { printer.printMsg("Não existe supermercado com este código."); }
-		 */
+
 	}
 
 }

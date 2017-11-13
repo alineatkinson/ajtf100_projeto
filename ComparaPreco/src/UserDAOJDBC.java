@@ -21,9 +21,9 @@ public class UserDAOJDBC implements UserDAO {
 		Statement stmt = null;
 
 		String sql = "CREATE TABLE users";
-        sql += " (cpf varchar(12) NOT NULL,";
-        sql += " name varchar(300) NOT NULL)";
-        
+		sql += " (cpf varchar(12) NOT NULL,";
+		sql += " name varchar(300) NOT NULL)";
+
 		System.out.println("Entrou no create table");
 
 		try {
@@ -48,8 +48,6 @@ public class UserDAOJDBC implements UserDAO {
 		Statement stmt = null;
 		String sql = null;
 		ResultSet rs = null;
-		// DatabaseMetaData dbmd; // apagar
-		// String schemas; // apagar
 
 		Connection conn = null;
 		try {
@@ -94,12 +92,7 @@ public class UserDAOJDBC implements UserDAO {
 			// schemas = rs.toString();
 			// System.out.println(schemas);
 		} catch (SQLException e) {
-			try {
-				throw new ConnectionException("Erro na execucao da query " + sql, e);
-			} catch (ConnectionException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			throw new RuntimeException("Erro na criacao da tabela 'supermarkets'", e);
 		} finally {
 			ConnectionManager.close(conn, stmt);
 		}
@@ -128,12 +121,7 @@ public class UserDAOJDBC implements UserDAO {
 				System.out.println("name: " + name + "cpf user: " + cpfUser);
 			}
 		} catch (SQLException e) {
-			try {
-				throw new ConnectionException("Erro na execucao do select: " + sql, e);
-			} catch (ConnectionException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			throw new RuntimeException("Erro na criacao da tabela 'supermarkets'", e);
 		} catch (ConnectionException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -164,12 +152,8 @@ public class UserDAOJDBC implements UserDAO {
 				users.put(cpf, new User(name, cpf));
 			}
 		} catch (SQLException e) {
-			try {
-				throw new ConnectionException("Erro na execucao do select: " + sql, e);
-			} catch (ConnectionException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			throw new RuntimeException("Erro na criacao da tabela 'supermarkets'", e);
+
 		} finally {
 			ConnectionManager.close(conn, stmt, rs);
 		}
@@ -192,13 +176,7 @@ public class UserDAOJDBC implements UserDAO {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (SQLException e) {
-			String errorMsg = "Erro ao tentar remover user de cpf " + cpfUser;
-			try {
-				throw new ConnectionException(errorMsg, e);
-			} catch (ConnectionException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			throw new RuntimeException("Erro na criacao da tabela 'supermarkets'", e);
 		} finally {
 			ConnectionManager.close(conn, stmt);
 		}

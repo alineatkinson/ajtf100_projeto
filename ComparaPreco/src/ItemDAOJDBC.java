@@ -7,7 +7,8 @@ import java.sql.Statement;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ItemDAOJDBC implements ComparePriceDAO {
+public class ItemDAOJDBC implements ComparePriceDAO<Item> {
+
 	public void createTable() {
 		Connection conn = null;
 		try {
@@ -31,24 +32,16 @@ public class ItemDAOJDBC implements ComparePriceDAO {
 			stmt.executeUpdate(sql);
 			System.out.println("Tabela 'items' criada com sucesso");
 		} catch (SQLException e) {
-			try {
-				throw new ConnectionException("Erro na criacao da tabela 'items'", e);
-			} catch (ConnectionException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			throw new RuntimeException("Erro na criacao da tabela 'supermarkets'", e);
 		} finally {
 			ConnectionManager.close(conn, stmt);
 		}
 	}
 
-	public void save(Object objItem) {
-		Item item = (Item) objItem;
+	public void save(Item item) {
 		Statement stmt = null;
 		String sql = null;
 		ResultSet rs = null;
-		// DatabaseMetaData dbmd; // apagar
-		// String schemas; // apagar
 
 		Connection conn = null;
 		try {
@@ -58,21 +51,19 @@ public class ItemDAOJDBC implements ComparePriceDAO {
 			e2.printStackTrace();
 		}
 		DatabaseMetaData dbmd = null;
-
 		try {
 			dbmd = conn.getMetaData();
 			rs = dbmd.getTables(null, "ALINE", "ITEMS", null);
 			if (!rs.next()) {
 				this.createTable();
 			}
-		} catch (SQLException e2) {
+		} catch (SQLException e3) {
 			// TODO Auto-generated catch block
-			e2.printStackTrace();
+			e3.printStackTrace();
 		}
 
 		Item itemGet = null;
 		itemGet = (Item) get(item.getBarCode());
-				
 
 		if (itemGet == null) {
 			System.out.println("Entrou no if do save");
@@ -89,69 +80,25 @@ public class ItemDAOJDBC implements ComparePriceDAO {
 
 		}
 
-		// Connection conn = ConnectionManager.getConnection();
 		try {
 			stmt = conn.createStatement();
 			stmt.executeUpdate(sql);
 			System.out.println("SQL = " + sql);
-			// dbmd = conn.getMetaData();
-			// rs = dbmd.getSchemas();
-			// schemas = rs.toString();
-			// System.out.println(schemas);
+
 		} catch (SQLException e) {
-			try {
-				throw new ConnectionException("Erro na execucao da query " + sql, e);
-			} catch (ConnectionException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			throw new RuntimeException("Erro na criacao da tabela 'supermarkets'", e);
 		} finally {
 			ConnectionManager.close(conn, stmt);
 		}
 	}
 
-	public Object get(Number codebar_item) {
+	public Item get(Number codebar_item) {
 		String sql = "SELECT * FROM items WHERE codebar_item = " + codebar_item;
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		Item item = null;
-
-		try {
-
-			conn = ConnectionManager.getConnection();
-			// System.out.println("PEGOU CONEXÃO");
-			stmt = conn.createStatement();
-			// System.out.println("CRIOU STATEMENT");
-			rs = stmt.executeQuery(sql);
-			// System.out.println("EXECUTOU STATEMENT");
-
-			if (rs.next()) {
-				System.out.println("ENTROU NO IF DO GET item");
-				String name = rs.getString("name");
-				String description = rs.getString("description");
-				item = new Item((Integer)codebar_item, name, description);
-				System.out
-						.println("name: " + name + "código de barras: " + codebar_item + "Descrição :" + description);
-			}
-		} catch (SQLException e) {
-			try {
-				throw new ConnectionException("Erro na execucao do select: " + sql, e);
-			} catch (ConnectionException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		} catch (ConnectionException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		} finally {
-			ConnectionManager.close(conn, stmt, rs);
-		}
-		return item;
+		return (Item) executeQueryMap(sql, new ItemRowMapper());
 	}
 
 	public Map getAll() {
-		String sql = "SELECT * FROM items";
+		String sql = "SELECT * FROM taking_prices";
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -166,18 +113,11 @@ public class ItemDAOJDBC implements ComparePriceDAO {
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				String name = rs.getString("name");
 				int codebar_item = rs.getInt("codebar_item");
-				String description = rs.getString("description");
-				items.put(codebar_item, new Item(codebar_item, name, description));
+				items.put(codebar_item, (Item) this.get(codebar_item));
 			}
 		} catch (SQLException e) {
-			try {
-				throw new ConnectionException("Erro na execucao do select: " + sql, e);
-			} catch (ConnectionException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			throw new RuntimeException("Erro na criacao da tabela 'supermarkets'", e);
 		} finally {
 			ConnectionManager.close(conn, stmt, rs);
 		}
@@ -185,37 +125,18 @@ public class ItemDAOJDBC implements ComparePriceDAO {
 	}
 
 	public void delete(Number codebar_item) {
-		Connection conn = null;
-		PreparedStatement stmt = null;
 		String sql = "DELETE FROM items WHERE codebar_item = " + codebar_item;
 		int qtdRemovidos = 0;
 
-		try {
-			conn = ConnectionManager.getConnection();
-			stmt = conn.prepareStatement(sql);
-			// stmt.setInt(1, code_supermarket);
-			qtdRemovidos = stmt.executeUpdate();
-			System.out.println("item excluído do banco com sucesso!" + qtdRemovidos + " linhas excluidas");
-		} catch (ConnectionException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (SQLException e) {
-			String errorMsg = "Erro ao tentar remover item de code_supermarket " + codebar_item;
-			try {
-				throw new ConnectionException(errorMsg, e);
-			} catch (ConnectionException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		} finally {
-			ConnectionManager.close(conn, stmt);
-		}
-		System.out.println(" Total de linhas removidas: " + qtdRemovidos);
+		qtdRemovidos = executeQueryDelete(sql);
+		System.out.println("item excluído do banco com sucesso!" + qtdRemovidos + " linhas excluidas");
+
 	}
 
-	public boolean checksExistence(Number code_item) {
+	public boolean checksExistence(Number codebar_item) {
+
 		Item itemGet = null;
-		itemGet = (Item) this.get(code_item);
+		itemGet = (Item) this.get(codebar_item);
 
 		if (itemGet == null) {
 			return false;
