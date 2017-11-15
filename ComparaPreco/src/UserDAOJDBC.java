@@ -1,199 +1,70 @@
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
-public class UserDAOJDBC implements UserDAO {
-	public void createTable() {
-		Connection conn = null;
-		try {
-			conn = ConnectionManager.getConnection();
-		} catch (ConnectionException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-		Statement stmt = null;
+public class UserDAOJDBC extends ComparePriceDAOJDBC implements UserDAO {
 
-		String sql = "CREATE TABLE users";
-		sql += " (cpf varchar(12) NOT NULL,";
-		sql += " name varchar(300) NOT NULL)";
+	private SQLHandler<TakingPrice> sh = new TakingPriceSQLHandler();
+	private RowMapper rm = new TakingPriceRowMapper();
+	Printer printer = new Printer();
 
-		System.out.println("Entrou no create table");
-
-		try {
-			stmt = conn.createStatement();
-			System.out.println("Criou objeto statement");
-			stmt.executeUpdate(sql);
-			System.out.println("Tabela 'users' criada com sucesso");
-		} catch (SQLException e) {
-			try {
-				throw new ConnectionException("Erro na criacao da tabela 'users'", e);
-			} catch (ConnectionException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		} finally {
-			ConnectionManager.close(conn, stmt);
-		}
-	}
-
-	public void save(Object objUser) {
-		User user = (User) objUser;
-		Statement stmt = null;
-		String sql = null;
-		ResultSet rs = null;
-
-		Connection conn = null;
-		try {
-			conn = ConnectionManager.getConnection();
-		} catch (ConnectionException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-		DatabaseMetaData dbmd = null;
-		try {
-			dbmd = conn.getMetaData();
-			rs = dbmd.getTables(null, "ALINE", "USERS", null);
-			if (!rs.next()) {
-				this.createTable();
-			}
-		} catch (SQLException e3) {
-			// TODO Auto-generated catch block
-			e3.printStackTrace();
-		}
-
-		User userGet = null;
-		userGet = (User) get(user.getCpf());
-
-		if (userGet == null) {
-			System.out.println("Entrou no if do save");
-			sql = "INSERT INTO users (cpf ,name) ";
-			sql += "  VALUES ('" + user.getCpf() + "', ";
-			sql += "'" + user.getName() + "' )";
-		} else {
-			System.out.println("Entrou no else");
-			sql = "UPDATE users SET name = '" + user.getName() + "', ";
-			sql += " WHERE cpf = '" + user.getCpf() + "'";
-		}
-
-		// Connection conn = ConnectionManager.getConnection();
-		try {
-			stmt = conn.createStatement();
-			stmt.executeUpdate(sql);
-			System.out.println("SQL = " + sql);
-			// dbmd = conn.getMetaData();
-			// rs = dbmd.getSchemas();
-			// schemas = rs.toString();
-			// System.out.println(schemas);
-		} catch (SQLException e) {
-			throw new RuntimeException("Erro na criacao da tabela 'supermarkets'", e);
-		} finally {
-			ConnectionManager.close(conn, stmt);
-		}
-	}
-
-	public Object get(String cpfUser) {
-		String sql = "SELECT * FROM users WHERE cpf like '" + cpfUser + "'";
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		User user = null;
-
-		try {
-
-			conn = ConnectionManager.getConnection();
-			// System.out.println("PEGOU CONEXÃO");
-			stmt = conn.createStatement();
-			// System.out.println("CRIOU STATEMENT");
-			rs = stmt.executeQuery(sql);
-			// System.out.println("EXECUTOU STATEMENT");
-
-			if (rs.next()) {
-				System.out.println("ENTROU NO IF DO GET user");
-				String name = rs.getString("name");
-				user = new User(name, cpfUser);
-				System.out.println("name: " + name + "cpf user: " + cpfUser);
-			}
-		} catch (SQLException e) {
-			throw new RuntimeException("Erro na criacao da tabela 'supermarkets'", e);
-		} catch (ConnectionException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		} finally {
-			ConnectionManager.close(conn, stmt, rs);
-		}
-		return user;
+	public void createTable(SQLHandler sh) {
+		String sql = sh.getCreateTable();
+		int qdtEdited = super.executeQuery(sql);
+		printer.printMsg("Tabela TakingPrices criada com sucesso");
 	}
 
 	public Map getAll() {
-		String sql = "SELECT * FROM users";
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		Map<String, User> users = new ConcurrentHashMap<>();
+		String sql = sh.getSelectAll();
+		ResultSet rs = super.getResultSet(sql);
+
+		List<User> takingprices = new ArrayList<>();
+
 		try {
-			try {
-				conn = ConnectionManager.getConnection();
-			} catch (ConnectionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				String name = rs.getString("name");
-				String cpf = rs.getString("cpf");
-				users.put(cpf, new User(name, cpf));
+				int codebar_item = rs.getInt("codebar_item");
+				takingprices.add(this.get(codebar_item));
 			}
 		} catch (SQLException e) {
-			throw new RuntimeException("Erro na criacao da tabela 'supermarkets'", e);
-
-		} finally {
-			ConnectionManager.close(conn, stmt, rs);
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return users;
+		return takingprices;
 	}
 
-	public void delete(String cpfUser) {
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		String sql = "DELETE FROM users WHERE cpf like '" + cpfUser + "'";
+	public void delete(Number codebar_item) {
+
+		String sql = sh.getDeleteSQL() + codebar_item;
 		int qtdRemovidos = 0;
 
-		try {
-			conn = ConnectionManager.getConnection();
-			stmt = conn.prepareStatement(sql);
-			// stmt.setInt(1, code_supermarket);
-			qtdRemovidos = stmt.executeUpdate();
-			System.out.println("user excluído do banco com sucesso!" + qtdRemovidos + " linhas excluidas");
-		} catch (ConnectionException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (SQLException e) {
-			throw new RuntimeException("Erro na criacao da tabela 'supermarkets'", e);
-		} finally {
-			ConnectionManager.close(conn, stmt);
-		}
-		System.out.println(" Total de linhas removidas: " + qtdRemovidos);
+		qtdRemovidos = executeQuery(sql);
+		System.out.println("taking_prices excluído do banco com sucesso!" + qtdRemovidos + " linhas excluidas");
 	}
 
-	public boolean checksExistence(String cpfUser) {
+	@Override
+	public void save(User object) {
+		String cpf = object.getCpf();
+		super.save(object, cpf, sh);
+	}
 
-		User userGet = null;
-		userGet = (User) this.get(cpfUser);
+	@Override
+	public User get(String cpf) {
+		String sql = sh.getSelectSQL() + cpf;
+		return (User) super.get(cpf, rm, sql);
+	}
 
-		if (userGet == null) {
-			return false;
-		} else {
-			return true;
-		}
+	@Override
+	public boolean checksExistence(String key) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
+	@Override
+	public void delete(String key) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

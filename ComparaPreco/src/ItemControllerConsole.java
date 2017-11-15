@@ -1,15 +1,18 @@
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 
 public class ItemControllerConsole {
 	Printer printer = new Printer();
 	Console reader = new Console();
-	//ComparePriceDAO itemDao = new ItemDAOCollections();
-	//ComparePriceDAO itemDao = new ItemDAOJDBC();
+	// ComparePriceDAO itemDao = new ItemDAOCollections();
+	// ComparePriceDAO itemDao = new ItemDAOJDBC();
 	ComparePriceDAO itemDao = new DAOFactory().getItemDAO();
 
 	/*
@@ -21,23 +24,26 @@ public class ItemControllerConsole {
 		String msg = "Qual o código de barras do item? \n";
 		printer.printMsg(msg);
 		int codeBar = reader.readNumber();
-		
+
 		// Ask and assign item's name
 		msg = "Qual o nome do item? \n";
 		printer.printMsg(msg);
 		String name = reader.readText();
 		name = reader.readText();
-		
+
 		// Ask and assign item's description
 		msg = "Qual a descrição do item? \n";
 		printer.printMsg(msg);
 		String description = reader.readText();
-		
-		
-		// Save the item
-		itemDao.save(new Item(codeBar, name, description));
-		System.out.println("Item incluído nome: " + name + " Código de barras " + codeBar);
 
+		// Save the item
+		this.save(codeBar, name, description);
+
+	}
+
+	private void save(int codeBar, String name, String description) {
+		Item item = new Item(codeBar, name, description);
+		itemDao.save(item);
 	}
 
 	/*
@@ -51,44 +57,33 @@ public class ItemControllerConsole {
 
 		if (itemDao.checksExistence(itemKey)) {
 			item = (Item) itemDao.get(itemKey);
-			String nameItem = item.getName();
-			String description = item.getDescription();
 			int respEdit = 0;
+			itemDao.delete(itemKey);
 
 			do {
-				printer.printMsg(" O item selecionado contém os seguintes dados: ");
-				printer.printMsg(" Código de barras : " + itemKey);
-				printer.printMsg(" Nome do  item: " + nameItem);
-				printer.printMsg(" Descrição do  item: " + description);
-				printer.printMsg(" Digite para alterar: 1 -> Código de barras , 2 -> Nome do item,  3 -> Descrição");
-
-				respEdit = reader.readNumber();
-				boolean included = false;
-
-				itemDao.delete(itemKey);
-
+				respEdit = this.askWhatEdit(item);
 				if (respEdit == 1) {
 					printer.printMsg(" Digite o novo código de barras: ");
 					int newCodeBar = 0;
 					newCodeBar = reader.readNumber();
-					Item newItem = new Item(newCodeBar, nameItem, description);
-					itemDao.save(newItem);
+					this.save(newCodeBar, item.getName(), item.getDescription());
+
 				} else if (respEdit == 2) {
 					printer.printMsg(" Digite o novo nome do item: ");
 					String newName = new String();
 					newName = " ";
 					newName = reader.readText();
 					newName = reader.readText();
-					Item newItem = new Item(itemKey, newName, description);
-					itemDao.save(newItem);
+					this.save(item.getBarCode(), newName, item.getDescription());
+
 				} else if (respEdit == 3) {
 					printer.printMsg(" Digite a nova descrição do item: ");
 					String newDescription = new String();
 					newDescription = " ";
 					newDescription = reader.readText();
 					newDescription = reader.readText();
-					Item newItem = new Item(itemKey, nameItem, newDescription);
-					itemDao.save(newItem);
+					this.save(item.getBarCode(), item.getName(), newDescription);
+
 				} else {
 					printer.printMsg("Nenhuma alternativa válida foi digitada. Tente outra vez!");
 				}
@@ -99,25 +94,41 @@ public class ItemControllerConsole {
 		}
 	}
 
+	public int askWhatEdit(Item item) {
+		printer.printMsg(" O item selecionado contém os seguintes dados: ");
+		printer.printMsg(" Código de barras : " + item.getBarCode());
+		printer.printMsg(" Nome do  item: " + item.getName());
+		printer.printMsg(" Descrição do  item: " + item.getDescription());
+		printer.printMsg(" Digite para alterar: 1 -> Código de barras , 2 -> Nome do item,  3 -> Descrição");
+		int respEdit = reader.readNumber();
+		return respEdit;
+	}
+
+	public List<String> getData() {
+
+		List<String> data = new ArrayList<String>();
+		List<Item> items = itemDao.getAll();
+
+		for (Item item : items) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("[Código de barra do item] : " + item.getBarCode());
+			sb.append("Nome do item: " + item.getName());
+			sb.append("Descrição do item: " + item.getDescription() + "\n");
+			data.add(sb.toString());
+		}
+		return data;
+	}
+
 	/*
 	 * List all items
 	 */
 	public void listItems() {
 
-		Map items = itemDao.getAll();
-		Set keys = items.keySet();
-		Iterator i = keys.iterator();
-		Item itemPrint = null;
+		List<String> data = getData();
 
-		while (i.hasNext()) {
-			int key = (Integer) i.next();
-			itemPrint = (Item) items.get(key);
-			printer.printMsg("[Código de barra do item] : " + itemPrint.getBarCode());
-			printer.printMsg("Nome do item: " + itemPrint.getName());
-			printer.printMsg("Descrição do item: " + itemPrint.getDescription() + "\n");
-
+		for (String item : data) {
+			printer.printMsg(item);
 		}
-
 	}
 
 	/*
@@ -128,7 +139,13 @@ public class ItemControllerConsole {
 		printer.printMsg("Digite o código de barras do item a ser deletado: ");
 		int itemKey = 0;
 		itemKey = reader.readNumber();
-		itemDao.delete(itemKey);
+
+		if (itemDao.checksExistence(itemKey)) {
+			itemDao.delete(itemKey);
+		} else {
+			printer.printMsg("Não há item com este código.");
+		}
+
 	}
 
 }

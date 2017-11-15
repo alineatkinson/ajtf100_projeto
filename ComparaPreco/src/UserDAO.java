@@ -2,9 +2,9 @@ import java.util.Map;
 
 public interface UserDAO {
 
-	public abstract void save(Object object);
+	public abstract void save(User object);
 
-	public abstract Object get(String key);
+	public abstract User get(String key);
 
 	public abstract boolean checksExistence(String key);
 

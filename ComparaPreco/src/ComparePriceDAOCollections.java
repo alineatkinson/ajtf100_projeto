@@ -1,4 +1,5 @@
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ComparePriceDAOCollections<E>  implements ComparePriceDAO {
@@ -12,8 +13,9 @@ public class ComparePriceDAOCollections<E>  implements ComparePriceDAO {
 		System.out.println("objeto incluído no dao collections");
 	}
 
-	public Map getAll() {
-		return (Map) objects;
+	public List<E> getAll() {
+		List<E> list = new ArrayList(objects.values());
+		return list;
 	}
 
 	public boolean checksExistence(Number key) {

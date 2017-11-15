@@ -1,4 +1,5 @@
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -19,8 +20,6 @@ public class SupermarketControllerConsole {
 
 	public void createSupermarket() {
 
-		Supermarket supermarket;
-
 		// Assign supermarket name attribute to the item
 		printer.printMsg("Qual o código do supermercado? (Código int) \n");
 		int codeSupermarket = reader.readNumber();
@@ -33,11 +32,12 @@ public class SupermarketControllerConsole {
 		// Ask the supermarket's code adress
 		printer.printMsg("Qual o cep deste supermercado? (utilize somente números) \n");
 		int cepSuper = reader.readNumber();
+		this.save(nameSuper, cepSuper, codeSupermarket);
+	}
 
+	public void save(String nameSuper, int cepSuper, int codeSupermarket) {
 		// Create the supermarket with the name, address and code supermarket number
-		supermarket = new Supermarket(nameSuper, cepSuper, codeSupermarket);
-
-		// fazer try catch
+		Supermarket supermarket = new Supermarket(nameSuper, cepSuper, codeSupermarket);
 		supermarketDao.save(supermarket);
 	}
 
@@ -52,42 +52,31 @@ public class SupermarketControllerConsole {
 
 		if (supermarketDao.checksExistence(supermarketKey)) {
 			supermarket = (Supermarket) supermarketDao.get(supermarketKey);
-			String nameSupermarket = supermarket.getName();
-			int cepSupermarket = supermarket.getCEP();
 
 			int respEdit = 0;
+			supermarketDao.delete(supermarketKey);
 
 			do {
-				printer.printMsg(" O supermercado selecionado contém os seguintes dados: ");
-				printer.printMsg(" Nome : " + nameSupermarket);
-				printer.printMsg(" Código : " + supermarketKey);
-				printer.printMsg(" CEP : " + cepSupermarket);
-				printer.printMsg(
-						" Digite para alterar: 1 -> Nome do supermercado, 2 -> Código do supermercado, 3 -> CEP");
-				respEdit = reader.readNumber();
-
-				supermarketDao.delete(supermarketKey);
-
+				respEdit = this.askWhatEdit(supermarket);
 				if (respEdit == 1) {
 					printer.printMsg(" Digite o novo nome do supermercado: ");
 					String newNome = new String();
 					newNome = " ";
 					newNome = reader.readText();
 					newNome = reader.readText();
-					Supermarket newSupermarket = new Supermarket(newNome, cepSupermarket, supermarketKey);
-					supermarketDao.save(newSupermarket);
+					this.save(newNome, supermarket.getCEP(), supermarket.getCode());
+
 				} else if (respEdit == 2) {
 					printer.printMsg(" Digite o novo código do supermercado: ");
 					int newCodeSupermarket = 0;
 					newCodeSupermarket = reader.readNumber();
-					Supermarket newSupermarket = new Supermarket(nameSupermarket, cepSupermarket, newCodeSupermarket);
-					supermarketDao.save(newSupermarket);
+					this.save(supermarket.getName(), supermarket.getCEP(), newCodeSupermarket);
+
 				} else if (respEdit == 3) {
 					printer.printMsg(" Digite o novo CEP do supermercado: ");
 					int newCEPSupermarket = 0;
 					newCEPSupermarket = reader.readNumber();
-					Supermarket newSupermarket = new Supermarket(nameSupermarket, newCEPSupermarket, supermarketKey);
-					supermarketDao.save(newSupermarket);
+					this.save(supermarket.getName(), newCEPSupermarket, supermarket.getCode());
 				} else {
 					printer.printMsg("Nenhuma alternativa válida foi digitada. Tente outra vez!");
 				}
@@ -98,23 +87,56 @@ public class SupermarketControllerConsole {
 		}
 	}
 
+	public int askWhatEdit(Supermarket sm) {
+		printer.printMsg(" O supermercado selecionado contém os seguintes dados: ");
+		printer.printMsg(" Nome : " + sm.getName());
+		printer.printMsg(" Código : " + sm.getCode());
+		printer.printMsg(" CEP : " + sm.getCEP());
+		printer.printMsg(" Digite para alterar: 1 -> Nome do supermercado, 2 -> Código do supermercado, 3 -> CEP");
+		int respEdit = 0;
+		return respEdit = reader.readNumber();
+	}
+
+	public List<String> getData() {
+
+		List<String> data = new ArrayList<String>();
+		List<Supermarket> supermarkets = supermarketDao.getAll();
+
+		for (Supermarket supermarket : supermarkets) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("[Código do Supermercado] : " + supermarket.getCode());
+			sb.append("Nome do supermercado: " + supermarket.getName());
+			sb.append("CEP do supermercado: " + supermarket.getCEP() + "\n");
+			data.add(sb.toString());
+		}
+		return data;
+	}
+
+	public void listSupermarkets() {
+
+		List<String> data = getData();
+
+		for (String supermarket : data) {
+			printer.printMsg(supermarket);
+		}
+	}
+
 	/*
 	 * List all supermarkets
 	 */
-	public void listSupermarkets() {
-		Map supermarkets = supermarketDao.getAll();
-		Set keys = supermarkets.keySet();
-		Iterator i = keys.iterator();
-		Supermarket supermarketPrint = null;
-
-		while (i.hasNext()) {
-			int key = (Integer) i.next();
-			supermarketPrint = (Supermarket) supermarkets.get(key);
-			printer.printMsg("[Código do Supermercado] : " + supermarketPrint.getCode());
-			printer.printMsg("Nome do supermercado: " + supermarketPrint.getName());
-			printer.printMsg("CEP do supermercado: " + supermarketPrint.getCEP() + "\n");
-		}
-	}
+	/*
+	 * public void listSupermarkets() { List<Supermarket> supermarkets =
+	 * supermarketDao.getAll();
+	 * 
+	 * Iterator<Supermarket> i = supermarkets.iterator(); Supermarket
+	 * supermarketPrint = null;
+	 * 
+	 * while (i.hasNext()) { supermarketPrint = i.next();
+	 * printer.printMsg("[Código do Supermercado] : " + supermarketPrint.getCode());
+	 * printer.printMsg("Nome do supermercado: " + supermarketPrint.getName());
+	 * printer.printMsg("CEP do supermercado: " + supermarketPrint.getCEP() + "\n");
+	 * } }
+	 */
 
 	/*
 	 * Delete a supermarket
@@ -124,8 +146,11 @@ public class SupermarketControllerConsole {
 		int supermarketKey = 0;
 		supermarketKey = reader.readNumber();
 
-		supermarketDao.delete(supermarketKey);
-
+		if (supermarketDao.checksExistence(supermarketKey)) {
+			supermarketDao.delete(supermarketKey);
+		} else {
+			printer.printMsg("Não há supermercado com este código.");
+		}
 	}
 
 }

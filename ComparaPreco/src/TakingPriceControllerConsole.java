@@ -1,59 +1,54 @@
 import java.text.DateFormat;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class TakingPriceControllerConsole {
 	Printer printer = new Printer();
 	Console reader = new Console();
-	//ComparePriceDAO takingPriceDao = new TakingPriceDAOCollections();
+	// ComparePriceDAO takingPriceDao = new TakingPriceDAOCollections();
 	ComparePriceDAO takingPriceDao = new DAOFactory().getTakingPriceDAO();
 
 	public void createTakingPrice() {
 
-		TakingPrice takingPrice;
-
 		printer.printMsg("Qual o código do item? \n");
 		int codeBarItem = reader.readNumber();
-		//codeSupermarket = reader.readNumber();
-	
-		
+		// codeSupermarket = reader.readNumber();
+
 		printer.printMsg("Qual o código do supermercado? (Código int) \n");
 		int codeSupermarket = reader.readNumber();
 
-	
 		printer.printMsg("Qual o preço do item? (Ex.Formato: 5000,23 para R$ 5.000,23) \n");
 		double priceItem = reader.readNumberDouble();
-		
-		//LocalDateTime timePoint = LocalDateTime.now(); 
-		//System.out.print(timePoint);
-		
-		//DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-		//Calendar cal = Calendar.getInstance();
-		//System.out.println(dateFormat.format(cal)); //31/01/2017 16 12:08:43
-		
-		//DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-		//LocalDateTime now = LocalDateTime.now();
-		//System.out.println(dtf.format(now)); //2016/11/16 12:08:43
-		//System.out.println(now);
-		
-		
+
+		// LocalDateTime timePoint = LocalDateTime.now();
+		// System.out.print(timePoint);
+
+		// DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		// Calendar cal = Calendar.getInstance();
+		// System.out.println(dateFormat.format(cal)); //31/01/2017 16 12:08:43
+
+		// DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+		// LocalDateTime now = LocalDateTime.now();
+		// System.out.println(dtf.format(now)); //2016/11/16 12:08:43
+		// System.out.println(now);
+
 		java.util.Date now = new Date();
 		String dStr = java.text.DateFormat.getDateInstance(DateFormat.LONG).format(now);
-         //Convertendo de String para Date                                  
-       // Date dataf = parser.parse(data);             
-         //Convertendo para o tipo sql.Date (formato: yyyy-MM-dd)
-     //   java.sql.Date dataSql = new java.sql.Date(dataf.getTime());
+		// Convertendo de String para Date
+		// Date dataf = parser.parse(data);
+		// Convertendo para o tipo sql.Date (formato: yyyy-MM-dd)
+		// java.sql.Date dataSql = new java.sql.Date(dataf.getTime());
 		System.out.println(dStr);
-		takingPrice = new TakingPrice(codeBarItem, priceItem, codeSupermarket, now); 
+		this.save(codeBarItem, priceItem, codeSupermarket, now);
+
+	}
+
+	public void save(int codeBarItem, double priceItem, int codeSupermarket, Date now) {
+		TakingPrice takingPrice = new TakingPrice(codeBarItem, priceItem, codeSupermarket, now);
 		takingPriceDao.save(takingPrice);
 	}
 
@@ -66,46 +61,37 @@ public class TakingPriceControllerConsole {
 		int codeBarItem = reader.readNumber();
 		TakingPrice tp = null;
 
-		// pensando em cadastrar o novo preço sem editar o preço antigo. Senão terei que controlar por muitos atributos.
+		// pensando em cadastrar o novo preço sem editar o preço antigo. Senão terei que
+		// controlar por muitos atributos.
 		if (takingPriceDao.checksExistence(codeBarItem)) {
 			tp = (TakingPrice) takingPriceDao.get(codeBarItem);
 			int codeSupermarket = tp.getCodeSupermarket();
 			double priceItem = tp.getPrice();
 			Date dateTP = tp.getDate();
-			printer.printMsg(" A tomada de preço selecionada contém os seguintes dados: ");
-			printer.printMsg(" Código do item: " + codeBarItem);
-			printer.printMsg(" Código do supermercado : " + codeSupermarket);
-			NumberFormat monetaryFormatter = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
-			printer.printMsg("Preço do item :" + monetaryFormatter.format(priceItem));
-			printer.printMsg("Data da tomada de preço :" + dateTP);
-			printer.printMsg(" Digite para alterar: 1 -> Código do item, 2 -> Código do supermercado, 3 -> Preço do item");
 			int respEdit = 0;
-			respEdit = reader.readNumber();
-
 			takingPriceDao.delete(codeBarItem);
 
 			do {
+				respEdit = this.askWhatEdit(tp);
 				if (respEdit == 1) {
 					printer.printMsg(" Digite o novo código do item: ");
 					int newCodeItem = 0;
 					newCodeItem = reader.readNumber();
-					TakingPrice newTP = new TakingPrice(newCodeItem, priceItem, codeSupermarket, dateTP);
-					takingPriceDao.save(newTP);
+					this.save(newCodeItem, priceItem, codeSupermarket, dateTP);
 				} else if (respEdit == 2) {
 					printer.printMsg(" Digite o novo código do supermercado: ");
 					int newCodeSupermarket = 0;
 					newCodeSupermarket = reader.readNumber();
-					TakingPrice newTP = new TakingPrice(codeBarItem, priceItem, newCodeSupermarket, dateTP);
-					takingPriceDao.save(newTP);
+					this.save(codeBarItem, priceItem, newCodeSupermarket, dateTP);
 				} else if (respEdit == 3) {
 					printer.printMsg(" Digite o novo preço do item: ");
 					double newPriceItem = 0;
 					newPriceItem = reader.readNumberDouble();
-					TakingPrice newTP = new TakingPrice(codeBarItem, newPriceItem, codeSupermarket, dateTP);
-					takingPriceDao.save(newTP);
+					this.save(codeBarItem, newPriceItem, codeSupermarket, dateTP);
 				} else {
 					printer.printMsg("Nenhuma alternativa válida foi digitada. Tente outra vez!");
 				}
+				
 			} while (respEdit != 1 & respEdit != 2 & respEdit != 3);
 
 		} else {
@@ -113,42 +99,45 @@ public class TakingPriceControllerConsole {
 		}
 	}
 
-	/*
-	 * List all supermarkets
-	 */
-	public void listTakingPrice() {
-				
-		Map takingPrices = takingPriceDao.getAll();
-		Set keys = takingPrices.keySet();
-		Iterator i = keys.iterator();
-		TakingPrice tpPrint = null;
-
-		while (i.hasNext()) {
-			int key = (Integer) i.next();
-			tpPrint = (TakingPrice) takingPrices.get(key);
-			printer.printMsg("[Código do item] : " + tpPrint.getCodeBarItem());
-			printer.printMsg("[Código do Supermercado]: " + tpPrint.getCodeSupermarket());
-			printer.printMsg("Preço: " + tpPrint.getPrice());
-			printer.printMsg("Data: " + tpPrint.getDate() + "\n");
-		}
-		
-
+	public int askWhatEdit(TakingPrice tp) {
+		printer.printMsg(" A tomada de preço selecionada contém os seguintes dados: ");
+		printer.printMsg(" Código do item: " + tp.codeBarItem);
+		printer.printMsg(" Código do supermercado : " + tp.getCodeSupermarket());
 		NumberFormat monetaryFormatter = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+		printer.printMsg("Preço do item :" + monetaryFormatter.format(tp.getPrice()));
+		printer.printMsg("Data da tomada de preço :" + tp.getDate());
+		printer.printMsg(" Digite para alterar: 1 -> Código do item, 2 -> Código do supermercado, 3 -> Preço do item");
+		int respEdit = 0;
+		return respEdit = reader.readNumber();
+	}
 
-		System.out.println("Teste list dao colecctions");
-		while (i.hasNext()) {
-			int chave = (int) i.next();
-			tpPrint = (TakingPrice) takingPrices.get(chave);
-			printer.printMsg("------------------------------------");
-			printer.printMsg("[Código do item:] :" + chave);
-			printer.printMsg("Código do Supermercado :" + tpPrint.getCodeSupermarket() + "\n");
-			printer.printMsg("Preço do item :" + monetaryFormatter.format(tpPrint.getPrice()));
-			printer.printMsg("Data da tomada de preço :" + tpPrint.getDate());
-			printer.printMsg("------------------------------------");
+	/*
+	 * List all taking prices
+	 */
+	public List<String> getData() {
+
+		List<String> data = new ArrayList<String>();
+		List<TakingPrice> takingPrices = takingPriceDao.getAll();
+
+		for (TakingPrice takingprice : takingPrices) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("[Código do item] : " + takingprice.getCodeBarItem());
+			sb.append("[Código do Supermercado]: " + takingprice.getCodeSupermarket());
+			sb.append("Preço: " + takingprice.getPrice());
+			sb.append("Data: " + takingprice.getDate() + "\n");
+			data.add(sb.toString());
+		}
+		return data;
+	}
+
+	public void listTakingPrice() {
+
+		List<String> data = getData();
+
+		for (String item : data) {
+			printer.printMsg(item);
 		}
 	}
-		
-	
 
 	/*
 	 * Delete a supermarket

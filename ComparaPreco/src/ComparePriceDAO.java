@@ -3,6 +3,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 import java.util.Map;
 
 public interface ComparePriceDAO<E> {
@@ -15,9 +16,9 @@ public interface ComparePriceDAO<E> {
 
 	public abstract void delete(Number key);
 
-	public abstract Map getAll();
+	public abstract List<E> getAll();
 
-	public default Object executeQueryMap(String sql, RowMapper m) {
+	/*public default Object executeQueryMap(String sql, RowMapper m) {
 
 		Connection conn = null;
 		Statement stmt = null;
@@ -44,7 +45,8 @@ public interface ComparePriceDAO<E> {
 		return valor;
 
 	}
-
+*/
+	/*
 	public default int executeQueryDelete(String sql) {
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -65,7 +67,7 @@ public interface ComparePriceDAO<E> {
 		System.out.println(" Total de linhas removidas: " + qtdRemovidos);
 
 		return qtdRemovidos;
-	}
+	}]*/
 	/*
 	 * public default void executeUpdate(String sql) { Connection conn = null;
 	 * PreparedStatement stmt = null;

@@ -3,12 +3,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class UserDAOCollections implements UserDAO {
+public class UserDAOCollections implements ComparePriceDAO<User> {
 	ConcurrentHashMap users = new ConcurrentHashMap();
 	Printer printer = new Printer();
 
-	public void save (Object objUser) {
-		User user = (User)objUser;
+	public void save (User user) {
 		users.put(user.getCpf(),user);
 		System.out.println("Usuário adicionado");
 	}

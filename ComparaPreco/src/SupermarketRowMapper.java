@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 class SupermarketRowMapper implements RowMapper {
 
-	public Object map(ResultSet rs) throws SQLException {
+	public Supermarket map(ResultSet rs) throws SQLException {
 
 		String name = rs.getString("name");
 		int cepSuper = rs.getInt("cep");

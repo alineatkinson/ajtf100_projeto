@@ -17,7 +17,8 @@ public class ConnectionManager {
 			conn = DriverManager.getConnection(STR_CON, USER, PASSWORD);
 			System.out.println("Conectado 2");
 			System.out.println(conn.toString());
-			System.out.printf("%s %s %n",conn.getMetaData().getDatabaseProductName(), conn.getMetaData().getDatabaseProductVersion());
+			System.out.printf("%s %s %n", conn.getMetaData().getDatabaseProductName(),
+					conn.getMetaData().getDatabaseProductVersion());
 		} catch (SQLException e) {
 			throw new ConnectionException("Erro ao obter a conexao", e);
 		}
@@ -56,5 +57,15 @@ public class ConnectionManager {
 			e.printStackTrace();
 		}
 		ConnectionManager.close(conn, stmt);
+	}
+
+	public static void close(ResultSet rs) {
+		try {
+			if (rs != null) {
+				rs.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
