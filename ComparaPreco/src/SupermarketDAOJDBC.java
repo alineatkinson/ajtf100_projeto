@@ -14,12 +14,12 @@ public class SupermarketDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 	public void createTable() {
 		String sql = sh.getCreateTable();
 		int qdtEdited = super.executeQuery(sql);
-		printer.printMsg("Tabela TakingPrices criada com sucesso");
+		printer.printMsg("Tabela Supermarkets criada com sucesso");
 	}
 
 	public List<Supermarket> getAll() {
 		String sql = sh.getSelectAll();
-		List<Supermarket> takingprices = new ArrayList<>();
+		List<Supermarket> supermarkets = new ArrayList<>();
 		Statement stmt = null;
 		ResultSet rs = null;
 		Connection conn = null;
@@ -29,8 +29,8 @@ public class SupermarketDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				int codebar_item = rs.getInt("codebar_item");
-				takingprices.add(this.get(codebar_item));
+				int code_supermarket = rs.getInt("code_supermarket");
+				supermarkets.add(this.get(code_supermarket));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -38,7 +38,7 @@ public class SupermarketDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 		} finally {
 			ConnectionManager.close(conn, stmt, rs);
 		}
-		return takingprices;
+		return supermarkets;
 	}
 
 	public void delete(Number codebar_item) {
@@ -47,7 +47,7 @@ public class SupermarketDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 		int qtdRemovidos = 0;
 
 		qtdRemovidos = executeQuery(sql);
-		System.out.println("taking_prices excluído do banco com sucesso!" + qtdRemovidos + " linhas excluidas");
+		System.out.println("supermercado excluído do banco com sucesso!" + qtdRemovidos + " linhas excluidas");
 	}
 
 	@Override

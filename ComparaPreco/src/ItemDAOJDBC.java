@@ -26,11 +26,14 @@ public class ItemDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceDAO<
 
 		try {
 			conn = ConnectionManager.getConnection();
+			System.out.println(sql);
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
+			System.out.print(rs.toString());
 			
 			while (rs.next()) {
 				int codebar_item = rs.getInt("codebar_item");
+				System.out.println(codebar_item);
 				items.add(this.get(codebar_item));
 			}
 		} catch (ConnectionException e) {

@@ -104,9 +104,12 @@ public class SupermarketControllerConsole {
 
 		for (Supermarket supermarket : supermarkets) {
 			StringBuilder sb = new StringBuilder();
-			sb.append("[Código do Supermercado] : " + supermarket.getCode());
-			sb.append("Nome do supermercado: " + supermarket.getName());
-			sb.append("CEP do supermercado: " + supermarket.getCEP() + "\n");
+			String codigoSuper = "[Código do Supermercado] : " + supermarket.getCode() + " \n";
+			sb.append(codigoSuper);
+			String nomeSuper = "Nome do supermercado: " + supermarket.getName() + " \n";
+			sb.append(nomeSuper);
+			String cepSuper = "CEP do supermercado: " + supermarket.getCEP() + "\n";
+			sb.append(cepSuper);
 			data.add(sb.toString());
 		}
 		return data;

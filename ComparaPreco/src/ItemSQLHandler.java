@@ -54,6 +54,7 @@ public class ItemSQLHandler implements SQLHandler<Item> {
 	public String getSelectAll() {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT * FROM items");
+		System.out.println(sql.toString());
 		return sql.toString();
 	}
 
