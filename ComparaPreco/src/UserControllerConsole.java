@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -6,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class UserControllerConsole {
 	Printer printer = new Printer();
 	Console reader = new Console();
-	//UserDAO userDao = new UserDAOCollections();= new UserDAOJDBC();
+	// UserDAO userDao = new UserDAOCollections();= new UserDAOJDBC();
 	UserDAO userDao = new DAOFactory().getUserDAO();
 
 	public void createUser() {
@@ -23,8 +25,14 @@ public class UserControllerConsole {
 		String cpfUser = reader.readText();
 
 		// save the user
-		userDao.save(new User(nameUser, cpfUser));
+		save(nameUser, cpfUser);
 
+	}
+
+	public void save(String nameUser, String cpfUser) {
+		// Create the supermarket with the name, address and code supermarket number
+		User user = new User(nameUser, cpfUser);
+		userDao.save(user);
 	}
 
 	public void editUser() {
@@ -36,13 +44,8 @@ public class UserControllerConsole {
 		if (userDao.checksExistence(userKey)) {
 			user = (User) userDao.get(userKey);
 			String nameUser = user.getName();
-			printer.printMsg(" O usuário selecionado contém os seguintes dados: ");
-			printer.printMsg(" Nome: " + nameUser);
-			printer.printMsg(" CPF : " + userKey);
-			printer.printMsg(" Digite para alterar: 1 -> Nome, 2 -> CPF");
-			int respEdit = 0;
-			respEdit = reader.readNumber();
 
+			int respEdit = askWhatEdit(user);
 			userDao.delete(userKey);
 
 			do {
@@ -51,14 +54,14 @@ public class UserControllerConsole {
 					String newNome = new String();
 					newNome = reader.readText();
 					newNome = reader.readText();
-					userDao.save(new User(newNome, userKey));
+					this.save(newNome, userKey);
 				} else if (respEdit == 2) {
 					printer.printMsg(" Digite o novo CPF: ");
 					String newCPF = new String();
 					newCPF = " ";
 					newCPF = reader.readText();
 					newCPF = reader.readText();
-					userDao.save(new User(nameUser, newCPF));
+					this.save(nameUser, newCPF);
 				} else {
 					printer.printMsg("Nenhuma alternativa válida foi digitada. Tente outra vez!");
 				}
@@ -69,19 +72,39 @@ public class UserControllerConsole {
 		}
 	}
 
-	// public void deleteUser();
+	public int askWhatEdit(User user) {
+		printer.printMsg(" O usuário selecionado contém os seguintes dados: ");
+		printer.printMsg(" Nome: " + user.getName());
+		printer.printMsg(" CPF : " + user.getCpf());
+		printer.printMsg(" Digite para alterar: 1 -> Nome, 2 -> CPF");
+		int respEdit = 0;
+		return respEdit = reader.readNumber();
+	}
+
+	/*
+	 * List all taking prices
+	 */
+	public List<String> getData() {
+
+		List<String> data = new ArrayList<String>();
+		List<User> users = userDao.getAll();
+
+		for (User user : users) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("[CPF do usuário] : " + user.getCpf());
+			sb.append("Nome do usuário: " + user.getName() + "\n");
+			data.add(sb.toString());
+		}
+		return data;
+	}
+
 	public void listUsers() {
 
-		Map users = userDao.getAll();
-		Set keys = users.keySet();
-		Iterator i = keys.iterator();
-		User userPrint = null;
+		List<String> data = getData();
 
-		while (i.hasNext()) {
-			String key = (String) i.next();
-			userPrint = (User) users.get(key);
-			printer.printMsg("[CPF do usuário] : " + userPrint.getCpf());
-			printer.printMsg("Nome do usuário: " + userPrint.getName() + "\n");
+		
+		for (String user : data) {
+			printer.printMsg(user);
 		}
 	}
 
@@ -89,7 +112,11 @@ public class UserControllerConsole {
 		printer.printMsg("Digite o cpf do usuário a ser excluído: ");
 		String userKey = new String();
 		userKey = reader.readText();
-
-		userDao.delete(userKey);
+		if (userDao.checksExistence(userKey)) {
+			userDao.delete(userKey);
+		} else {
+			printer.printMsg("Não há usuário com este cpf");
+		}
 	}
+
 }

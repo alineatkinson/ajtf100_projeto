@@ -1,14 +1,16 @@
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class UserDAOCollections implements ComparePriceDAO<User> {
+public class UserDAOCollections implements UserDAO {
 	ConcurrentHashMap users = new ConcurrentHashMap();
 	Printer printer = new Printer();
 
-	public void save (User user) {
-		users.put(user.getCpf(),user);
+	public void save(User user) {
+		users.put(user.getCpf(), user);
 		System.out.println("Usuário adicionado");
 	}
 
@@ -28,8 +30,9 @@ public class UserDAOCollections implements ComparePriceDAO<User> {
 	}
 
 	@Override
-	public Map getAll() {
-		return this.users;
+	public List getAll() {
+		List<User> list = new ArrayList(users.values());
+		return null;
 	}
 
 }

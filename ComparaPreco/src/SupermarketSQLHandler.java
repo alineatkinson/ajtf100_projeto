@@ -7,7 +7,7 @@ public class SupermarketSQLHandler implements SQLHandler<Supermarket> {
 	public String handle(Supermarket supermarket, Boolean exist) {
 		StringBuilder sql = new StringBuilder();
 
-		if (exist) {
+		if (!exist) {
 			System.out.println("Entrou no if do save");
 			sql.append("INSERT INTO supermarkets (code_supermarket, name, cep) ");
 			sql.append("  VALUES (" + supermarket.getCode() + ", ");
@@ -53,9 +53,8 @@ public class SupermarketSQLHandler implements SQLHandler<Supermarket> {
 
 	@Override
 	public String getSelectAll() {
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT * FROM supermarkets");
-		return sql.toString();
+		String sql = "SELECT * FROM supermarkets";
+		return sql;
 	}
 
 }

@@ -6,7 +6,7 @@ public class ItemSQLHandler implements SQLHandler<Item> {
 
 		StringBuilder sql = new StringBuilder();
 
-		if (exist) {
+		if (!exist) {
 			System.out.println("Entrou no if do save");
 			sql.append("INSERT INTO items (codebar_item, name, description) ");
 			sql.append("  VALUES (" + item.getBarCode() + ", ");
@@ -52,10 +52,8 @@ public class ItemSQLHandler implements SQLHandler<Item> {
 
 	@Override
 	public String getSelectAll() {
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT * FROM items");
-		System.out.println(sql.toString());
-		return sql.toString();
+		String sql = "SELECT * FROM items";
+		return sql;
 	}
 
 }

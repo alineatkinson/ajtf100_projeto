@@ -82,7 +82,7 @@ public class SupermarketDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 
 	@Override
 	public Supermarket get(Number key) {
-		String sql = sh.getSelectSQL() + key;
+		String sql = sh.getSelectSQL();
 		return (Supermarket) super.get(key, sh.getRowMapper(), sql);
 	}
 

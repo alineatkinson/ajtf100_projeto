@@ -1,40 +1,61 @@
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class UserSQLHandler implements SQLHandler<User> {
 
 	@Override
+	public String handle(User user, Boolean exist) {
+
+		StringBuilder sql = new StringBuilder();
+
+		if (!exist) {
+			System.out.println("Entrou no if do save");
+			sql.append("INSERT INTO users (cpf ,name) ");
+			sql.append(" VALUES ('" + user.getCpf() + "',");
+			sql.append("'" + user.getName() + "')");
+
+		} else {
+			System.out.println("Entrou no else");
+			sql.append("UPDATE users SET name = '" + user.getName() + "'");
+			sql.append(" WHERE cpf = '" + user.getCpf() + "'");
+
+		}
+
+		return sql.toString();
+	}
+
+	@Override
 	public RowMapper getRowMapper() {
-		// TODO Auto-generated method stub
-		return null;
+		RowMapper rm = new UserRowMapper();
+		return rm;
 	}
 
 	@Override
 	public String getSelectSQL() {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT * FROM users WHERE cpf like '";
+		return sql;
 	}
 
 	@Override
 	public String getDeleteSQL() {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "DELETE FROM users WHERE cpf like '";
+		return sql;
 	}
 
 	@Override
 	public String getCreateTable() {
-		// TODO Auto-generated method stub
-		return null;
+		StringBuilder sql = new StringBuilder();
+		sql.append("CREATE TABLE users");
+		sql.append(" (cpf varchar(12) NOT NULL,");
+		sql.append(" name varchar(300) NOT NULL)");
+
+		return sql.toString();
 	}
 
 	@Override
 	public String getSelectAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String handle(User e, Boolean exist) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT * FROM users";
+		return sql;
 	}
 
 }

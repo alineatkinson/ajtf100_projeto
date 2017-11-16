@@ -11,7 +11,7 @@ public class TakingPriceSQLHandler implements SQLHandler<TakingPrice> {
 		SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String date1 = parser.format(date);
 
-		if (exist) {
+		if (!exist) {
 			System.out.println("Entrou no if do save");
 			sql.append("INSERT INTO taking_prices (codebar_item, code_supermarket, price, date) ");
 			sql.append("  VALUES (" + e.getCodeBarItem() + ", ");
@@ -60,9 +60,8 @@ public class TakingPriceSQLHandler implements SQLHandler<TakingPrice> {
 
 	@Override
 	public String getSelectAll() {
-		StringBuilder sql = null;
-		sql.append("SELECT * FROM taking_prices");
-		return sql.toString();
+		String sql = "SELECT * FROM taking_prices";
+		return sql;
 	}
 
 }

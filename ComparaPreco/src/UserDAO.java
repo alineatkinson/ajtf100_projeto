@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Map;
 
 public interface UserDAO {
@@ -10,5 +11,5 @@ public interface UserDAO {
 
 	public abstract void delete(String key);
 
-	public abstract Map getAll();
+	public abstract List getAll();
 }

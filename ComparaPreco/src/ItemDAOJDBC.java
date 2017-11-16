@@ -88,7 +88,7 @@ public class ItemDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceDAO<
 
 	@Override
 	public Item get(Number key) {
-		String sql = sh.getSelectSQL() + key;
+		String sql = sh.getSelectSQL();
 		return (Item) super.get(key, sh.getRowMapper(), sql);
 	}
 

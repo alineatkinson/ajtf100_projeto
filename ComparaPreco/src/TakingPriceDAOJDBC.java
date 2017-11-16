@@ -81,7 +81,7 @@ public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 
 	@Override
 	public TakingPrice get(Number key) {
-		String sql = sh.getSelectSQL() + key;
+		String sql = sh.getSelectSQL();
 		return (TakingPrice) super.get(key, sh.getRowMapper(), sql);
 	}
 

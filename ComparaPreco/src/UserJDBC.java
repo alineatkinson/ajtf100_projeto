@@ -98,7 +98,7 @@ public class UserJDBC implements UserDAO {
 		}
 	}
 
-	public Object get(String cpfUser) {
+	public User get(String cpfUser) {
 		String sql = "SELECT * FROM users WHERE cpf like '" + cpfUser + "'";
 		Connection conn = null;
 		Statement stmt = null;
@@ -131,7 +131,7 @@ public class UserJDBC implements UserDAO {
 		return user;
 	}
 
-	public Map getAll() {
+	public List getAll() {
 		String sql = "SELECT * FROM users";
 		Connection conn = null;
 		Statement stmt = null;
