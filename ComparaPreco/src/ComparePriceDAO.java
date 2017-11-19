@@ -13,7 +13,7 @@ public interface ComparePriceDAO<E> {
 	public abstract E get(Number key);
 
 	public abstract boolean checksExistence(Number key);
-
+	
 	public abstract void delete(Number key);
 
 	public abstract List<E> getAll();

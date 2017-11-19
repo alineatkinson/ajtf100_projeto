@@ -10,7 +10,7 @@ public class TakingPriceControllerConsole {
 	Printer printer = new Printer();
 	Console reader = new Console();
 	// ComparePriceDAO takingPriceDao = new TakingPriceDAOCollections();
-	ComparePriceDAO takingPriceDao = new DAOFactory().getTakingPriceDAO();
+	TakingPriceDAOJDBC takingPriceDao = (TakingPriceDAOJDBC) new DAOFactory().getTakingPriceDAO();
 
 	public void createTakingPrice() {
 
@@ -60,16 +60,21 @@ public class TakingPriceControllerConsole {
 		printer.printMsg("Digite o código do item a ser alterado? ");
 		int codeBarItem = reader.readNumber();
 		TakingPrice tp = null;
+		
+		printer.printMsg("Digite o código do supermercado a ser alterado? ");
+		int codeSmkt = reader.readNumber();
+		Supermarket smkt = null;
 
 		// pensando em cadastrar o novo preço sem editar o preço antigo. Senão terei que
 		// controlar por muitos atributos.
-		if (takingPriceDao.checksExistence(codeBarItem)) {
-			tp = (TakingPrice) takingPriceDao.get(codeBarItem);
+		if (takingPriceDao.checksExistence(codeBarItem, codeSmkt)) {
+			tp = (TakingPrice) takingPriceDao.get(codeBarItem, codeSmkt);
 			int codeSupermarket = tp.getCodeSupermarket();
 			double priceItem = tp.getPrice();
 			Date dateTP = tp.getDate();
 			int respEdit = 0;
-			takingPriceDao.delete(codeBarItem);
+			
+			takingPriceDao.delete(codeBarItem, codeSupermarket);
 
 			do {
 				respEdit = this.askWhatEdit(tp);
@@ -121,9 +126,9 @@ public class TakingPriceControllerConsole {
 
 		for (TakingPrice takingprice : takingPrices) {
 			StringBuilder sb = new StringBuilder();
-			sb.append("[Código do item] : " + takingprice.getCodeBarItem());
-			sb.append("[Código do Supermercado]: " + takingprice.getCodeSupermarket());
-			sb.append("Preço: " + takingprice.getPrice());
+			sb.append("[Código do item] : " + takingprice.getCodeBarItem()+ "\n");
+			sb.append("[Código do Supermercado]: " + takingprice.getCodeSupermarket()+ "\n");
+			sb.append("Preço: " + takingprice.getPrice()+ "\n");
 			sb.append("Data: " + takingprice.getDate() + "\n");
 			data.add(sb.toString());
 		}
@@ -144,11 +149,15 @@ public class TakingPriceControllerConsole {
 	 */
 	public void deleteTakingPrice() {
 		printer.printMsg("Digite o código do item com tomada de preço a ser excluído: ");
-		int codeBarItemKey = 0;
-		codeBarItemKey = reader.readNumber();
+		int codeBarItem = 0;
+		codeBarItem = reader.readNumber();
+		
+		printer.printMsg("Digite o código do supermercado com tomada de preço a ser excluído: ");
+		int codeSmkt = 0;
+		codeSmkt = reader.readNumber();
 
-		if (takingPriceDao.checksExistence(codeBarItemKey)) {
-			takingPriceDao.delete(codeBarItemKey);
+		if (takingPriceDao.checksExistence(codeBarItem, codeSmkt)) {
+			takingPriceDao.delete(codeBarItem, codeSmkt);
 		} else {
 			printer.printMsg("Não tomada de preço com este código de item.");
 		}

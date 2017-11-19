@@ -111,8 +111,8 @@ public class ItemControllerConsole {
 
 		for (Item item : items) {
 			StringBuilder sb = new StringBuilder();
-			sb.append("[Código de barra do item] : " + item.getBarCode());
-			sb.append("Nome do item: " + item.getName());
+			sb.append("[Código de barra do item] : " + item.getBarCode()+ "\n");
+			sb.append("Nome do item: " + item.getName()+ "\n");
 			sb.append("Descrição do item: " + item.getDescription() + "\n");
 			data.add(sb.toString());
 		}

@@ -258,8 +258,14 @@ class Item16Handler implements Handler {
 }
 
 class Item17Handler implements Handler {
+	ComparatorItemsControllerConsole comparator;
+
+	public Item17Handler(ComparatorItemsControllerConsole comparator) {
+		super();
+		this.comparator = comparator;
+	}
 	public void execute() {
-		System.out.println("Ainda não implementado");
+		comparator.createComparation();
 	}
 }
 

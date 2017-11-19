@@ -44,6 +44,11 @@ public class ComparePriceDAOJDBC<E, K> {
 		return (E) executeQueryMap(sql, rm);
 	}
 
+	public E get(String name, RowMapper rm, String sql) { //Precisa?
+		sql += "" + name + "'";
+		return (E) executeQueryMap(sql, rm);
+	}
+
 	public Object executeQueryMap(String sql, RowMapper m) {
 
 		Connection conn = null;
@@ -82,6 +87,15 @@ public class ComparePriceDAOJDBC<E, K> {
 			return true;
 		}
 
+	}
+
+	public boolean checksExistence(String name, RowMapper rm, String sql) {
+		Object o = this.get(name, rm, sql);
+		if (o == null) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	public int executeQuery(String sql) {

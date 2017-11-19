@@ -25,6 +25,7 @@ public class TakingPriceSQLHandler implements SQLHandler<TakingPrice> {
 			sql.append(" price = " + e.getPrice() + ",");
 			sql.append(" date = '" + date1 + "'");
 			sql.append(" WHERE codebar_item = " + e.getCodeBarItem());
+			sql.append(" and code_supermarket = " + e.getCodeSupermarket());
 		}
 		return sql.toString();
 	}
@@ -46,6 +47,10 @@ public class TakingPriceSQLHandler implements SQLHandler<TakingPrice> {
 		String sql = "DELETE FROM taking_prices WHERE codebar_item = ";
 		return sql;
 	}
+	public String getDeleteSQLTP(Number codebar_item, Number code_supermarket) {
+		String sql = "DELETE FROM taking_prices WHERE codebar_item = "+codebar_item+" and code_supermarket = "+code_supermarket;
+		return sql;
+	}
 
 	@Override
 	public String getCreateTable() {
@@ -64,4 +69,8 @@ public class TakingPriceSQLHandler implements SQLHandler<TakingPrice> {
 		return sql;
 	}
 
+	public String getSelectSQLTP(Number codebar_item, Number code_supermarket) {
+		String sql = "SELECT * FROM taking_prices WHERE codebar_item = "+codebar_item+" and code_supermarket = "+code_supermarket;
+		return sql;
+	}
 }

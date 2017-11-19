@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceDAO<Item> {
-	private SQLHandler<Item> sh = new ItemSQLHandler();
+	private ItemSQLHandler sh = new ItemSQLHandler();
 	Printer printer = new Printer();
 
 	public void createTable() {
@@ -30,7 +30,7 @@ public class ItemDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceDAO<
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 			System.out.print(rs.toString());
-			
+
 			while (rs.next()) {
 				int codebar_item = rs.getInt("codebar_item");
 				System.out.println(codebar_item);
@@ -95,6 +95,11 @@ public class ItemDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceDAO<
 	@Override
 	public boolean checksExistence(Number key) {
 		boolean exist = super.checksExistence(key, sh.getRowMapper(), sh.getSelectSQL());
+		return exist;
+	}
+
+	public boolean checksExistence(String name) {
+		boolean exist = super.checksExistence(name, sh.getRowMapper(), sh.getSelectNameSQL());
 		return exist;
 	}
 

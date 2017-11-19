@@ -1,6 +1,6 @@
 import java.util.Date;
 
-public class TakingPrice {
+public class TakingPrice{// implements Comparable<TakingPrice> {
 
 	int codeBarItem;
 	// Date dateTP;
@@ -22,31 +22,35 @@ public class TakingPrice {
 	public void setPrice(int price) {
 		this.price = price;
 	}
+
 	/*
 	 * Return the attribute price
 	 */
 	public int getCodeSupermarket() {
 		return codeSupermarket;
 	}
+
 	/*
 	 * Return the attribute price
 	 */
 	public int getCodeBarItem() {
 		return codeBarItem;
 	}
+
 	/*
 	 * Return the attribute price
 	 */
 	public double getPrice() {
 		return price;
 	}
+
 	/*
 	 * Return the attribute date
 	 */
 	public Date getDate() {
 		return date;
 	}
-	
+
 	public int hashCode() {
 		return codeBarItem;
 	}
@@ -54,14 +58,28 @@ public class TakingPrice {
 	 * Print TomadaPreco's attribute
 	 */
 	/*
-	public void print() {
-		// Object formatter to brazilian monetary formatter
-		NumberFormat monetaryFormatter = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
-		System.out.println("------------------------------------");
-		System.out.println("Código do Supermercado :" + this.codeSupermarket);
-		System.out.println("Preço do item :" + monetaryFormatter.format(this.price));
-		System.out.println("Código do item :" + this.codeBarItem);
-		System.out.println("------------------------------------");
+	 * public void print() { // Object formatter to brazilian monetary formatter
+	 * NumberFormat monetaryFormatter = NumberFormat.getCurrencyInstance(new
+	 * Locale("pt", "BR"));
+	 * System.out.println("------------------------------------");
+	 * System.out.println("Código do Supermercado :" + this.codeSupermarket);
+	 * System.out.println("Preço do item :" + monetaryFormatter.format(this.price));
+	 * System.out.println("Código do item :" + this.codeBarItem);
+	 * System.out.println("------------------------------------"); }
+	 */
+/*
+	@Override
+	public int compareTo(TakingPrice tp) {
+
+		if (this.getPrice() < this.getPrice()) {
+			return -1;
+		}
+
+		if (this.getPrice() > this.getPrice()) {
+			return 1;
+		}
+
+		return 0;
 	}
 	*/
 }

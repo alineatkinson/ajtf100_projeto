@@ -34,8 +34,8 @@ public class Menu {
 	MenuItem menu15 = new MenuItem(15, "Excluir tomada de preço.", new Item15Handler(controllerTakingPriceConsole));
 	MenuItem menu16 = new MenuItem(16, "Imprimir tomada de preço.", new Item16Handler(controllerTakingPriceConsole));
 
-	MenuItem menu17 = new MenuItem(17, "Comparar preço de item.", new Item17Handler());
-	MenuItem menu18 = new MenuItem(18, "Cadastrar supermercado.", new Item18Handler());
+	MenuItem menu17 = new MenuItem(17, "Comparar preço de item.", new Item17Handler(new ComparatorItemsControllerConsole()));
+	MenuItem menu18 = new MenuItem(18, "Somar compra.", new Item18Handler());
 
 	List<MenuItem> list = new ArrayList<>();
 

@@ -33,6 +33,11 @@ public class ItemSQLHandler implements SQLHandler<Item> {
 		String sql = "SELECT * FROM items WHERE codebar_item = ";
 		return sql;
 	}
+	
+	public String getSelectNameSQL() {
+		String sql = "SELECT * FROM items WHERE name = '";
+		return sql;
+	}
 
 	@Override
 	public String getDeleteSQL() {

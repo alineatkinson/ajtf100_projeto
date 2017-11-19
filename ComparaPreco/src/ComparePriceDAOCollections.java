@@ -32,6 +32,12 @@ public class ComparePriceDAOCollections<E>  implements ComparePriceDAO {
 	public void delete(Number key) {
 		E object = (E) objects.remove(key);
 	}
+	
+	public boolean checksExistence(String name) {
+		//Consrtuir método
+		return false;
+		
+	}
 
 }
 
