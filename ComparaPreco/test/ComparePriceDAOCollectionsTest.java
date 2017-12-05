@@ -3,6 +3,9 @@ import static org.junit.Assert.*;
 import org.junit.Assert;
 import org.junit.Test;
 
+import model.Supermarket;
+import persistence.ComparePriceDAOCollections;
+
 public class ComparePriceDAOCollectionsTest {
 
 	@Test
