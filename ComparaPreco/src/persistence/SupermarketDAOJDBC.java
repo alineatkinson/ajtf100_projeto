@@ -16,11 +16,13 @@ public class SupermarketDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 	private SQLHandler<model.Supermarket> sh = new SupermarketSQLHandler();
 	Printer printer = new Printer();
 
+	/*
 	public void createTable() {
 		String sql = sh.getCreateTable();
 		int qdtEdited = super.executeQuery(sql);
 		printer.printMsg("Tabela Supermarkets criada com sucesso");
 	}
+	*/
 
 	public List<Supermarket> getAll() {
 		String sql = sh.getSelectAll();
@@ -71,6 +73,7 @@ public class SupermarketDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 			e2.printStackTrace();
 		}
 		DatabaseMetaData dbmd = null;
+		/*
 		try {
 			dbmd = conn.getMetaData();
 			rs = dbmd.getTables(null, "ALINE", "SUPERMARKETS", null);
@@ -81,6 +84,7 @@ public class SupermarketDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 			// TODO Auto-generated catch block
 			e3.printStackTrace();
 		}
+		*/
 		int code_supermarket = object.getCode();
 		super.save(object, code_supermarket, sh);
 	}
@@ -97,10 +101,5 @@ public class SupermarketDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 		return exist;
 	}
 
-	@Override
-	public Supermarket get(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

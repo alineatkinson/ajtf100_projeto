@@ -17,11 +17,13 @@ public class UserDAOJDBC extends DAOJDBC implements UserDAO {
 	private SQLHandler<User> sh = new UserSQLHandler();
 	Printer printer = new Printer();
 
+	/*
 	public void createTable(SQLHandler sh) {
 		String sql = sh.getCreateTable();
 		int qdtEdited = super.executeQuery(sql);
 		printer.printMsg("Tabela Users criada com sucesso");
 	}
+	*/
 
 	public void delete(String cpf) {
 
@@ -48,6 +50,7 @@ public class UserDAOJDBC extends DAOJDBC implements UserDAO {
 			e2.printStackTrace();
 		}
 		DatabaseMetaData dbmd = null;
+		/*
 		try {
 			dbmd = conn.getMetaData();
 			rs = dbmd.getTables(null, "ALINE", "USERS", null);
@@ -58,6 +61,7 @@ public class UserDAOJDBC extends DAOJDBC implements UserDAO {
 			// TODO Auto-generated catch block
 			e3.printStackTrace();
 		}
+		*/
 		String cpf = user.getCpf();
 		super.save(user, cpf, sh);
 	}
@@ -68,11 +72,13 @@ public class UserDAOJDBC extends DAOJDBC implements UserDAO {
 		return (User) super.get(cpf, sh.getRowMapper(), sql);
 	}
 
+	/*
 	public void createTable() {
 		String sql = sh.getCreateTable();
 		int qdtEdited = super.executeQuery(sql);
 		printer.printMsg("Tabela users criada com sucesso");
 	}
+	*/
 
 	public List<User> getAll() {
 		String sql = sh.getSelectAll();

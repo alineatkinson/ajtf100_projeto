@@ -15,11 +15,13 @@ public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 	private TakingPriceSQLHandler sh = new TakingPriceSQLHandler();
 	Printer printer = new Printer();
 
+	/*
 	public void createTable() {
 		String sql = sh.getCreateTable();
 		int qdtEdited = super.executeQuery(sql);
 		printer.printMsg("Tabela TakingPrices criada com sucesso");
 	}
+	*/
 
 	public List<TakingPrice> getAll() {
 		String sql = sh.getSelectAll();
@@ -81,6 +83,7 @@ public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 
 		Connection conn = null;
 		DatabaseMetaData dbmd = null;
+		/*
 		try {
 			conn = ConnectionManager.getConnection();
 			dbmd = conn.getMetaData();
@@ -92,6 +95,7 @@ public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 			// TODO Auto-generated catch block
 			e3.printStackTrace();
 		}
+		*/
 		// int codebar_item = tp.getCodeBarItem();
 
 		// Statement stmt = null;
@@ -157,9 +161,4 @@ public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 
 	}
 
-	@Override
-	public TakingPrice get(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

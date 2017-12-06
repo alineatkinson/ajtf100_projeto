@@ -47,16 +47,6 @@ public class UserSQLHandler implements SQLHandler<User> {
 	}
 
 	@Override
-	public String getCreateTable() {
-		StringBuilder sql = new StringBuilder();
-		sql.append("CREATE TABLE users");
-		sql.append(" (cpf varchar(12) NOT NULL,");
-		sql.append(" name varchar(300) NOT NULL)");
-
-		return sql.toString();
-	}
-
-	@Override
 	public String getSelectAll() {
 		String sql = "SELECT * FROM users";
 		return sql;

@@ -15,7 +15,7 @@ public interface ComparePriceDAO<E> {
 	public abstract E get(Number key);
 
 	// criar uma interface para extender essa, apenas com esse método.
-	public abstract E get(String name);
+	//public abstract E get(String name);
 	
 	public abstract boolean checksExistence(Number key);
 	

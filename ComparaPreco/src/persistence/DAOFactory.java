@@ -16,7 +16,7 @@ public class DAOFactory {
 		//return new ComparePriceDAOCollections<Supermarket>();
 	}
 
-	public ComparePriceDAO<Item> getItemDAO() {
+	public ComparePriceByNameDAO<Item> getItemDAO() {
 		return new ItemDAOJDBC();
 		//return new ComparePriceDAOCollections<Item>();
 	}

@@ -56,6 +56,7 @@ public class TakingPriceSQLHandler implements SQLHandler<TakingPrice> {
 		return sql;
 	}
 
+	/*
 	@Override
 	public String getCreateTable() {
 		StringBuilder sql = new StringBuilder();
@@ -66,6 +67,7 @@ public class TakingPriceSQLHandler implements SQLHandler<TakingPrice> {
 		sql.append(" date timestamp )");
 		return sql.toString();
 	}
+	*/
 
 	@Override
 	public String getSelectAll() {

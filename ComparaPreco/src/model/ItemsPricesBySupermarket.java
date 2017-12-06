@@ -10,7 +10,13 @@ public class ItemsPricesBySupermarket {
 	List<Item> items;
 	Supermarket supermarket;
 	double sumPrices;
-
+	
+	public ItemsPricesBySupermarket(List<TakingPrice> takingPrices, List<Item> items, Supermarket supermarket ){
+		this.takingPrices = takingPrices;
+		this.items = items;
+		this.supermarket = supermarket;
+	}
+/*
 	public void setTakingPrices(List<TakingPrice> tps) {
 		this.takingPrices = tps;
 	}
@@ -22,7 +28,7 @@ public class ItemsPricesBySupermarket {
 	public void setSupermarket(Supermarket supermarket) {
 		this.supermarket = supermarket;
 	}
-
+*/
 	public void sumPrices() {
 		System.out.println("tamanho tps: " + takingPrices.size());
 		

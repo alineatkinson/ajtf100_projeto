@@ -1,38 +1,45 @@
 package business;
 
 import model.ItemsPricesBySupermarket;
+import model.PricesByItem;
 import model.Supermarket;
+import persistence.ComparePriceByNameDAO;
+import persistence.ComparePriceDAO;
+import persistence.DAOFactory;
+import persistence.ItemDAOJDBC;
 import persistence.ItemsPricesBySupermarketDAO;
 import persistence.SupermarketDAOJDBC;
 import presentation.SumPricesConsole;
 import model.Item;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SumPrices {
 
-	SumPricesConsole console = new SumPricesConsole();
-	List<ItemsPricesBySupermarket> lista = new ArrayList();
+	List<ItemsPricesBySupermarket> list = new ArrayList();
 
 	// retornar para console objeto lista
-	public void sumPricesBySupermarket(List<Item> items) {
+	public List<ItemsPricesBySupermarket> sumPricesBySupermarket(List<Item> items) throws SQLException {
 		List<Supermarket> supermarkets = new ArrayList();
 		SupermarketDAOJDBC supermarketDAO = new SupermarketDAOJDBC();
 		supermarkets = supermarketDAO.getAll();
-		for(Item item: items) {
-			System.out.println("\n Item : "+ item.getName());
+		for (Item item : items) {
+			System.out.println("\n Item : " + item.getName());
 		}
 		for (Supermarket supermarket : supermarkets) {
 			ItemsPricesBySupermarket ipbs = this.getItemsPricesBySupermarket(supermarket, items);
 			if (ipbs != null) {
-				lista.add(ipbs);
+				list.add(ipbs);
 			}
 		}
-		console.showResults(lista);
+
+		return list;
+
 	}
 
-	public ItemsPricesBySupermarket getItemsPricesBySupermarket(Supermarket supermarket, List<Item> items) {
+	public ItemsPricesBySupermarket getItemsPricesBySupermarket(Supermarket supermarket, List<Item> items) throws SQLException {
 		ItemsPricesBySupermarket ipbs = null;
 
 		ItemsPricesBySupermarketDAO ipsDAO = new ItemsPricesBySupermarketDAO();
@@ -42,4 +49,23 @@ public class SumPrices {
 		return ipbs;
 	}
 
+	public List<Item> getItems(List<String> namesItems) {
+		List<Item> items = new ArrayList();
+
+		for (String name : namesItems) {
+			Item item = this.getItemByName(name);
+			items.add(item);
+
+		}
+		return items;
+	}
+	
+	public Item getItemByName(String name) {
+		//Não deu certo dessa forma:
+		//ComparePriceByNameDAO<Item> itemDao = new DAOFactory().getItemDAO();
+		// como deixo compare price pra pegar o get com nome???
+		ItemDAOJDBC itemDao = new ItemDAOJDBC();
+		Item selectedItem = itemDao.get(name);
+		return selectedItem;
+	}
 }

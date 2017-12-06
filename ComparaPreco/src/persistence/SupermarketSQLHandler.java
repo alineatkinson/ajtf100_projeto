@@ -45,6 +45,7 @@ public class SupermarketSQLHandler implements SQLHandler<Supermarket> {
 		return sql;
 	}
 
+	/*
 	@Override
 	public String getCreateTable() {
 		StringBuilder sql = new StringBuilder();
@@ -54,6 +55,7 @@ public class SupermarketSQLHandler implements SQLHandler<Supermarket> {
 		sql.append(" cep int NOT NULL)");
 		return sql.toString();
 	}
+	*/
 
 	@Override
 	public String getSelectAll() {

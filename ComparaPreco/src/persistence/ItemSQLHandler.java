@@ -48,6 +48,7 @@ public class ItemSQLHandler implements SQLHandler<Item> {
 		return sql;
 	}
 
+	/*
 	@Override
 	public String getCreateTable() {
 		StringBuilder sql = new StringBuilder();
@@ -57,6 +58,7 @@ public class ItemSQLHandler implements SQLHandler<Item> {
 		sql.append(" description varchar(500))");
 		return sql.toString();
 	}
+	*/
 
 	@Override
 	public String getSelectAll() {

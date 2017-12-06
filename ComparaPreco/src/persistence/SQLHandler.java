@@ -9,8 +9,6 @@ public interface SQLHandler<E> {
 
 	public String getDeleteSQL();
 	
-	public String getCreateTable();
-	
 	public String getSelectAll();
 
 	public String handle(E e, Boolean exist);

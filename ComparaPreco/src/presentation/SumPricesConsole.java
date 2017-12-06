@@ -1,8 +1,10 @@
 package presentation;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import business.SumPrices;
 import model.Item;
 import model.PricesByItem;
 import model.Supermarket;
@@ -12,6 +14,15 @@ import model.ItemsPricesBySupermarket;
 public class SumPricesConsole {
 	Printer printer = new Printer();
 
+	public void createSumPrices() throws SQLException {
+		ComparatorPriceConsole consoleComparator = new ComparatorPriceConsole();
+		SumPrices sumPrices = new SumPrices();
+		List<String> namesItems = consoleComparator.askItemsToCompare();
+		List<Item> items = sumPrices.getItems(namesItems);
+		List<ItemsPricesBySupermarket> list = sumPrices.sumPricesBySupermarket(items);
+		this.showResults(list);
+	}
+	
 	public void showResults(List<ItemsPricesBySupermarket> itemsPricesBySupermarket) {
 		List<String> data = this.getData(itemsPricesBySupermarket);
 
@@ -24,14 +35,14 @@ public class SumPricesConsole {
 		List<String> data = new ArrayList<String>();
 		printer.printMsg("-------------------------------------------------------\n");
 		printer.printMsg("TOTALIZAÇÃO POR SUPERMERCADO: ");
-		
+
 		for (ItemsPricesBySupermarket ipbs : itemsPricesBySupermarket) {
 			StringBuilder sbtp = new StringBuilder();
 			sbtp.append("-------------------------------------------------------\n");
 			Supermarket supermarket = ipbs.getSupermarket();
-			//StringBuilder sbSuper = new StringBuilder();
+			// StringBuilder sbSuper = new StringBuilder();
 
-			//data.add(sbSuper.toString());
+			// data.add(sbSuper.toString());
 			List<Item> items = ipbs.getItems();
 			for (Item item : items) {
 				StringBuilder sbItem = new StringBuilder();
@@ -40,7 +51,7 @@ public class SumPricesConsole {
 				// sbItem.append("Descrição do item: " + item.getDescription() + "\n\n");
 				data.add(sbItem.toString());
 			}
-			
+
 			List<TakingPrice> tps = ipbs.getTakingPrices();
 			for (TakingPrice tp : tps) {
 				StringBuilder tpBuilder = new StringBuilder();

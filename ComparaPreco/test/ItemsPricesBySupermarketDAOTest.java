@@ -1,5 +1,6 @@
 import static org.junit.Assert.*;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,14 +17,14 @@ import persistence.ItemsPricesBySupermarketDAO;
 public class ItemsPricesBySupermarketDAOTest {
 
 	@Test
-	public void test() {
+	public void test() throws SQLException {
 		Item item1 = new Item(900, "itemTeste1", "Item teste descrição 1");
 		Item item2 = new Item(990, "itemTeste2", "Item teste descrição 2");
 		List<Item> items = new ArrayList();
 
 		items.add(item1);
 		items.add(item2);
-		ItemsPricesBySupermarket ipbs1 = new ItemsPricesBySupermarket();
+
 		ipbs1.setItems(items);
 
 		double price1 = 99.99;
@@ -38,6 +39,8 @@ public class ItemsPricesBySupermarketDAOTest {
 
 		ipbs1.setTakingPrices(tps);
 
+		ItemsPricesBySupermarket ipbs1 = new ItemsPricesBySupermarket();
+		
 		Supermarket supermarket = new Supermarket("Nome", 88117, 999);
 
 		ipbs1.setSupermarket(supermarket);

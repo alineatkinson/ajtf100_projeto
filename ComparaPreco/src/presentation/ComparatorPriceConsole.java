@@ -1,24 +1,26 @@
 package presentation;
 
 import business.ComparatorPrice;
+import business.SumPrices;
 import model.Item;
 import model.PricesByItem;
 import model.TakingPrice;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ComparatorPriceConsole {
 	Printer printer = new Printer();
+	List<String> namesItems = new ArrayList();
 
-	public void askItemsToCompare() {
+	public List<String> askItemsToCompare() {
 		Console reader = new Console();
-		ComparatorPrice comparator = new ComparatorPrice();
-		printer.printMsg("Digite os itens que deseja comparar: ");
-		List<String> namesItems = new ArrayList();
+		printer.printMsg("Digite os itens que deseja comparar/somar: ");
+
 		int resp;
 		String itemName;
-		comparator = new ComparatorPrice();
+		// comparator = new ComparatorPrice();
 
 		do {
 			printer.printMsg("Digite o nome: ");
@@ -33,7 +35,15 @@ public class ComparatorPriceConsole {
 
 		} while (resp != 2);
 
-		comparator.createComparation(namesItems);
+		return namesItems;
+
+	}
+
+	public void createComparation() throws SQLException {
+		ComparatorPrice comparator = new ComparatorPrice();
+		namesItems = this.askItemsToCompare();
+		List<PricesByItem> list = comparator.createComparation(this.namesItems);
+		this.showResults(list);
 	}
 
 	public void showResults(List<PricesByItem> pricesByItem) {

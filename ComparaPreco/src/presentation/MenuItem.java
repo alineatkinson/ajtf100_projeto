@@ -1,6 +1,7 @@
 package presentation;
 
 import java.util.List;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MenuItem {
@@ -14,8 +15,15 @@ public class MenuItem {
 		this.handler = handler;
 	}
 
+	
+	// tá correto isso?
 	public void execute() {
-		handler.execute();
+		try {
+			handler.execute();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public String toString() {
@@ -37,7 +45,7 @@ public class MenuItem {
 // }
 
 interface Handler {
-	void execute();
+	void execute() throws SQLException;
 }
 
 class Item1Handler implements Handler {
@@ -258,19 +266,24 @@ class Item17Handler implements Handler {
 
 	public Item17Handler(ComparatorPriceConsole comparator) { // ComparatorItemsControllerConsole comparator) {
 		super();
-		System.out.println("Teste 1 ok");
 		this.comparator = comparator;
 	}
 
-	public void execute() {
-		comparator.askItemsToCompare();
+	public void execute() throws SQLException {
+		comparator.createComparation();
 		// comparator.createComparation();
 	}
 }
 
 class Item18Handler implements Handler {
-	public void execute() {
-		System.out.println("Ainda não implementado");
+	SumPricesConsole comparator;
+	
+	public Item18Handler(SumPricesConsole comparator) { // ComparatorItemsControllerConsole comparator) {
+		super();
+		this.comparator = comparator;
+	}
+	public void execute() throws SQLException {
+		comparator.createSumPrices(); 
 	}
 }
 

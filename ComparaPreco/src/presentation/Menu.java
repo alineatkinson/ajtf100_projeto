@@ -16,6 +16,7 @@ public class Menu {
 	SupermarketControllerConsole controllerSuperarketConsole = new SupermarketControllerConsole();
 	TakingPriceControllerConsole controllerTakingPriceConsole = new TakingPriceControllerConsole();
 	ComparatorPriceConsole comparatorPrice = new ComparatorPriceConsole();
+	SumPricesConsole sumConsole = new SumPricesConsole();
 	
 	MenuItem menu1 = new MenuItem(1, " Cadastrar usuário.", new Item1Handler(controllerUserConsole));
 	MenuItem menu2 = new MenuItem(2, " Editar usuário.", new Item2Handler(controllerUserConsole));
@@ -38,7 +39,7 @@ public class Menu {
 	MenuItem menu16 = new MenuItem(16, "Imprimir tomada de preço.", new Item16Handler(controllerTakingPriceConsole));
 
 	MenuItem menu17 = new MenuItem(17, "Comparar preço de item.", new Item17Handler(comparatorPrice)); //
-	MenuItem menu18 = new MenuItem(18, "Somar compra.", new Item18Handler());
+	MenuItem menu18 = new MenuItem(18, "Somar compra.", new Item18Handler(sumConsole));
 
 	List<MenuItem> list = new ArrayList<>();
 

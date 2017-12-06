@@ -11,15 +11,17 @@ import presentation.Printer;
 
 import model.Item;
 
-public class ItemDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceDAO<Item> {
+public class ItemDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceByNameDAO<Item> {
 	private ItemSQLHandler sh = new ItemSQLHandler();
 	Printer printer = new Printer();
 
+	/*
 	public void createTable() {
 		String sql = sh.getCreateTable();
 		int qdtEdited = super.executeQuery(sql);
 		printer.printMsg("Tabela TakingPrices criada com sucesso");
 	}
+	*/
 
 	public List<Item> getAll() {
 		String sql = sh.getSelectAll();
@@ -63,7 +65,9 @@ public class ItemDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceDAO<
 	}
 
 	@Override
-	public void save(Item object) {
+	// pq não consigo colocar o parâmetro como item?
+	public void save(Object object) {
+		Item item = (Item) object;
 		Statement stmt = null;
 		String sql = null;
 		ResultSet rs = null;
@@ -76,6 +80,8 @@ public class ItemDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceDAO<
 			e2.printStackTrace();
 		}
 		DatabaseMetaData dbmd = null;
+		
+		/*
 		try {
 			dbmd = conn.getMetaData();
 			rs = dbmd.getTables(null, "ALINE", "ITEMS", null);
@@ -86,9 +92,10 @@ public class ItemDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceDAO<
 			// TODO Auto-generated catch block
 			e3.printStackTrace();
 		}
+		*/
 
-		int codebar_item = object.getBarCode();
-		super.save(object, codebar_item, sh);
+		int codebar_item = item.getBarCode();
+		super.save(item, codebar_item, sh);
 	}
 
 	@Override
@@ -112,5 +119,6 @@ public class ItemDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceDAO<
 		boolean exist = super.checksExistence(name, sh.getRowMapper(), sh.getSelectNameSQL());
 		return exist;
 	}
+
 
 }
