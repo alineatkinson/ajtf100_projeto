@@ -2,9 +2,9 @@ package model;
 
 
 public class Supermarket {
-	String name;
-	int cepSuper;
-	int code;
+	private String name;
+	private int cepSuper;
+	private int code;
 
 
 	public Supermarket(String name, int cepSuper, int code) {

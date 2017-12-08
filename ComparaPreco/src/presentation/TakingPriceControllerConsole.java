@@ -14,10 +14,10 @@ import persistence.DAOFactory;
 import persistence.TakingPriceDAOJDBC;
 
 public class TakingPriceControllerConsole {
-	Printer printer = new Printer();
-	Console reader = new Console();
+	private Printer printer = new Printer();
+	private Console reader = new Console();
 	// ComparePriceDAO takingPriceDao = new TakingPriceDAOCollections();
-	TakingPriceDAOJDBC takingPriceDao = (TakingPriceDAOJDBC) new DAOFactory().getTakingPriceDAO();
+	private TakingPriceDAOJDBC takingPriceDao = (TakingPriceDAOJDBC) new DAOFactory().getTakingPriceDAO();
 
 	public void createTakingPrice() {
 

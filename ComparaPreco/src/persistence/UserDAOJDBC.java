@@ -1,5 +1,6 @@
 package persistence;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -15,19 +16,16 @@ import presentation.Printer;
 public class UserDAOJDBC extends DAOJDBC implements UserDAO {
 
 	private SQLHandler<User> sh = new UserSQLHandler();
-	Printer printer = new Printer();
-
-	/*
-	public void createTable(SQLHandler sh) {
-		String sql = sh.getCreateTable();
-		int qdtEdited = super.executeQuery(sql);
-		printer.printMsg("Tabela Users criada com sucesso");
-	}
-	*/
 
 	public void delete(String cpf) {
-
-		String sql = sh.getDeleteSQL() + cpf + "'";
+		//TODO melhorar exceção
+		String sql = null;
+		try {
+			sql = sh.getDeleteSQL() + cpf + "'";
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		int qtdRemovidos = 0;
 
 		qtdRemovidos = executeQuery(sql);
@@ -39,8 +37,6 @@ public class UserDAOJDBC extends DAOJDBC implements UserDAO {
 		Statement stmt = null;
 		String sql = null;
 		ResultSet rs = null;
-		// DatabaseMetaData dbmd; // apagar
-		// String schemas; // apagar
 
 		Connection conn = null;
 		try {
@@ -50,38 +46,33 @@ public class UserDAOJDBC extends DAOJDBC implements UserDAO {
 			e2.printStackTrace();
 		}
 		DatabaseMetaData dbmd = null;
-		/*
-		try {
-			dbmd = conn.getMetaData();
-			rs = dbmd.getTables(null, "ALINE", "USERS", null);
-			if (!rs.next()) {
-				this.createTable();
-			}
-		} catch (SQLException e3) {
-			// TODO Auto-generated catch block
-			e3.printStackTrace();
-		}
-		*/
+
 		String cpf = user.getCpf();
 		super.save(user, cpf, sh);
 	}
 
 	@Override
 	public User get(String cpf) {
-		String sql = sh.getSelectSQL();
+		//TODO melhorar exceção
+		String sql = null;
+		try {
+			sql = sh.getSelectSQL();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return (User) super.get(cpf, sh.getRowMapper(), sql);
 	}
 
-	/*
-	public void createTable() {
-		String sql = sh.getCreateTable();
-		int qdtEdited = super.executeQuery(sql);
-		printer.printMsg("Tabela users criada com sucesso");
-	}
-	*/
-
 	public List<User> getAll() {
-		String sql = sh.getSelectAll();
+		//TODO melhorar exceção
+		String sql = null;
+		try {
+			sql = sh.getSelectAll();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		List<User> users = new ArrayList<>();
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -107,7 +98,14 @@ public class UserDAOJDBC extends DAOJDBC implements UserDAO {
 
 	@Override
 	public boolean checksExistence(String key) {
-		boolean exist = super.checksExistence(key, sh.getRowMapper(), sh.getSelectSQL());
+		//TODO melhorar exceção
+		boolean exist = false;
+		try {
+			exist = super.checksExistence(key, sh.getRowMapper(), sh.getSelectSQL());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return exist;
 	}
 

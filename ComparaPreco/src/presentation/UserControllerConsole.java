@@ -12,10 +12,10 @@ import persistence.DAOFactory;
 import persistence.UserDAO;
 
 public class UserControllerConsole {
-	Printer printer = new Printer();
-	Console reader = new Console();
+	private Printer printer = new Printer();
+	private Console reader = new Console();
 	// UserDAO userDao = new UserDAOCollections();= new UserDAOJDBC();
-	UserDAO userDao = new DAOFactory().getUserDAO();
+	private UserDAO userDao = new DAOFactory().getUserDAO();
 
 	public void createUser() {
 

@@ -1,9 +1,9 @@
 package model;
 
 public class Item {
-	String name;
-	int barCode;
-	String description;
+	private String name;
+	private int barCode;
+	private String description;
 	/*
 	 * Constructor of the item
 	 */

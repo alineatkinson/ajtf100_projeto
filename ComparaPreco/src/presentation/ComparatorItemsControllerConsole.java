@@ -14,11 +14,11 @@ import persistence.ComparePriceDAO;
 import persistence.DAOFactory;
 
 public class ComparatorItemsControllerConsole {
-	Printer printer = new Printer();
-	Console reader = new Console();
-	ComparePriceDAO supermarketDao = new DAOFactory().getSupermarketDAO();
-	ComparePriceDAO itemDao = new DAOFactory().getItemDAO();
-	ComparePriceDAO takingPriceDao = new DAOFactory().getTakingPriceDAO();
+	private Printer printer = new Printer();
+	private Console reader = new Console();
+	private ComparePriceDAO supermarketDao = new DAOFactory().getSupermarketDAO();
+	private ComparePriceDAO itemDao = new DAOFactory().getItemDAO();
+	private ComparePriceDAO takingPriceDao = new DAOFactory().getTakingPriceDAO();
 
 	public void createComparation() {
 		Item selectedItem;
@@ -86,15 +86,8 @@ public class ComparatorItemsControllerConsole {
 	public List selectSupermarkets() {
 		List<Supermarket> list = new ArrayList();
 
-		// List<Supermarket> selectedSupermarkets = new ArrayList();
-
 		list = supermarketDao.getAll();
-		/*
-		 * list = supermarketDao.getAll(); for (TakingPrice tp : takingPrices) { for
-		 * (Supermarket smk : list) { if (tp.getCodeSupermarket() == smk.getCode()) {
-		 * selectedSupermarkets.add(smk); } } }
-		 */
-		System.out.println("SAiu do select supermarkets com lista = ");
+
 		return list;
 	}
 
@@ -102,7 +95,6 @@ public class ComparatorItemsControllerConsole {
 		List<TakingPrice> list = new ArrayList();
 
 		List<TakingPrice> selectedTP = new ArrayList();
-
 		list = takingPriceDao.getAll();
 		if (supermarkets != null) {
 			System.out.println("supermarkets = " + supermarkets.toString());
@@ -127,17 +119,6 @@ public class ComparatorItemsControllerConsole {
 		return selectedTP;
 	}
 
-	/*
-	 * public boolean checkExistence(String nameItems) {
-	 * 
-	 * ComparePriceDAO itemDao = new DAOFactory().getItemDAO();
-	 * 
-	 * if (itemDao.checksExistence(nameItems)) { return true; } else { return false;
-	 * }
-	 * 
-	 * }
-	 */
-
 	public List<String> comparePriceItems(Item item, List<TakingPrice> selectedSortedTakingPrices,
 			List<Supermarket> selectedSupermarkets) {
 
@@ -155,24 +136,10 @@ public class ComparatorItemsControllerConsole {
 
 		for (TakingPrice tp : selectedSortedTakingPrices) {
 			for (Supermarket supermarket : selectedSupermarkets) {
-				// System.out.println("Código do item : " + item.getBarCode() + "\n");
-				// System.out.println("Código do item na tp : " + tp.getCodeBarItem() + "\n");
-				// System.out.println("Código do supermercado : " + supermarket.getCode() +
-				// "\n");
-				// System.out.println("Código do supermercado na tp : " +
-				// tp.getCodeSupermarket() + "\n");
 				if (item.getBarCode() == tp.getCodeBarItem() & supermarket.getCode() == tp.getCodeSupermarket()) {
-					// System.out.print("\nEntrou no if do compare");
-					// System.out.println("Nomea do supermercado: " + supermarket.getName());
 					StringBuilder sbTP = new StringBuilder();
 					sbTP.append("Nomea do supermercado: " + supermarket.getName() + "\n");
-					// NumberFormat monetaryFormatter = NumberFormat.getCurrencyInstance(new
-					// Locale("pt", "BR"));
-					// sb.append("Preço do item :" + monetaryFormatter.format(tp.getPrice()) +
-					// "\n");
 					sbTP.append("Preço do item :" + tp.getPrice() + "\n");
-					// System.out.println("Preço do item :" + tp.getPrice() + "\n");
-					// Collections.sort(resultsComparation);
 					resultsComparation.add(sbTP.toString());
 
 				}

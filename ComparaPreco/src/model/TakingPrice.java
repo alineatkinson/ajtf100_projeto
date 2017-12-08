@@ -6,9 +6,9 @@ public class TakingPrice{// implements Comparable<TakingPrice> {
 
 	public int codeBarItem;
 	// Date dateTP;
-	double price;
-	int codeSupermarket;
-	Date date;
+	private double price;
+	private int codeSupermarket;
+	private Date date;
 
 	public TakingPrice(int codeBarItem, double price, int codeSupermarket, Date date) {
 		this.codeBarItem = codeBarItem;

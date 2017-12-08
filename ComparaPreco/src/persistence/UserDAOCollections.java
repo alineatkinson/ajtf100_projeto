@@ -11,8 +11,7 @@ import model.User;
 import presentation.Printer;
 
 public class UserDAOCollections implements UserDAO {
-	ConcurrentHashMap users = new ConcurrentHashMap();
-	Printer printer = new Printer();
+	private ConcurrentHashMap users = new ConcurrentHashMap();
 
 	public void save(User user) {
 		users.put(user.getCpf(), user);

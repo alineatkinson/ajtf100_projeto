@@ -1,5 +1,6 @@
 package persistence;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
@@ -23,8 +24,16 @@ public class DAOJDBC<E, K> {
 			e2.printStackTrace();
 		}
 		DatabaseMetaData dbmd = null;
-		Boolean exist = this.checksExistence(k, ir.getRowMapper(), ir.getSelectSQL());
-		sql = ir.handle(e, exist);
+		// TODO melhorar exceção
+		Boolean exist = null;
+		try {
+			exist = this.checksExistence(k, ir.getRowMapper(), ir.getSelectSQL());
+			sql = ir.handle(e, exist);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
 		try {
 			stmt = conn.createStatement();
 			stmt.executeUpdate(sql);
@@ -103,7 +112,7 @@ public class DAOJDBC<E, K> {
 
 		return qtdRemovidos;
 	}
-	
+
 	public ResultSet executeSql(String sql) {
 
 		Connection conn = null;
@@ -119,15 +128,11 @@ public class DAOJDBC<E, K> {
 			rs = stmt.executeQuery(sql);
 			// System.out.println("EXECUTOU STATEMENT");
 
-
 		} catch (SQLException e) {
 			throw new RuntimeException("Erro na execucao do select: " + sql, e);
-		} finally {
-			ConnectionManager.close(conn, stmt, rs);
 		}
 		return rs;
 
 	}
-
 
 }

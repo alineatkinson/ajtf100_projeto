@@ -11,10 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ComparatorPriceConsole {
-	Printer printer = new Printer();
-	List<String> namesItems = new ArrayList();
+	private Printer printer = new Printer();
+	private List<String> namesItems = new ArrayList();
 
-	public List<String> askItemsToCompare() {
+	protected List<String> askItemsToCompare() {
 		Console reader = new Console();
 		printer.printMsg("Digite os itens que deseja comparar/somar: ");
 
@@ -39,14 +39,14 @@ public class ComparatorPriceConsole {
 
 	}
 
-	public void createComparation() throws SQLException {
+	protected void createComparation() throws SQLException {
 		ComparatorPrice comparator = new ComparatorPrice();
 		namesItems = this.askItemsToCompare();
 		List<PricesByItem> list = comparator.createComparation(this.namesItems);
 		this.showResults(list);
 	}
 
-	public void showResults(List<PricesByItem> pricesByItem) {
+	private void showResults(List<PricesByItem> pricesByItem) {
 		List<String> data = this.getData(pricesByItem);
 
 		for (String item : data) {
@@ -55,7 +55,7 @@ public class ComparatorPriceConsole {
 
 	}
 
-	public List<String> getData(List<PricesByItem> pricesByItem) {
+	private List<String> getData(List<PricesByItem> pricesByItem) {
 		List<String> data = new ArrayList<String>();
 
 		for (PricesByItem pbi : pricesByItem) {
@@ -77,16 +77,5 @@ public class ComparatorPriceConsole {
 		}
 		return data;
 	}
-
-	/*
-	 * List all items
-	 */
-	/*
-	 * public void listItems() {
-	 * 
-	 * List<String> data = getData();
-	 * 
-	 * for (String item : data) { printer.printMsg(item); } }
-	 */
 
 }

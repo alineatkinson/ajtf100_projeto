@@ -2,8 +2,8 @@ package model;
 
 
 public class User {
-	String name;
-	String cpf;
+	private String name;
+	private String cpf;
 	
 	public User(String name, String cpf) {
 		this.name = name;

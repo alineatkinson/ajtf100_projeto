@@ -15,11 +15,11 @@ import persistence.ComparePriceDAO;
 import persistence.DAOFactory;
 
 public class ItemControllerConsole {
-	Printer printer = new Printer();
-	Console reader = new Console();
+	private Printer printer = new Printer();
+	private Console reader = new Console();
 	// ComparePriceDAO itemDao = new ItemDAOCollections();
 	// ComparePriceDAO itemDao = new ItemDAOJDBC();
-	ComparePriceDAO itemDao = new DAOFactory().getItemDAO();
+	private ComparePriceDAO itemDao = new DAOFactory().getItemDAO();
 
 	/*
 	 * Create the item
@@ -35,7 +35,7 @@ public class ItemControllerConsole {
 		msg = "Qual o nome do item? \n";
 		printer.printMsg(msg);
 		String name = reader.readText();
-		name = reader.readText();
+		//name = reader.readText();
 
 		// Ask and assign item's description
 		msg = "Qual a descrição do item? \n";
@@ -79,7 +79,7 @@ public class ItemControllerConsole {
 					String newName = new String();
 					newName = " ";
 					newName = reader.readText();
-					newName = reader.readText();
+					//newName = reader.readText();
 					this.save(item.getBarCode(), newName, item.getDescription());
 
 				} else if (respEdit == 3) {
@@ -87,7 +87,7 @@ public class ItemControllerConsole {
 					String newDescription = new String();
 					newDescription = " ";
 					newDescription = reader.readText();
-					newDescription = reader.readText();
+					//newDescription = reader.readText();
 					this.save(item.getBarCode(), item.getName(), newDescription);
 
 				} else {

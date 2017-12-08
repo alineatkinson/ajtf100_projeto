@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ComparePriceDAOCollections<E> implements ComparePriceDAO {
-	ConcurrentHashMap objects = new ConcurrentHashMap();
-	Printer printer = new Printer();
+	private ConcurrentHashMap objects = new ConcurrentHashMap();
+	private Printer printer = new Printer();
 
 	public void save(Object objSuper) {
 		E object = (E) objSuper;

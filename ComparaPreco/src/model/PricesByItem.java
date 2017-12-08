@@ -3,8 +3,8 @@ package model;
 import java.util.List;
 
 public class PricesByItem {
-	Item item;
-	List<TakingPrice> tps;
+	private Item item;
+	private List<TakingPrice> tps;
 	
 	public PricesByItem(Item item, List<TakingPrice> tps) {
 		this.item = item;

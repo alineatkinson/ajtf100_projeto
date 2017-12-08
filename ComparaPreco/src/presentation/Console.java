@@ -6,9 +6,9 @@ import java.util.Scanner;
  * @author Aline Atkinson da Cunha
  */
 
-public class Console implements Reader {
+class Console implements Reader {
 
-	Scanner keyboard = new Scanner(System.in);
+	private Scanner keyboard = new Scanner(System.in);
 
 	/**
 	 * O teclado lê o caracter digitado pelo usuário

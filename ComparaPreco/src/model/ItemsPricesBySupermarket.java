@@ -6,10 +6,10 @@ package model;
 import java.util.List;
 
 public class ItemsPricesBySupermarket {
-	List<TakingPrice> takingPrices;
-	List<Item> items;
-	Supermarket supermarket;
-	double sumPrices;
+	private List<TakingPrice> takingPrices;
+	private List<Item> items;
+	private Supermarket supermarket;
+	private double sumPrices;
 	
 	public ItemsPricesBySupermarket(List<TakingPrice> takingPrices, List<Item> items, Supermarket supermarket ){
 		this.takingPrices = takingPrices;

@@ -16,8 +16,8 @@ import presentation.ComparatorPriceConsole;
 
 public class ComparatorPrice {
 
-	ComparatorPriceConsole console = new ComparatorPriceConsole();
-	PriceByItemDAO priceByItemDAO = new PriceByItemDAO();
+	private ComparatorPriceConsole console = new ComparatorPriceConsole();
+	private PriceByItemDAO priceByItemDAO = new PriceByItemDAO();
 
 	// retornar obj priceByItem
 	public List<PricesByItem> createComparation(List<String> namesItems) throws SQLException {

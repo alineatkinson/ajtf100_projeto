@@ -1,11 +1,13 @@
 package persistence;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import model.TakingPrice;
 
 public class TakingPriceSQLHandler implements SQLHandler<TakingPrice> {
+	ReadFileProperties rfp = new ReadFileProperties();
 
 	@Override
 	public String handle(TakingPrice e, Boolean exist) {
@@ -31,6 +33,7 @@ public class TakingPriceSQLHandler implements SQLHandler<TakingPrice> {
 			sql.append(" WHERE codebar_item = " + e.getCodeBarItem());
 			sql.append(" and code_supermarket = " + e.getCodeSupermarket());
 		}
+		System.out.println(sql.toString());
 		return sql.toString();
 	}
 
@@ -41,42 +44,37 @@ public class TakingPriceSQLHandler implements SQLHandler<TakingPrice> {
 	}
 
 	@Override
-	public String getSelectSQL() {
-		String sql = "SELECT * FROM taking_prices WHERE codebar_item = ";
+	public String getSelectSQL() throws IOException {
+		// String sql = "SELECT * FROM taking_prices WHERE codebar_item = ";
+		String sql = rfp.getQuery("selectTP");
 		return sql;
 	}
 
 	@Override
-	public String getDeleteSQL() {
-		String sql = "DELETE FROM taking_prices WHERE codebar_item = ";
+	public String getDeleteSQL() throws IOException {
+		// String sql = "DELETE FROM taking_prices WHERE codebar_item = ";
+		String sql = rfp.getQuery("deleteTP");
 		return sql;
 	}
-	public String getDeleteSQLTP(Number codebar_item, Number code_supermarket) {
+
+	public String getDeleteSQLTP(Number codebar_item, Number code_supermarket) throws IOException {
 		String sql = "DELETE FROM taking_prices WHERE codebar_item = "+codebar_item+" and code_supermarket = "+code_supermarket;
+		//String sql = rfp.getQueryTP("deleteSQLTP", codebar_item, code_supermarket);
 		return sql;
 	}
 
-	/*
 	@Override
-	public String getCreateTable() {
-		StringBuilder sql = new StringBuilder();
-		sql.append("CREATE TABLE taking_prices");
-		sql.append(" (codebar_item int NOT NULL,");
-		sql.append(" code_supermarket int NOT NULL, ");
-		sql.append(" price DECIMAL(18,2) NOT NULL, ");
-		sql.append(" date timestamp )");
-		return sql.toString();
-	}
-	*/
-
-	@Override
-	public String getSelectAll() {
-		String sql = "SELECT * FROM taking_prices";
+	public String getSelectAll() throws IOException {
+		//String sql = "SELECT * FROM taking_prices";
+		String sql = rfp.getQuery("selectAllTP");
+		System.out.println(sql);
 		return sql;
 	}
 
-	public String getSelectSQLTP(Number codebar_item, Number code_supermarket) {
-		String sql = "SELECT * FROM taking_prices WHERE codebar_item = "+codebar_item+" and code_supermarket = "+code_supermarket;
+	public String getSelectSQLTP(Number codebar_item, Number code_supermarket) throws IOException {
+		// String sql = "SELECT * FROM taking_prices WHERE codebar_item = " +
+		// codebar_item + " and code_supermarket = " + code_supermarket;
+		String sql = rfp.getQueryTP("selectSQLTP", codebar_item, code_supermarket);
 		return sql;
 	}
 }

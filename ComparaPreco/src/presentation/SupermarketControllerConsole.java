@@ -18,11 +18,11 @@ import persistence.DAOFactory;
  */
 public class SupermarketControllerConsole {
 
-	Printer printer = new Printer();
-	Console reader = new Console();
+	private Printer printer = new Printer();
+	private Console reader = new Console();
 	// ComparePriceDAO supermarketDao = new SupermarketDAOCollections(); new
 	// SupermarketDAOJDBC();
-	ComparePriceDAO supermarketDao = new DAOFactory().getSupermarketDAO();
+	private ComparePriceDAO supermarketDao = new DAOFactory().getSupermarketDAO();
 
 	public void createSupermarket() {
 
@@ -33,7 +33,7 @@ public class SupermarketControllerConsole {
 		// Ask the supermarket's name
 		printer.printMsg("Qual o nome deste supermercado? \n");
 		String nameSuper = reader.readText();
-		nameSuper = reader.readText();
+		//nameSuper = reader.readText();
 
 		// Ask the supermarket's code adress
 		printer.printMsg("Qual o cep deste supermercado? (utilize somente números) \n");
@@ -69,7 +69,7 @@ public class SupermarketControllerConsole {
 					String newNome = new String();
 					newNome = " ";
 					newNome = reader.readText();
-					newNome = reader.readText();
+					//newNome = reader.readText();
 					this.save(newNome, supermarket.getCEP(), supermarket.getCode());
 
 				} else if (respEdit == 2) {
@@ -129,23 +129,6 @@ public class SupermarketControllerConsole {
 			printer.printMsg(supermarket);
 		}
 	}
-
-	/*
-	 * List all supermarkets
-	 */
-	/*
-	 * public void listSupermarkets() { List<Supermarket> supermarkets =
-	 * supermarketDao.getAll();
-	 * 
-	 * Iterator<Supermarket> i = supermarkets.iterator(); Supermarket
-	 * supermarketPrint = null;
-	 * 
-	 * while (i.hasNext()) { supermarketPrint = i.next();
-	 * printer.printMsg("[Código do Supermercado] : " + supermarketPrint.getCode());
-	 * printer.printMsg("Nome do supermercado: " + supermarketPrint.getName());
-	 * printer.printMsg("CEP do supermercado: " + supermarketPrint.getCEP() + "\n");
-	 * } }
-	 */
 
 	/*
 	 * Delete a supermarket

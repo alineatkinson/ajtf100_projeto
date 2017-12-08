@@ -1,11 +1,13 @@
 package persistence;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import model.Supermarket;
 
 public class SupermarketSQLHandler implements SQLHandler<Supermarket> {
+	ReadFileProperties rfp = new ReadFileProperties();
 
 	@Override
 	public String handle(Supermarket supermarket, Boolean exist) {
@@ -34,32 +36,23 @@ public class SupermarketSQLHandler implements SQLHandler<Supermarket> {
 	}
 
 	@Override
-	public String getSelectSQL() {
-		String sql = "SELECT * FROM supermarkets WHERE code_supermarket = ";
+	public String getSelectSQL() throws IOException {
+		// String sql = "SELECT * FROM supermarkets WHERE code_supermarket = ";
+		String sql = rfp.getQuery("selectSupermarket");
 		return sql;
 	}
 
 	@Override
-	public String getDeleteSQL() {
-		String sql = "DELETE FROM supermarkets WHERE code_supermarket = ";
+	public String getDeleteSQL() throws IOException {
+		// String sql = "DELETE FROM supermarkets WHERE code_supermarket = ";
+		String sql = rfp.getQuery("deleteSupermarket");
 		return sql;
 	}
 
-	/*
 	@Override
-	public String getCreateTable() {
-		StringBuilder sql = new StringBuilder();
-		sql.append("CREATE TABLE supermarkets");
-		sql.append(" (code_supermarket  int NOT NULL, ");
-		sql.append(" name varchar(100) NOT NULL, ");
-		sql.append(" cep int NOT NULL)");
-		return sql.toString();
-	}
-	*/
-
-	@Override
-	public String getSelectAll() {
-		String sql = "SELECT * FROM supermarkets";
+	public String getSelectAll() throws IOException {
+		// String sql = "SELECT * FROM supermarkets";
+		String sql = rfp.getQuery("selectAllSupermarkets");
 		return sql;
 	}
 

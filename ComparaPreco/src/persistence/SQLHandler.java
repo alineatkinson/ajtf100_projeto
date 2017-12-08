@@ -1,17 +1,18 @@
 package persistence;
 
+import java.io.IOException;
 
-public interface SQLHandler<E> {
+interface SQLHandler<E> {
 
 	public RowMapper getRowMapper();
 
-	public String getSelectSQL();
+	public String getSelectSQL() throws IOException;
 
-	public String getDeleteSQL();
+	public String getDeleteSQL() throws IOException;
 	
-	public String getSelectAll();
+	public String getSelectAll() throws IOException;
 
-	public String handle(E e, Boolean exist);
+	public String handle(E e, Boolean exist) throws IOException;
 	
 
 }

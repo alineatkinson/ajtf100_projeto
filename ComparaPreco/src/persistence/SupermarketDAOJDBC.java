@@ -1,5 +1,6 @@
 package persistence;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -14,18 +15,17 @@ import presentation.Printer;
 public class SupermarketDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceDAO<Supermarket> {
 
 	private SQLHandler<model.Supermarket> sh = new SupermarketSQLHandler();
-	Printer printer = new Printer();
-
-	/*
-	public void createTable() {
-		String sql = sh.getCreateTable();
-		int qdtEdited = super.executeQuery(sql);
-		printer.printMsg("Tabela Supermarkets criada com sucesso");
-	}
-	*/
 
 	public List<Supermarket> getAll() {
-		String sql = sh.getSelectAll();
+		String sql = null;
+		
+		// TODO MELHORAR EXCEÇÃO
+		try {
+			sql = sh.getSelectAll();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		List<Supermarket> supermarkets = new ArrayList<>();
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -49,8 +49,14 @@ public class SupermarketDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 	}
 
 	public void delete(Number codebar_item) {
-
-		String sql = sh.getDeleteSQL() + codebar_item;
+		// TODO MELHORAR EXCEÇÃO
+		String sql = null;
+		try {
+			sql = sh.getDeleteSQL() + codebar_item;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		int qtdRemovidos = 0;
 
 		qtdRemovidos = executeQuery(sql);
@@ -62,8 +68,6 @@ public class SupermarketDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 		Statement stmt = null;
 		String sql = null;
 		ResultSet rs = null;
-		// DatabaseMetaData dbmd; // apagar
-		// String schemas; // apagar
 
 		Connection conn = null;
 		try {
@@ -73,33 +77,34 @@ public class SupermarketDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 			e2.printStackTrace();
 		}
 		DatabaseMetaData dbmd = null;
-		/*
-		try {
-			dbmd = conn.getMetaData();
-			rs = dbmd.getTables(null, "ALINE", "SUPERMARKETS", null);
-			if (!rs.next()) {
-				this.createTable();
-			}
-		} catch (SQLException e3) {
-			// TODO Auto-generated catch block
-			e3.printStackTrace();
-		}
-		*/
+
 		int code_supermarket = object.getCode();
 		super.save(object, code_supermarket, sh);
 	}
 
 	@Override
 	public Supermarket get(Number key) {
-		String sql = sh.getSelectSQL();
+		// TODO MELHORAR EXCEÇÃO
+		String sql = null;
+		try {
+			sql = sh.getSelectSQL();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return (Supermarket) super.get(key, sh.getRowMapper(), sql);
 	}
 
 	@Override
 	public boolean checksExistence(Number key) {
-		boolean exist = super.checksExistence(key, sh.getRowMapper(), sh.getSelectSQL());
+		boolean exist = false;
+		try {
+			exist = super.checksExistence(key, sh.getRowMapper(), sh.getSelectSQL());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return exist;
 	}
-
 
 }

@@ -12,7 +12,7 @@ interface Reader {
 	 * Read the character written into console
 	 *
 	 */
-	public abstract char readCharacter();
+	abstract char readCharacter();
 
 	// return teclado.next().charAt(0);
 
@@ -20,7 +20,7 @@ interface Reader {
 	 * Read the text written into console
 	 *
 	 */
-	public abstract String readText();
+	abstract String readText();
 
 	// return teclado.nextLine();
 
@@ -34,6 +34,6 @@ interface Reader {
 	 * Read the double number written into console
 	 *
 	 */
-	public int readNumber();
+	int readNumber();
 
 }

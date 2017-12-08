@@ -1,5 +1,6 @@
 package persistence;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -24,7 +25,14 @@ public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 	*/
 
 	public List<TakingPrice> getAll() {
-		String sql = sh.getSelectAll();
+		// TODO melhorar exceção
+		String sql = null;
+		try {
+			sql = sh.getSelectAll();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		List<TakingPrice> takingprices = new ArrayList<>();
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -49,70 +57,34 @@ public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 	}
 
 	public void delete(Number codebar_item, Number code_supermarket) {
-
-		String sql = sh.getDeleteSQLTP(codebar_item, code_supermarket);
+		// TODO melhorar exceção
+		String sql = null;
+		try {
+			sql = sh.getDeleteSQLTP(codebar_item, code_supermarket);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		int qtdRemovidos = 0;
 
 		qtdRemovidos = executeQuery(sql);
 		System.out.println("taking_prices excluído do banco com sucesso!" + qtdRemovidos + " linhas excluidas");
 	}
 
-	@Override
-	/*
-	 * public void save(TakingPrice object) { Statement stmt = null; String sql =
-	 * null; ResultSet rs = null; // DatabaseMetaData dbmd; // apagar // String
-	 * schemas; // apagar
-	 * 
-	 * Connection conn = null; try { conn = ConnectionManager.getConnection(); }
-	 * catch (ConnectionException e2) { // TODO Auto-generated catch block
-	 * e2.printStackTrace(); } DatabaseMetaData dbmd = null; try { dbmd =
-	 * conn.getMetaData(); rs = dbmd.getTables(null, "ALINE", "ITEMS", null); if
-	 * (!rs.next()) { this.createTable(); } } catch (SQLException e3) { // TODO
-	 * Auto-generated catch block e3.printStackTrace(); } int codebar_item =
-	 * object.getCodeBarItem(); save(object, codebar_item, sh);
-	 * 
-	 * }
-	 */
+
 
 	public void save(TakingPrice tp) {
 		Statement stmt = null;
 		String sql = null;
 		ResultSet rs = null;
-		// DatabaseMetaData dbmd; // apagar
-		// String schemas; // apagar
 
 		Connection conn = null;
 		DatabaseMetaData dbmd = null;
-		/*
-		try {
-			conn = ConnectionManager.getConnection();
-			dbmd = conn.getMetaData();
-			rs = dbmd.getTables(null, "ALINE", "TAKING_PRICES", null);
-			if (!rs.next()) {
-				this.createTable();
-			}
-		} catch (SQLException e3) {
-			// TODO Auto-generated catch block
-			e3.printStackTrace();
-		}
-		*/
-		// int codebar_item = tp.getCodeBarItem();
 
-		// Statement stmt = null;
-		// String sql = null;
-		// ResultSet rs = null;
-
-		// Connection conn = null;
-		// try {
-		// conn = ConnectionManager.getConnection();
-		// } catch (ConnectionException e2) {
-		// TODO Auto-generated catch block
-		// e2.printStackTrace();
-		// }
-		// DatabaseMetaData dbmd = null;
 		Boolean exist = this.checksExistence(tp.getCodeBarItem(), tp.getCodeSupermarket());
 		sql = sh.handle(tp, exist);
 		try {
+			conn = ConnectionManager.getConnection();
 			stmt = conn.createStatement();
 			stmt.executeUpdate(sql);
 			System.out.println("SQL = " + sql);
@@ -127,19 +99,40 @@ public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 	@Override
 	public TakingPrice get(Number key) {
 		System.out.println("Entrou no get errrado");
-		String sql = sh.getSelectSQL();
+		// TODO melhorar exceção
+		String sql = null;
+		try {
+			sql = sh.getSelectSQL();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return (TakingPrice) super.get(key, sh.getRowMapper(), sql);
 	}
 
 	public TakingPrice get(Number codebar_item, Number code_supermarket) {
-		String sql = sh.getSelectSQLTP(codebar_item, code_supermarket);
+		// TODO melhorar exceção
+		String sql = null;
+		try {
+			sql = sh.getSelectSQLTP(codebar_item, code_supermarket);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return (TakingPrice) super.executeQueryMap(sql, sh.getRowMapper());
 	}
 
 	@Override
 	public boolean checksExistence(Number key) {
 		System.out.println("Entrou no check existence errrado");
-		boolean exist = super.checksExistence(key, sh.getRowMapper(), sh.getSelectSQL());
+		// TODO melhorar exceção
+		boolean exist = false;
+		try {
+			exist = super.checksExistence(key, sh.getRowMapper(), sh.getSelectSQL());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return exist;
 	}
 

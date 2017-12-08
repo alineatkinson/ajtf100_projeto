@@ -1,8 +1,11 @@
 package persistence;
 
+import java.io.IOException;
+
 import model.Item;
 
 public class ItemSQLHandler implements SQLHandler<Item> {
+	ReadFileProperties rfp = new ReadFileProperties();
 
 	@Override
 	public String handle(Item item, Boolean exist) {
@@ -32,37 +35,29 @@ public class ItemSQLHandler implements SQLHandler<Item> {
 	}
 
 	@Override
-	public String getSelectSQL() {
-		String sql = "SELECT * FROM items WHERE codebar_item = ";
+	public String getSelectSQL() throws IOException {
+		// String sql = "SELECT * FROM items WHERE codebar_item = ";
+		String sql = rfp.getQuery("selectItem");
 		return sql;
 	}
-	
-	public String getSelectNameSQL() {
-		String sql = "SELECT * FROM items WHERE name = '";
+
+	public String getSelectNameSQL() throws IOException {
+		// String sql = "SELECT * FROM items WHERE name = '";
+		String sql = rfp.getQuery("selectItemByName");
 		return sql;
 	}
 
 	@Override
-	public String getDeleteSQL() {
-		String sql = "DELETE FROM items WHERE codebar_item = ";
+	public String getDeleteSQL() throws IOException {
+		// String sql = "DELETE FROM items WHERE codebar_item = ";
+		String sql = rfp.getQuery("deleteItems");
 		return sql;
 	}
 
-	/*
 	@Override
-	public String getCreateTable() {
-		StringBuilder sql = new StringBuilder();
-		sql.append("CREATE TABLE items");
-		sql.append(" (codebar_item int NOT NULL,");
-		sql.append(" name varchar(100) NOT NULL, ");
-		sql.append(" description varchar(500))");
-		return sql.toString();
-	}
-	*/
-
-	@Override
-	public String getSelectAll() {
-		String sql = "SELECT * FROM items";
+	public String getSelectAll() throws IOException {
+		// String sql = "SELECT * FROM items";
+		String sql = rfp.getQuery("selectAllItems");
 		return sql;
 	}
 

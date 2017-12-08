@@ -18,7 +18,7 @@ import java.util.List;
 
 public class SumPrices {
 
-	List<ItemsPricesBySupermarket> list = new ArrayList();
+	private List<ItemsPricesBySupermarket> list = new ArrayList();
 
 	// retornar para console objeto lista
 	public List<ItemsPricesBySupermarket> sumPricesBySupermarket(List<Item> items) throws SQLException {

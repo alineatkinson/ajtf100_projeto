@@ -12,7 +12,7 @@ import model.TakingPrice;
 import model.ItemsPricesBySupermarket;
 
 public class SumPricesConsole {
-	Printer printer = new Printer();
+	private Printer printer = new Printer();
 
 	public void createSumPrices() throws SQLException {
 		ComparatorPriceConsole consoleComparator = new ComparatorPriceConsole();

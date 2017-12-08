@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 public class MenuItem {
 	int option;
-	String description;
-	Handler handler;
+	private String description;
+	private Handler handler;
 
 	public MenuItem(int option, String description, Handler handler) {
 		this.option = option;
@@ -15,7 +15,6 @@ public class MenuItem {
 		this.handler = handler;
 	}
 
-	
 	// tá correto isso?
 	public void execute() {
 		try {
@@ -30,19 +29,6 @@ public class MenuItem {
 		return String.format("%s . %s ", option, description);
 	}
 }
-
-// System.out.println("Opção 2 selecionada: 2. Cadastrar item. ");
-// controllerItemConsole.createItem();
-
-// int option = 1;
-// String description = "Cadastrar usuário.";
-// String feedback = "Opção 1 selecionada: ";
-// UserControllerConsole controllerUserConsole = new UserControllerConsole();
-
-// abstract class ItemUserHandler {
-// UserControllerConsole controllerUserConsole;
-
-// }
 
 interface Handler {
 	void execute() throws SQLException;
@@ -277,28 +263,13 @@ class Item17Handler implements Handler {
 
 class Item18Handler implements Handler {
 	SumPricesConsole comparator;
-	
+
 	public Item18Handler(SumPricesConsole comparator) { // ComparatorItemsControllerConsole comparator) {
 		super();
 		this.comparator = comparator;
 	}
+
 	public void execute() throws SQLException {
-		comparator.createSumPrices(); 
+		comparator.createSumPrices();
 	}
 }
-
-/*
- * 
- * class Item2Handler implements Handler { public void execute() {
- * ItemControllerConsole controllerItemConsole = new ItemControllerConsole();
- * controllerItemConsole.createItem();
- * 
- * } }
- * 
- * class Item3Handler implements Handler { public void execute() {
- * SupermarketControllerConsole controllerSupermarketUserConsole = new
- * SupermarketControllerConsole();
- * controllerSupermarketUserConsole.createSupermarket();
- * 
- * } }
- */

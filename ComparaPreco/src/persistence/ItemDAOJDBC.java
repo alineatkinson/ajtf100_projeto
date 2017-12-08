@@ -1,5 +1,6 @@
 package persistence;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -13,18 +14,23 @@ import model.Item;
 
 public class ItemDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceByNameDAO<Item> {
 	private ItemSQLHandler sh = new ItemSQLHandler();
-	Printer printer = new Printer();
+	private Printer printer = new Printer();
 
 	/*
-	public void createTable() {
-		String sql = sh.getCreateTable();
-		int qdtEdited = super.executeQuery(sql);
-		printer.printMsg("Tabela TakingPrices criada com sucesso");
-	}
-	*/
+	 * public void createTable() { String sql = sh.getCreateTable(); int qdtEdited =
+	 * super.executeQuery(sql);
+	 * printer.printMsg("Tabela TakingPrices criada com sucesso"); }
+	 */
 
 	public List<Item> getAll() {
-		String sql = sh.getSelectAll();
+		// TODO MELHORAR EXCE플O
+		String sql = null;
+		try {
+			sql = sh.getSelectAll();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		List<Item> items = new ArrayList<>();
 
 		Statement stmt = null;
@@ -56,8 +62,14 @@ public class ItemDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceByNa
 	}
 
 	public void delete(Number codebar_item) {
-
-		String sql = sh.getDeleteSQL() + codebar_item;
+		// TODO MELHORAR EXCE플O
+		String sql = null;
+		try {
+			sql = sh.getDeleteSQL() + codebar_item;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		int qtdRemovidos = 0;
 
 		qtdRemovidos = executeQuery(sql);
@@ -80,19 +92,12 @@ public class ItemDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceByNa
 			e2.printStackTrace();
 		}
 		DatabaseMetaData dbmd = null;
-		
+
 		/*
-		try {
-			dbmd = conn.getMetaData();
-			rs = dbmd.getTables(null, "ALINE", "ITEMS", null);
-			if (!rs.next()) {
-				this.createTable();
-			}
-		} catch (SQLException e3) {
-			// TODO Auto-generated catch block
-			e3.printStackTrace();
-		}
-		*/
+		 * try { dbmd = conn.getMetaData(); rs = dbmd.getTables(null, "ALINE", "ITEMS",
+		 * null); if (!rs.next()) { this.createTable(); } } catch (SQLException e3) { //
+		 * TODO Auto-generated catch block e3.printStackTrace(); }
+		 */
 
 		int codebar_item = item.getBarCode();
 		super.save(item, codebar_item, sh);
@@ -100,25 +105,52 @@ public class ItemDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceByNa
 
 	@Override
 	public Item get(Number key) {
-		String sql = sh.getSelectSQL();
+		// TODO MELHORAR EXCE플O
+		String sql = null;
+		try {
+			sql = sh.getSelectSQL();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return (Item) super.get(key, sh.getRowMapper(), sql);
 	}
-	
+
 	public Item get(String name) {
-		String sql = sh.getSelectNameSQL();
+		// TODO MELHORAR EXCE플O
+		String sql = null;
+		try {
+			sql = sh.getSelectNameSQL();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return (Item) super.get(name, sh.getRowMapper(), sql);
 	}
 
 	@Override
 	public boolean checksExistence(Number key) {
-		boolean exist = super.checksExistence(key, sh.getRowMapper(), sh.getSelectSQL());
+		// TODO MELHORAR EXCE플O
+		boolean exist = false;
+		try {
+			exist = super.checksExistence(key, sh.getRowMapper(), sh.getSelectSQL());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return exist;
 	}
 
 	public boolean checksExistence(String name) {
-		boolean exist = super.checksExistence(name, sh.getRowMapper(), sh.getSelectNameSQL());
+		// TODO MELHORAR EXCE플O
+		boolean exist = false;
+		try {
+			exist = super.checksExistence(name, sh.getRowMapper(), sh.getSelectNameSQL());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return exist;
 	}
-
 
 }
