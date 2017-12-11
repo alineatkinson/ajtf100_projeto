@@ -5,6 +5,7 @@ import model.PricesByItem;
 import model.Supermarket;
 import model.TakingPrice;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,7 +21,14 @@ public class ItemsPricesBySupermarketDAO {
 			throws SQLException {
 
 		ItemsPricesBySupermarketSQLHandler ipbs = new ItemsPricesBySupermarketSQLHandler();
-		String sql = ipbs.getSelectSQL(items, supermarket);
+		String sql = null;
+		// TODO MELHORAR EXCEÇÃO
+		try {
+			sql = ipbs.getSelectSQL(items, supermarket);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println("execução sql :" + sql);
 
 		SQLHandler tphandler = new TakingPriceSQLHandler();

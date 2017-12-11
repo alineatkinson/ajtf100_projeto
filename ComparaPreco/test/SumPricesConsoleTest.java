@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import model.Item;
 import model.ItemsPricesBySupermarket;
+import model.Supermarket;
 import model.TakingPrice;
 import presentation.SumPricesConsole;
 
@@ -32,19 +33,20 @@ public class SumPricesConsoleTest {
 		List<TakingPrice> tps = new ArrayList();
 		tps.add(tp1);
 		tps.add(tp2);
-		
-		ItemsPricesBySupermarket ipbs = new ItemsPricesBySupermarket();
-		ipbs.setItems(items);
-		ipbs.setTakingPrices(tps);
-		
+
+		Supermarket supermarket = new Supermarket("Nome", 88117, 999);
+		// ipbs.setItems(items);
+		// ipbs.setTakingPrices(tps);
+		ItemsPricesBySupermarket ipbs = new ItemsPricesBySupermarket(tps, items, supermarket);
+
 		SumPricesConsole console = new SumPricesConsole();
-		
+
 		List<ItemsPricesBySupermarket> list = new ArrayList();
 
 		List<String> data = console.getData(list);
 		for (String print : data) {
 			Assert.assertTrue(print.contains("Total da soma para o supermercado "));
-		} 
+		}
 	}
 
 }

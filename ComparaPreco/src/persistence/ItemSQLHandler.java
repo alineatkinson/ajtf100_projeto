@@ -8,24 +8,34 @@ public class ItemSQLHandler implements SQLHandler<Item> {
 	ReadFileProperties rfp = new ReadFileProperties();
 
 	@Override
-	public String handle(Item item, Boolean exist) {
+	public String handle(Item item, Boolean exist) throws IOException {
 
-		StringBuilder sql = new StringBuilder();
+		// StringBuilder sql = new StringBuilder();
+		String sql;
 
 		if (!exist) {
-			System.out.println("Entrou no if do save");
-			sql.append("INSERT INTO items (codebar_item, name, description) ");
-			sql.append("  VALUES (" + item.getBarCode() + ", ");
-			sql.append("'" + item.getName() + "',");
-			sql.append("'" + item.getDescription() + "' )");
+			// System.out.println("Entrou no if do save");
+			// sql.append("INSERT INTO items (codebar_item, name, description) ");
+			// sql.append(" VALUES (" + item.getBarCode() + ", ");
+			// sql.append("'" + item.getName() + "',");
+			// sql.append("'" + item.getDescription() + "' )");
+			sql = rfp.getQuery("insertItem");
+			sql = sql.replaceFirst("[?]", item.getBarCode() + "");
+			sql = sql.replaceFirst("[?]", item.getName());
+			sql = sql.replaceFirst("[?]", item.getDescription());
 
 		} else {
-			System.out.println("Entrou no else");
-			sql.append("UPDATE items SET name = '" + item.getName() + "', ");
-			sql.append("description = '" + item.getDescription() + "'");
-			sql.append(" WHERE codebar_item = " + item.getBarCode());
+			// System.out.println("Entrou no else");
+			//sql.append("UPDATE items SET name = '" + item.getName() + "', ");
+			//sql.append("description = '" + item.getDescription() + "'");
+			//sql.append(" WHERE codebar_item = " + item.getBarCode());
+			sql = rfp.getQuery("updateItem");
+			sql = sql.replaceFirst("[?]", item.getName());
+			sql = sql.replaceFirst("[?]", item.getDescription());
+			sql = sql.replaceFirst("[?]", item.getBarCode() + "");
+
 		}
-		return sql.toString();
+		return sql;
 	}
 
 	@Override

@@ -12,17 +12,24 @@ import persistence.ConnectionException;
 
 public class Screen {
 	static Menu menu;
-		
-	public static void main(String[] args) throws ConnectionException {
+
+	public static void main(String[] args) throws ConnectionException, NumeroInvalidoException {
 		Printer printer = new Printer();
 		Console reader = new Console();
 		int resposta2;
-		int resp;
+		int resp = 0;
 		menu = new Menu();
-	
+
 		do {
-			menu.toShow();
-			resp = menu.readAnswer();
+			do {
+				menu.toShow();
+				try {
+					resp = menu.readAnswer();
+				} catch (NumeroInvalidoException e) {
+					printer.printMsg("Tente novamente");
+				}
+			} while (resp > 18 || resp < 1);
+
 			menu.executeOption(resp);
 
 			printer.printMsg("Deseja utilizar a aplicação novamente? (1 = SIM | 2 = Não) \n");

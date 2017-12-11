@@ -25,7 +25,7 @@ public class ItemsPricesBySupermarketDAOTest {
 		items.add(item1);
 		items.add(item2);
 
-		ipbs1.setItems(items);
+		// ipbs1.setItems(items);
 
 		double price1 = 99.99;
 		double price2 = 99.99;
@@ -37,13 +37,15 @@ public class ItemsPricesBySupermarketDAOTest {
 		tps.add(tp1);
 		tps.add(tp2);
 
-		ipbs1.setTakingPrices(tps);
+		// ipbs1.setTakingPrices(tps);
 
-		ItemsPricesBySupermarket ipbs1 = new ItemsPricesBySupermarket();
-		
+		// ItemsPricesBySupermarket ipbs1 = new ItemsPricesBySupermarket();
+
 		Supermarket supermarket = new Supermarket("Nome", 88117, 999);
 
-		ipbs1.setSupermarket(supermarket);
+		// ipbs1.setSupermarket(supermarket);
+		ItemsPricesBySupermarket ipbs1 = new ItemsPricesBySupermarket(tps, items, supermarket);
+
 		ItemsPricesBySupermarketDAO ipbsDAO = new ItemsPricesBySupermarketDAO();
 		ItemsPricesBySupermarket ipbs2 = ipbsDAO.getItemsPricesBySupermarket(ipbs1.getItems(), ipbs1.getSupermarket());
 		Assert.assertEquals(ipbs1.getItems(), ipbs2.getItems());

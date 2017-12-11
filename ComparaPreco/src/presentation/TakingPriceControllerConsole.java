@@ -63,55 +63,86 @@ public class TakingPriceControllerConsole {
 	 * Edit the data of a supermarket
 	 */
 	public void editTakingPrice() {
-
-		printer.printMsg("Digite o código do item a ser alterado? ");
-		int codeBarItem = reader.readNumber();
 		TakingPrice tp = null;
-		
-		printer.printMsg("Digite o código do supermercado a ser alterado? ");
-		int codeSmkt = reader.readNumber();
-		Supermarket smkt = null;
+		int codeBarItem;
+		int codeSmkt;
+		int newCodeItem;
 
+		// while (true) {
+		// try {
+		printer.printMsg("Digite o código do item a ser alterado? ");
+		codeBarItem = reader.readNumber();
+		// break;
+		// } catch (NumberFormatException ex) {
+		// System.out.println("ERRO! Digite um número!");
+		// continue;
+		// }
+		// }
+
+		// while (true) {
+		// try {
+		printer.printMsg("Digite o código do supermercado a ser alterado? ");
+		codeSmkt = reader.readNumber();
+		// break;
+		// } catch (NumberFormatException ex) {
+		// System.out.println("ERRO! Digite um número!");
+		// continue;
+		// }
+		// }
+		Supermarket smkt = null;
 		// pensando em cadastrar o novo preço sem editar o preço antigo. Senão terei que
 		// controlar por muitos atributos.
+
 		if (takingPriceDao.checksExistence(codeBarItem, codeSmkt)) {
 			tp = (TakingPrice) takingPriceDao.get(codeBarItem, codeSmkt);
 			int codeSupermarket = tp.getCodeSupermarket();
 			double priceItem = tp.getPrice();
 			Date dateTP = tp.getDate();
 			int respEdit = 0;
-			
+
 			takingPriceDao.delete(codeBarItem, codeSupermarket);
 
 			do {
-				respEdit = this.askWhatEdit(tp);
-				if (respEdit == 1) {
-					printer.printMsg(" Digite o novo código do item: ");
-					int newCodeItem = 0;
-					newCodeItem = reader.readNumber();
-					this.save(newCodeItem, priceItem, codeSupermarket, dateTP);
-				} else if (respEdit == 2) {
-					printer.printMsg(" Digite o novo código do supermercado: ");
-					int newCodeSupermarket = 0;
-					newCodeSupermarket = reader.readNumber();
-					this.save(codeBarItem, priceItem, newCodeSupermarket, dateTP);
-				} else if (respEdit == 3) {
-					printer.printMsg(" Digite o novo preço do item: ");
-					double newPriceItem = 0;
-					newPriceItem = reader.readNumberDouble();
-					this.save(codeBarItem, newPriceItem, codeSupermarket, dateTP);
-				} else {
-					printer.printMsg("Nenhuma alternativa válida foi digitada. Tente outra vez!");
-				}
-				
+				try {
+					respEdit = this.askWhatEdit(tp);
+					// break;
+				} catch (NumeroInvalidoException e) {
+					// e.printStackTrace();
+					// } catch (NumberFormatException ex) {
+					// System.out.println("ERRO! Digite um número válido! \n");
+				} // continue;
 			} while (respEdit != 1 & respEdit != 2 & respEdit != 3);
 
+			if (respEdit == 1) {
+				printer.printMsg(" Digite o novo código do item: ");
+				// int newCodeItem = 0;
+				// codeSmkt = reader.readNumber();
+				newCodeItem = reader.readNumber();
+				this.save(newCodeItem, priceItem, codeSupermarket, dateTP);
+			} else if (respEdit == 2) {
+				printer.printMsg(" Digite o novo código do supermercado: ");
+				int newCodeSupermarket = 0;
+				newCodeSupermarket = reader.readNumber();
+				this.save(codeBarItem, priceItem, newCodeSupermarket, dateTP);
+			} else if (respEdit == 3) {
+				printer.printMsg(" Digite o novo preço do item: ");
+				double newPriceItem = 0;
+				newPriceItem = reader.readNumberDouble();
+				this.save(codeBarItem, newPriceItem, codeSupermarket, dateTP);
+			}
+			// else {
+			// printer.printMsg("Nenhuma alternativa válida foi digitada. Tente outra
+			// vez!");
+			// }
+
 		} else {
-			printer.printMsg("Não existe supermercado com este código cadastrado.");
+			printer.printMsg("Não existe tomada de preço com estes códigos cadastrados.");
 		}
 	}
 
-	public int askWhatEdit(TakingPrice tp) {
+	public int askWhatEdit(TakingPrice tp) throws NumeroInvalidoException {
+		int respEdit = 0;
+
 		printer.printMsg(" A tomada de preço selecionada contém os seguintes dados: ");
 		printer.printMsg(" Código do item: " + tp.codeBarItem);
 		printer.printMsg(" Código do supermercado : " + tp.getCodeSupermarket());
@@ -119,8 +150,13 @@ public class TakingPriceControllerConsole {
 		printer.printMsg("Preço do item :" + monetaryFormatter.format(tp.getPrice()));
 		printer.printMsg("Data da tomada de preço :" + tp.getDate());
 		printer.printMsg(" Digite para alterar: 1 -> Código do item, 2 -> Código do supermercado, 3 -> Preço do item");
-		int respEdit = 0;
-		return respEdit = reader.readNumber();
+		respEdit = reader.readNumber();
+
+		if (respEdit != 1 & respEdit != 2 & respEdit != 3) {
+			throw new NumeroInvalidoException(respEdit + " é um número inválido, tente novamente!");
+		}
+
+		return respEdit;
 	}
 
 	/*
@@ -133,9 +169,9 @@ public class TakingPriceControllerConsole {
 
 		for (TakingPrice takingprice : takingPrices) {
 			StringBuilder sb = new StringBuilder();
-			sb.append("[Código do item] : " + takingprice.getCodeBarItem()+ "\n");
-			sb.append("[Código do Supermercado]: " + takingprice.getCodeSupermarket()+ "\n");
-			sb.append("Preço: " + takingprice.getPrice()+ "\n");
+			sb.append("[Código do item] : " + takingprice.getCodeBarItem() + "\n");
+			sb.append("[Código do Supermercado]: " + takingprice.getCodeSupermarket() + "\n");
+			sb.append("Preço: " + takingprice.getPrice() + "\n");
 			sb.append("Data: " + takingprice.getDate() + "\n");
 			data.add(sb.toString());
 		}
@@ -155,18 +191,36 @@ public class TakingPriceControllerConsole {
 	 * Delete a supermarket
 	 */
 	public void deleteTakingPrice() {
-		printer.printMsg("Digite o código do item com tomada de preço a ser excluído: ");
 		int codeBarItem = 0;
-		codeBarItem = reader.readNumber();
-		
-		printer.printMsg("Digite o código do supermercado com tomada de preço a ser excluído: ");
 		int codeSmkt = 0;
+
+		// while (true) {
+		// try {
+		printer.printMsg("Digite o código do item com tomada de preço a ser excluído: ");
+		codeBarItem = 0;
+		codeBarItem = reader.readNumber();
+		// break;
+		// } catch (NumberFormatException ex) {
+		// System.out.println("ERRO! Digite um número!");
+		// continue;
+		// }
+		// }
+		// while (true) {
+		// try {
+		printer.printMsg("Digite o código do supermercado com tomada de preço a ser excluído: ");
+		codeSmkt = 0;
 		codeSmkt = reader.readNumber();
+		// break;
+		// } catch (NumberFormatException ex) {
+		// System.out.println("ERRO! Digite um número!");
+		// continue;
+		// }
+		// }
 
 		if (takingPriceDao.checksExistence(codeBarItem, codeSmkt)) {
 			takingPriceDao.delete(codeBarItem, codeSmkt);
 		} else {
-			printer.printMsg("Não tomada de preço com este código de item.");
+			printer.printMsg("Não existe tomada de preço com estes códigos.");
 		}
 	}
 }

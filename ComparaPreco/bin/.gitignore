@@ -1,15 +1,3 @@
-/business/
-/model/
-/persistence/
 /presentation/
-/SumPricesConsoleTest.class
-/Snippet.class
-/ComparatorPriceTest.class
-/ItemsPricesBySupermarketDAOTest.class
-/ItemsPricesBySupermarketSQLHandlerTest.class
-/ItemsPricesBySupermarketTest.class
-/PriceByItemDAOTest.class
-/PricesByItemSQLHandlerTest.class
-/PricesByItemTest.class
-/ComparatorPriceConsoleTest.class
-/SupermarketJDBCTest.class
+/business/
+/persistence/

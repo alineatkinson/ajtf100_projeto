@@ -42,49 +42,67 @@ public class UserControllerConsole {
 	}
 
 	public void editUser() {
+		User user = null;
+		int respEdit = 0;
 
 		printer.printMsg("Digite o cpf do usuário a ser alterado: ");
 		String userKey = reader.readText();
-		User user = null;
 
 		if (userDao.checksExistence(userKey)) {
 			user = (User) userDao.get(userKey);
 			String nameUser = user.getName();
-
-			int respEdit = askWhatEdit(user);
-			userDao.delete(userKey);
-
 			do {
-				if (respEdit == 1) {
-					printer.printMsg(" Digite o novo nome: ");
-					String newNome = new String();
-					newNome = reader.readText();
-					newNome = reader.readText();
-					this.save(newNome, userKey);
-				} else if (respEdit == 2) {
-					printer.printMsg(" Digite o novo CPF: ");
-					String newCPF = new String();
-					newCPF = " ";
-					newCPF = reader.readText();
-					newCPF = reader.readText();
-					this.save(nameUser, newCPF);
-				} else {
-					printer.printMsg("Nenhuma alternativa válida foi digitada. Tente outra vez!");
+				try {
+					respEdit = askWhatEdit(user);
+				} catch (NumeroInvalidoException e) {
+					// e.printStackTrace();
 				}
 			} while (respEdit != 1 & respEdit != 2);
+			userDao.delete(userKey);
+
+			if (respEdit == 1) {
+				printer.printMsg(" Digite o novo nome: ");
+				String newNome = new String();
+				newNome = reader.readText();
+				// newNome = reader.readText();
+				this.save(newNome, userKey);
+			} else if (respEdit == 2) {
+				printer.printMsg(" Digite o novo CPF: ");
+				String newCPF = new String();
+				newCPF = " ";
+				newCPF = reader.readText();
+				// newCPF = reader.readText();
+				this.save(nameUser, newCPF);
+			} else {
+				printer.printMsg("Nenhuma alternativa válida foi digitada. Tente outra vez!");
+			}
 
 		} else {
 			printer.printMsg("Não existe usuário com este número de cpf cadastrado.");
 		}
+
 	}
 
-	public int askWhatEdit(User user) {
+	public int askWhatEdit(User user) throws NumeroInvalidoException {
+		int respEdit = 0;
+
 		printer.printMsg(" O usuário selecionado contém os seguintes dados: ");
 		printer.printMsg(" Nome: " + user.getName());
 		printer.printMsg(" CPF : " + user.getCpf());
 		printer.printMsg(" Digite para alterar: 1 -> Nome, 2 -> CPF");
-		int respEdit = 0;
-		return respEdit = reader.readNumber();
+
+		respEdit = reader.readNumber();
+		// String numero1 = JOptionPane.showInputDialog("Entre com um número");
+		// a=Integer.parseInt(respEdit);
+		// break;
+
+		if (respEdit != 1 & respEdit != 2) {
+			throw new NumeroInvalidoException(respEdit + " é um número inválido, tente novamente!");
+		}
+
+		// } while (respEdit != 1 || respEdit != 2);
+		return respEdit;
+
 	}
 
 	/*
@@ -108,7 +126,6 @@ public class UserControllerConsole {
 
 		List<String> data = getData();
 
-		
 		for (String user : data) {
 			printer.printMsg(user);
 		}

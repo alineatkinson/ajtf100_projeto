@@ -20,7 +20,7 @@ public class PricesByItemSQLHandlerTest {
 	  public void getRowMapperTest() { 
 		// Como testar a criação de objetos
 		  RowMapper rowMapper = pbiSqlHandler.getRowMapper();
-		  rowMapper.
+	//	  rowMapper.
 	  }
 	 
 

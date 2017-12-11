@@ -10,29 +10,22 @@ public class UserSQLHandler implements SQLHandler<User> {
 	ReadFileProperties rfp = new ReadFileProperties();
 
 	@Override
-	// TODO VER SE PODE MELHORAR EXCEPTION
 	public String handle(User user, Boolean exist) throws IOException {
 
-		StringBuilder sql = new StringBuilder();
+		String sql;
 
 		if (!exist) {
-			// sql = rfp.getQueryUser("insertUser", user.getName(), user.getCpf());
-
-			System.out.println("Entrou no if do save");
-			sql.append("INSERT INTO users (cpf ,name) ");
-			sql.append(" VALUES ('" + user.getCpf() + "',");
-			sql.append("'" + user.getName() + "')");
+			sql = rfp.getQuery("insertUser");
+			sql = sql.replaceFirst("[?]", user.getName());
+			sql = sql.replaceFirst("[?]", user.getCpf());
 
 		} else {
-			// sql = rfp.getQueryUser("updateUser", user.getName(), user.getCpf());
-
-			System.out.println("Entrou no else");
-			sql.append("UPDATE users SET name = '" + user.getName() + "'");
-			sql.append(" WHERE cpf = '" + user.getCpf() + "'");
-
+			sql = rfp.getQuery("updateUser");
+			sql = sql.replaceFirst("[?]", user.getName());
+			sql = sql.replaceFirst("[?]", user.getCpf());
 		}
 
-		return sql.toString();
+		return sql;
 	}
 
 	@Override

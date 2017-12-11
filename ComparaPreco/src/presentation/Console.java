@@ -15,7 +15,15 @@ class Console implements Reader {
 	 *
 	 */
 	public char readCharacter() {
-		return keyboard.next().charAt(0);
+		// keyboard.next().charAt(0);
+
+		String input = keyboard.next();
+		// char charactere = keyboard.next().charAt(0);
+		if (input.length() > 1) {
+			throw new IllegalArgumentException("Por favor, insira apenas um caractere.");
+		}
+		char choice = input.charAt(0);
+		return choice;
 	}
 
 	/**
@@ -31,7 +39,15 @@ class Console implements Reader {
 	 *
 	 */
 	public double readNumberDouble() {
-		return keyboard.nextDouble();
+		Double number = 0.0;
+		try {
+			// double c = Double.parseDouble(getValorSolic());
+			number = keyboard.nextDouble();
+		} catch (NumberFormatException e) {
+			System.out.println("Valor solicitado é inválido!");
+		}
+
+		return number;
 	}
 
 	/**
@@ -39,8 +55,19 @@ class Console implements Reader {
 	 *
 	 */
 	public int readNumber() {
-        String text = readText();
-        return Integer.parseInt(text);
-    }
+		int number = 0;
+
+		while (true) {
+			try {
+				String text = readText();
+				number = Integer.parseInt(text);
+				break;
+			} catch (NumberFormatException ex) {
+				System.out.println("ERRO! Digite um número!");
+				continue;
+			}
+		}
+		return number;
+	}
 
 }

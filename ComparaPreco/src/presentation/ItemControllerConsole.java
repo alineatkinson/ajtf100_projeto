@@ -35,7 +35,7 @@ public class ItemControllerConsole {
 		msg = "Qual o nome do item? \n";
 		printer.printMsg(msg);
 		String name = reader.readText();
-		//name = reader.readText();
+		// name = reader.readText();
 
 		// Ask and assign item's description
 		msg = "Qual a descrição do item? \n";
@@ -67,7 +67,12 @@ public class ItemControllerConsole {
 			itemDao.delete(itemKey);
 
 			do {
-				respEdit = this.askWhatEdit(item);
+				try {
+					respEdit = this.askWhatEdit(item);
+				} catch (NumeroInvalidoException e) {
+					//printer.printMsg("Escolha a opção novamente: ");
+					//e.printStackTrace();
+				}
 				if (respEdit == 1) {
 					printer.printMsg(" Digite o novo código de barras: ");
 					int newCodeBar = 0;
@@ -79,7 +84,7 @@ public class ItemControllerConsole {
 					String newName = new String();
 					newName = " ";
 					newName = reader.readText();
-					//newName = reader.readText();
+					// newName = reader.readText();
 					this.save(item.getBarCode(), newName, item.getDescription());
 
 				} else if (respEdit == 3) {
@@ -87,7 +92,7 @@ public class ItemControllerConsole {
 					String newDescription = new String();
 					newDescription = " ";
 					newDescription = reader.readText();
-					//newDescription = reader.readText();
+					// newDescription = reader.readText();
 					this.save(item.getBarCode(), item.getName(), newDescription);
 
 				} else {
@@ -100,13 +105,16 @@ public class ItemControllerConsole {
 		}
 	}
 
-	public int askWhatEdit(Item item) {
+	public int askWhatEdit(Item item) throws NumeroInvalidoException {
 		printer.printMsg(" O item selecionado contém os seguintes dados: ");
 		printer.printMsg(" Código de barras : " + item.getBarCode());
 		printer.printMsg(" Nome do  item: " + item.getName());
 		printer.printMsg(" Descrição do  item: " + item.getDescription());
 		printer.printMsg(" Digite para alterar: 1 -> Código de barras , 2 -> Nome do item,  3 -> Descrição");
 		int respEdit = reader.readNumber();
+		if (respEdit != 1 & respEdit != 2 & respEdit != 3) {
+			throw new NumeroInvalidoException(respEdit + " é um número inválido, tente novamente! \n");
+		}
 		return respEdit;
 	}
 
@@ -117,8 +125,8 @@ public class ItemControllerConsole {
 
 		for (Item item : items) {
 			StringBuilder sb = new StringBuilder();
-			sb.append("[Código de barra do item] : " + item.getBarCode()+ "\n");
-			sb.append("Nome do item: " + item.getName()+ "\n");
+			sb.append("[Código de barra do item] : " + item.getBarCode() + "\n");
+			sb.append("Nome do item: " + item.getName() + "\n");
 			sb.append("Descrição do item: " + item.getDescription() + "\n");
 			data.add(sb.toString());
 		}

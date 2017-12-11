@@ -17,7 +17,7 @@ public class Menu {
 	TakingPriceControllerConsole controllerTakingPriceConsole = new TakingPriceControllerConsole();
 	ComparatorPriceConsole comparatorPrice = new ComparatorPriceConsole();
 	SumPricesConsole sumConsole = new SumPricesConsole();
-	
+
 	MenuItem menu1 = new MenuItem(1, " Cadastrar usuário.", new Item1Handler(controllerUserConsole));
 	MenuItem menu2 = new MenuItem(2, " Editar usuário.", new Item2Handler(controllerUserConsole));
 	MenuItem menu3 = new MenuItem(3, " Excluir usuário.", new Item3Handler(controllerUserConsole));
@@ -79,9 +79,17 @@ public class Menu {
 
 	}
 
-	public int readAnswer() {
+	public int readAnswer() throws NumeroInvalidoException {
 		Console readerConsole = new Console();
-		return readerConsole.readNumber();
+		int option;
+
+		option = readerConsole.readNumber();
+
+		if (option > 18 & option < 1) {
+			throw new NumeroInvalidoException(option + " não é uma opção inválida, tente novamente!");
+		}
+		return option;
+
 	}
 
 	public void executeOption(int option) {

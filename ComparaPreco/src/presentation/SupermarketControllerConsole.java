@@ -33,7 +33,7 @@ public class SupermarketControllerConsole {
 		// Ask the supermarket's name
 		printer.printMsg("Qual o nome deste supermercado? \n");
 		String nameSuper = reader.readText();
-		//nameSuper = reader.readText();
+		// nameSuper = reader.readText();
 
 		// Ask the supermarket's code adress
 		printer.printMsg("Qual o cep deste supermercado? (utilize somente números) \n");
@@ -63,13 +63,18 @@ public class SupermarketControllerConsole {
 			supermarketDao.delete(supermarketKey);
 
 			do {
-				respEdit = this.askWhatEdit(supermarket);
+				try {
+					respEdit = this.askWhatEdit(supermarket);
+				} catch (NumeroInvalidoException e) {
+					//printer.printMsg("Opção inválida, tente novamente! \n");
+					//e.printStackTrace();
+				}
 				if (respEdit == 1) {
 					printer.printMsg(" Digite o novo nome do supermercado: ");
 					String newNome = new String();
 					newNome = " ";
 					newNome = reader.readText();
-					//newNome = reader.readText();
+					// newNome = reader.readText();
 					this.save(newNome, supermarket.getCEP(), supermarket.getCode());
 
 				} else if (respEdit == 2) {
@@ -93,14 +98,18 @@ public class SupermarketControllerConsole {
 		}
 	}
 
-	public int askWhatEdit(Supermarket sm) {
+	public int askWhatEdit(Supermarket sm) throws NumeroInvalidoException {
 		printer.printMsg(" O supermercado selecionado contém os seguintes dados: ");
 		printer.printMsg(" Nome : " + sm.getName());
 		printer.printMsg(" Código : " + sm.getCode());
 		printer.printMsg(" CEP : " + sm.getCEP());
 		printer.printMsg(" Digite para alterar: 1 -> Nome do supermercado, 2 -> Código do supermercado, 3 -> CEP");
 		int respEdit = 0;
-		return respEdit = reader.readNumber();
+		respEdit = reader.readNumber();
+		if (respEdit != 1 & respEdit != 2 & respEdit != 3) {
+			throw new NumeroInvalidoException(respEdit + " é um número inválido, tente novamente!");
+		}
+		return respEdit;
 	}
 
 	public List<String> getData() {

@@ -1,5 +1,6 @@
 package persistence;
 
+import java.io.IOException;
 import java.util.List;
 
 import model.Item;
@@ -7,7 +8,7 @@ import model.Supermarket;
 
 public class ItemsPricesBySupermarketSQLHandler {
 
-	public String getSelectSQL(List<Item> items, Supermarket supermarket) {
+	public String getSelectSQL(List<Item> items, Supermarket supermarket) throws IOException {
 
 		System.out.println(" tamanho de items: " + items.size());
 		if (items != null & supermarket != null) {
@@ -33,13 +34,21 @@ public class ItemsPricesBySupermarketSQLHandler {
 			}
 
 			int code_supermarket = supermarket.getCode();
+			String sql;
+			ReadFileProperties rfp = new ReadFileProperties();
 
-			String sql = "SELECT distinct tp.codebar_item, tp.code_supermarket, tp.price, tp.date, it.name, it.description";
-			sql += " FROM taking_prices AS tp";
-			sql += " INNER JOIN items AS it ON it.codebar_item = tp.codebar_item";
-			sql += " inner join supermarkets as sp on sp.code_supermarket = tp.code_supermarket";
-			sql += " where it.codebar_item in ( " + codes + ") and tp.code_supermarket = " + code_supermarket;
+			// String sql = "SELECT distinct tp.codebar_item, tp.code_supermarket, tp.price,
+			// tp.date, it.name, it.description";
+			// sql += " FROM taking_prices AS tp";
+			// sql += " INNER JOIN items AS it ON it.codebar_item = tp.codebar_item";
+			// sql += " inner join supermarkets as sp on sp.code_supermarket =
+			// tp.code_supermarket";
+			// sql += " where it.codebar_item in ( " + codes + ") and tp.code_supermarket =
+			// " + code_supermarket;
 			// sql += " GROUP BY tp.code_supermarket";
+			sql = rfp.getQuery("selectItemPriceBysupermarket");
+			sql = sql.replaceFirst("[?]", codes.toString());
+			sql = sql.replaceFirst("[?]", code_supermarket + "");
 			return sql;
 		} else
 			return null;

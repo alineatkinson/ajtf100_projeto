@@ -6,6 +6,7 @@ import model.Item;
 import model.PricesByItem;
 import model.TakingPrice;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,14 @@ public class ComparatorPriceConsole {
 	protected void createComparation() throws SQLException {
 		ComparatorPrice comparator = new ComparatorPrice();
 		namesItems = this.askItemsToCompare();
-		List<PricesByItem> list = comparator.createComparation(this.namesItems);
+		List<PricesByItem> list = null;
+		// TODO MELHORAR EXCEÇÃO
+		try {
+			list = comparator.createComparation(this.namesItems);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.showResults(list);
 	}
 

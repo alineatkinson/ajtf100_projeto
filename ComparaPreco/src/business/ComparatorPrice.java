@@ -3,6 +3,7 @@ package business;
 import model.Item;
 import model.PricesByItem;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ public class ComparatorPrice {
 	private PriceByItemDAO priceByItemDAO = new PriceByItemDAO();
 
 	// retornar obj priceByItem
-	public List<PricesByItem> createComparation(List<String> namesItems) throws SQLException {
+	public List<PricesByItem> createComparation(List<String> namesItems) throws SQLException, IOException {
 		List<PricesByItem> pricesByItem = new ArrayList();
 		List<Item> items = new ArrayList();
 
@@ -41,7 +42,7 @@ public class ComparatorPrice {
 		return selectedItem;
 	}
 
-	public PricesByItem getPriceByItem(Item item) throws SQLException {
+	public PricesByItem getPriceByItem(Item item) throws SQLException, IOException {
 		PricesByItem pbi;
 		pbi = priceByItemDAO.getPriceByItem(item);
 		return pbi;

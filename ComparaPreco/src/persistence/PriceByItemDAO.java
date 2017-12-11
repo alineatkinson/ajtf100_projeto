@@ -1,5 +1,6 @@
 package persistence;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,7 +20,14 @@ public class PriceByItemDAO {
 		TakingPriceRowMapper tprm = new TakingPriceRowMapper();
 		List<TakingPrice> tps = new ArrayList();
 
-		String sql = pbiHandler.getSelectSQL(item.getBarCode());
+		String sql = null;
+		//TODO MELHORAR EXCEÇÃO
+		try {
+			sql = pbiHandler.getSelectSQL(item.getBarCode());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		ComparePriceDAOJDBC cp = new ComparePriceDAOJDBC();
 		ResultSet rs = cp.executeSql(sql);

@@ -17,12 +17,10 @@ public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 	Printer printer = new Printer();
 
 	/*
-	public void createTable() {
-		String sql = sh.getCreateTable();
-		int qdtEdited = super.executeQuery(sql);
-		printer.printMsg("Tabela TakingPrices criada com sucesso");
-	}
-	*/
+	 * public void createTable() { String sql = sh.getCreateTable(); int qdtEdited =
+	 * super.executeQuery(sql);
+	 * printer.printMsg("Tabela TakingPrices criada com sucesso"); }
+	 */
 
 	public List<TakingPrice> getAll() {
 		// TODO melhorar exceção
@@ -71,8 +69,6 @@ public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 		System.out.println("taking_prices excluído do banco com sucesso!" + qtdRemovidos + " linhas excluidas");
 	}
 
-
-
 	public void save(TakingPrice tp) {
 		Statement stmt = null;
 		String sql = null;
@@ -82,8 +78,15 @@ public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 		DatabaseMetaData dbmd = null;
 
 		Boolean exist = this.checksExistence(tp.getCodeBarItem(), tp.getCodeSupermarket());
-		sql = sh.handle(tp, exist);
+		//TODO MELHORAR EXCEÇÃO
 		try {
+			sql = sh.handle(tp, exist);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+
 			conn = ConnectionManager.getConnection();
 			stmt = conn.createStatement();
 			stmt.executeUpdate(sql);

@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Item;
+
 public class ComparatorItems {
 
 	public List<Item> getItemsAvailable(String[] names){
