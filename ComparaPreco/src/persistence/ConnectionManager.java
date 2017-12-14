@@ -29,7 +29,7 @@ public class ConnectionManager {
 	}
 
 	// código omitido idêntico ao exemplo anterior
-	public static void close(Connection conn) {
+	private static void close(Connection conn) {
 		try {
 			if (conn != null) {
 				conn.close();

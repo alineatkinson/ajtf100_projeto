@@ -22,14 +22,13 @@ public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 	 * printer.printMsg("Tabela TakingPrices criada com sucesso"); }
 	 */
 
-	public List<TakingPrice> getAll() {
+	public List<TakingPrice> getAll() throws PersistenceException {
 		// TODO melhorar exceção
 		String sql = null;
 		try {
 			sql = sh.getSelectAll();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			throw new PersistenceException("Não foi possível obter todas tomadas de preço", e1);
 		}
 		List<TakingPrice> takingprices = new ArrayList<>();
 		Statement stmt = null;

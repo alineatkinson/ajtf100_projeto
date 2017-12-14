@@ -22,7 +22,8 @@ public class ComparatorPriceConsole {
 		int resp;
 		String itemName;
 		// comparator = new ComparatorPrice();
-
+		namesItems.clear();
+		
 		do {
 			printer.printMsg("Digite o nome: ");
 			itemName = reader.readText();

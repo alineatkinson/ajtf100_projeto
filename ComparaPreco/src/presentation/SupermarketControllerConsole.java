@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import model.Supermarket;
 import persistence.ComparePriceDAO;
 import persistence.DAOFactory;
+import persistence.PersistenceException;
 
 /*
  * Create the supermarket
@@ -115,18 +116,24 @@ public class SupermarketControllerConsole {
 	public List<String> getData() {
 
 		List<String> data = new ArrayList<String>();
-		List<Supermarket> supermarkets = supermarketDao.getAll();
-
-		for (Supermarket supermarket : supermarkets) {
-			StringBuilder sb = new StringBuilder();
-			String codigoSuper = "[Código do Supermercado] : " + supermarket.getCode() + " \n";
-			sb.append(codigoSuper);
-			String nomeSuper = "Nome do supermercado: " + supermarket.getName() + " \n";
-			sb.append(nomeSuper);
-			String cepSuper = "CEP do supermercado: " + supermarket.getCEP() + "\n";
-			sb.append(cepSuper);
-			data.add(sb.toString());
+		List<Supermarket> supermarkets;
+		try {
+			supermarkets = supermarketDao.getAll();
+			for (Supermarket supermarket : supermarkets) {
+				StringBuilder sb = new StringBuilder();
+				String codigoSuper = "[Código do Supermercado] : " + supermarket.getCode() + " \n";
+				sb.append(codigoSuper);
+				String nomeSuper = "Nome do supermercado: " + supermarket.getName() + " \n";
+				sb.append(nomeSuper);
+				String cepSuper = "CEP do supermercado: " + supermarket.getCEP() + "\n";
+				sb.append(cepSuper);
+				data.add(sb.toString());
+			}
+		} catch (PersistenceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+
 		return data;
 	}
 

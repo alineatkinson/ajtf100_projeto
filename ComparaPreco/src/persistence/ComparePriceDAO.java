@@ -21,7 +21,7 @@ public interface ComparePriceDAO<E> {
 	
 	public abstract void delete(Number key);
 
-	public abstract List<E> getAll();
+	public abstract List<E> getAll() throws PersistenceException;
 
 	/*public default Object executeQueryMap(String sql, RowMapper m) {
 

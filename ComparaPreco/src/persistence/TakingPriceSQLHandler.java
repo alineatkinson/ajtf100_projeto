@@ -13,7 +13,6 @@ public class TakingPriceSQLHandler implements SQLHandler<TakingPrice> {
 	@Override
 	public String handle(TakingPrice e, Boolean exist) throws IOException {
 
-		// StringBuilder sql = new StringBuilder();
 		Date date = e.getDate();
 		SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String date1 = parser.format(date);
@@ -21,12 +20,6 @@ public class TakingPriceSQLHandler implements SQLHandler<TakingPrice> {
 
 		if (!exist) {
 			System.out.println("Entrou no if do save");
-			// sql.append("INSERT INTO taking_prices (codebar_item, code_supermarket, price,
-			// date) ");
-			// sql.append(" VALUES (" + e.getCodeBarItem() + ", ");
-			// sql.append(e.getCodeSupermarket() + ", ");
-			// sql.append(e.getPrice() + ", '");
-			// sql.append(date1 + "' )");
 			sql = rfp.getQuery("insertTP");
 			sql = sql.replaceFirst("[?]", e.getCodeBarItem() + "");
 			sql = sql.replaceFirst("[?]", e.getCodeSupermarket() + "");
@@ -34,13 +27,6 @@ public class TakingPriceSQLHandler implements SQLHandler<TakingPrice> {
 			sql = sql.replaceFirst("[?]", date1);
 
 		} else {
-			// System.out.println("Entrou no else");
-			// sql.append("UPDATE taking_prices SET code_supermarket = " +
-			// e.getCodeSupermarket() + ",");
-			// sql.append(" price = " + e.getPrice() + ",");
-			// sql.append(" date = '" + date1 + "'");
-			// sql.append(" WHERE codebar_item = " + e.getCodeBarItem());
-			// sql.append(" and code_supermarket = " + e.getCodeSupermarket());
 			sql = rfp.getQuery("updateTP");
 			sql = sql.replaceFirst("[?]", e.getCodeSupermarket() + "");
 			sql = sql.replaceFirst("[?]", e.getPrice() + "");
@@ -49,7 +35,6 @@ public class TakingPriceSQLHandler implements SQLHandler<TakingPrice> {
 			sql = sql.replaceFirst("[?]", e.getCodeSupermarket() + "");
 
 		}
-		// System.out.println(sql.toString());
 		return sql;
 	}
 
@@ -77,7 +62,7 @@ public class TakingPriceSQLHandler implements SQLHandler<TakingPrice> {
 		// String sql = "DELETE FROM taking_prices WHERE codebar_item = "+codebar_item+"
 		// and code_supermarket = "+code_supermarket;
 		String sql = rfp.getQuery("deleteSQLTP");
-		sql = sql.replaceFirst("[?]", codebar_item.toString()); 
+		sql = sql.replaceFirst("[?]", codebar_item.toString());
 		sql = sql.replaceFirst("[?]", code_supermarket.toString());
 		return sql;
 	}
@@ -86,7 +71,7 @@ public class TakingPriceSQLHandler implements SQLHandler<TakingPrice> {
 	public String getSelectAll() throws IOException {
 		// String sql = "SELECT * FROM taking_prices";
 		String sql = rfp.getQuery("selectAllTP");
-		System.out.println(sql);
+		//System.out.println(sql);
 		return sql;
 	}
 
@@ -94,7 +79,7 @@ public class TakingPriceSQLHandler implements SQLHandler<TakingPrice> {
 		// String sql = "SELECT * FROM taking_prices WHERE codebar_item = " +
 		// codebar_item + " and code_supermarket = " + code_supermarket;
 		String sql = rfp.getQuery("selectSQLTP");
-		sql = sql.replaceFirst("[?]", codebar_item.toString()); 
+		sql = sql.replaceFirst("[?]", codebar_item.toString());
 		sql = sql.replaceFirst("[?]", code_supermarket.toString());
 		return sql;
 	}

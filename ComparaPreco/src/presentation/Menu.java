@@ -85,7 +85,7 @@ public class Menu {
 
 		option = readerConsole.readNumber();
 
-		if (option > 18 & option < 1) {
+		if (option > 18 || option < 1) {
 			throw new NumeroInvalidoException(option + " não é uma opção inválida, tente novamente!");
 		}
 		return option;

@@ -12,6 +12,7 @@ import model.Supermarket;
 import model.TakingPrice;
 import persistence.ComparePriceDAO;
 import persistence.DAOFactory;
+import persistence.PersistenceException;
 
 public class ComparatorItemsControllerConsole {
 	private Printer printer = new Printer();
@@ -72,7 +73,12 @@ public class ComparatorItemsControllerConsole {
 
 	public Item getSelectItem(String nameItem) {
 		List<Item> list = new ArrayList();
-		list = itemDao.getAll();
+		try {
+			list = itemDao.getAll();
+		} catch (PersistenceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Item item = null;
 
 		for (Item oItem : list) {
@@ -86,7 +92,12 @@ public class ComparatorItemsControllerConsole {
 	public List selectSupermarkets() {
 		List<Supermarket> list = new ArrayList();
 
-		list = supermarketDao.getAll();
+		try {
+			list = supermarketDao.getAll();
+		} catch (PersistenceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return list;
 	}
@@ -95,7 +106,12 @@ public class ComparatorItemsControllerConsole {
 		List<TakingPrice> list = new ArrayList();
 
 		List<TakingPrice> selectedTP = new ArrayList();
-		list = takingPriceDao.getAll();
+		try {
+			list = takingPriceDao.getAll();
+		} catch (PersistenceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if (supermarkets != null) {
 			System.out.println("supermarkets = " + supermarkets.toString());
 		}

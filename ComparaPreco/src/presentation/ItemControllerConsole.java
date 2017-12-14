@@ -13,6 +13,7 @@ import org.junit.Test;
 import model.Item;
 import persistence.ComparePriceDAO;
 import persistence.DAOFactory;
+import persistence.PersistenceException;
 
 public class ItemControllerConsole {
 	private Printer printer = new Printer();
@@ -70,8 +71,8 @@ public class ItemControllerConsole {
 				try {
 					respEdit = this.askWhatEdit(item);
 				} catch (NumeroInvalidoException e) {
-					//printer.printMsg("Escolha a opção novamente: ");
-					//e.printStackTrace();
+					// printer.printMsg("Escolha a opção novamente: ");
+					// e.printStackTrace();
 				}
 				if (respEdit == 1) {
 					printer.printMsg(" Digite o novo código de barras: ");
@@ -121,15 +122,21 @@ public class ItemControllerConsole {
 	public List<String> getData() {
 
 		List<String> data = new ArrayList<String>();
-		List<Item> items = itemDao.getAll();
+		List<Item> items;
+		try {
+			items = itemDao.getAll();
 
-		for (Item item : items) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("[Código de barra do item] : " + item.getBarCode() + "\n");
-			sb.append("Nome do item: " + item.getName() + "\n");
-			sb.append("Descrição do item: " + item.getDescription() + "\n");
-			data.add(sb.toString());
+			for (Item item : items) {
+				StringBuilder sb = new StringBuilder();
+				sb.append("[Código de barra do item] : " + item.getBarCode() + "\n");
+				sb.append("Nome do item: " + item.getName() + "\n");
+				sb.append("Descrição do item: " + item.getDescription() + "\n");
+				data.add(sb.toString());
+			}
+		} catch (PersistenceException e) {
+			printer.printMsg(e.getMessage());
 		}
+
 		return data;
 	}
 
