@@ -12,7 +12,7 @@ import model.Item;
 import model.PricesByItem;
 import model.TakingPrice;
 
-public class PriceByItemDAO {
+public class PricesByItemDAO {
 
 	public PricesByItem getPriceByItem(Item item) throws SQLException {
 

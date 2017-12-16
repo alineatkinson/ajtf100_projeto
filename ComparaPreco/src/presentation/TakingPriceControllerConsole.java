@@ -2,25 +2,23 @@ package presentation;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import model.Supermarket;
+import business.TakingPriceManager;
 import model.TakingPrice;
-import persistence.DAOFactory;
-import persistence.PersistenceException;
-import persistence.TakingPriceDAOJDBC;
 
-public class TakingPriceControllerConsole {
+class TakingPriceControllerConsole {
 	private Printer printer = new Printer();
 	private Console reader = new Console();
-	// ComparePriceDAO takingPriceDao = new TakingPriceDAOCollections();
-	private TakingPriceDAOJDBC takingPriceDao = (TakingPriceDAOJDBC) new DAOFactory().getTakingPriceDAO();
+	private TakingPriceManager tpm = new TakingPriceManager();
 
-	public void createTakingPrice() {
+	void createTakingPrice() {
 
 		printer.printMsg("Qual o código do item? \n");
 		int codeBarItem = reader.readNumber();
@@ -32,46 +30,64 @@ public class TakingPriceControllerConsole {
 		printer.printMsg("Qual o preço do item? (Ex.Formato: 5000,23 para R$ 5.000,23) \n");
 		double priceItem = reader.readNumberDouble();
 
-		java.util.Date now = new Date();
-		String dStr = java.text.DateFormat.getDateInstance(DateFormat.LONG).format(now);
+		printer.printMsg(
+				"Qual a data da tomada de preço deste item? (Ex.Formato: '2017-12-16 10:55:53' para 16 de dezembro de 2017, 10 horas 55 min e 53 seg) \n");
+		// java.util.Date now = new Date();
+		String dateTP = reader.readText();
+		dateTP = reader.readText();
 
-		System.out.println(dStr);
-		this.save(codeBarItem, priceItem, codeSupermarket, now);
+		// String dStr =
+		// java.text.DateFormat.getDateInstance(DateFormat.LONG).format(now);
+
+		System.out.println(dateTP);
+
+		// String date="02/12/2004";
+		// String dt = "2017-05-08 10:05:55";
+		String pattern = "yyyy-mm-dd hh:mm:ss";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+		Date date = null;
+		try {
+			date = simpleDateFormat.parse(dateTP);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		System.out.println("Date:" + date);
+
+		this.saveTakingPrice(codeBarItem, priceItem, codeSupermarket, date);
 
 	}
 
-	public void save(int codeBarItem, double priceItem, int codeSupermarket, Date now) {
-		TakingPrice takingPrice = new TakingPrice(codeBarItem, priceItem, codeSupermarket, now);
-		takingPriceDao.save(takingPrice);
+	public void saveTakingPrice(int codeBarItem, double priceItem, int codeSupermarket, Date date) { // Create the
+		TakingPrice takingPrice = new TakingPrice(codeBarItem, priceItem, codeSupermarket, date);
+		tpm.save(takingPrice);
 	}
 
 	/*
 	 * Edit the data of a supermarket
 	 */
-	public void editTakingPrice() {
+	void editTakingPrice() {
 		TakingPrice tp = null;
-		int codeBarItem;
-		int codeSmkt;
+		int codebar_item;
+		int code_supermarket;
 		int newCodeItem;
 
 		printer.printMsg("Digite o código do item a ser alterado? ");
-		codeBarItem = reader.readNumber();
+		codebar_item = reader.readNumber();
 
 		printer.printMsg("Digite o código do supermercado a ser alterado? ");
-		codeSmkt = reader.readNumber();
+		code_supermarket = reader.readNumber();
 
-		Supermarket smkt = null;
 		// pensando em cadastrar o novo preço sem editar o preço antigo. Senão terei que
 		// controlar por muitos atributos.
 
-		if (takingPriceDao.checksExistence(codeBarItem, codeSmkt)) {
-			tp = (TakingPrice) takingPriceDao.get(codeBarItem, codeSmkt);
+		if (tpm.checksExistence(codebar_item, code_supermarket)) {
+			tp = tpm.getTakingPrice(codebar_item, code_supermarket);
 			int codeSupermarket = tp.getCodeSupermarket();
 			double priceItem = tp.getPrice();
 			Date dateTP = tp.getDate();
 			int respEdit = 0;
 
-			takingPriceDao.delete(codeBarItem, codeSupermarket);
+			tpm.deleteTakingPrice(codebar_item, code_supermarket);
 
 			do {
 				try {
@@ -80,30 +96,51 @@ public class TakingPriceControllerConsole {
 				} catch (NumeroInvalidoException e) {
 
 				}
-			} while (respEdit != 1 & respEdit != 2 & respEdit != 3);
 
-			if (respEdit == 1) {
-				printer.printMsg(" Digite o novo código do item: ");
-				newCodeItem = reader.readNumber();
-				this.save(newCodeItem, priceItem, codeSupermarket, dateTP);
-			} else if (respEdit == 2) {
-				printer.printMsg(" Digite o novo código do supermercado: ");
-				int newCodeSupermarket = 0;
-				newCodeSupermarket = reader.readNumber();
-				this.save(codeBarItem, priceItem, newCodeSupermarket, dateTP);
-			} else if (respEdit == 3) {
-				printer.printMsg(" Digite o novo preço do item: ");
-				double newPriceItem = 0;
-				newPriceItem = reader.readNumberDouble();
-				this.save(codeBarItem, newPriceItem, codeSupermarket, dateTP);
-			}
+				if (respEdit == 1) {
+					printer.printMsg(" Digite o novo código do item: ");
+					newCodeItem = reader.readNumber();
+					this.saveTakingPrice(newCodeItem, priceItem, codeSupermarket, dateTP);
+				} else if (respEdit == 2) {
+					printer.printMsg(" Digite o novo código do supermercado: ");
+					int newCodeSupermarket = 0;
+					newCodeSupermarket = reader.readNumber();
+					this.saveTakingPrice(codebar_item, priceItem, newCodeSupermarket, dateTP);
+				} else if (respEdit == 3) {
+					printer.printMsg(" Digite o novo preço do item: ");
+					double newPriceItem = 0;
+					newPriceItem = reader.readNumberDouble();
+					this.saveTakingPrice(codebar_item, newPriceItem, codeSupermarket, dateTP);
+				} else if (respEdit == 4) {
+					printer.printMsg(
+							" Digite a nova data da tomada de preço do item: (Ex.Formato: '2017-12-16 10:55:53' para 16 de dezembro de 2017, 10 horas 55 min e 53 seg)");
+					String date = reader.readText();
+					date = reader.readText();
 
-		} else {
+					String pattern = "yyyy-mm-dd hh:mm:ss";
+					SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+					Date newDateTP = null;
+					try {
+						newDateTP = simpleDateFormat.parse(date);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+					System.out.println("Date:" + date);
+
+					this.saveTakingPrice(codebar_item, priceItem, codeSupermarket, newDateTP);
+
+				}
+			} while (respEdit != 1 & respEdit != 2 & respEdit != 3 & respEdit != 4);
+
+		} else
+
+		{
 			printer.printMsg("Não existe tomada de preço com estes códigos cadastrados.");
 		}
+
 	}
 
-	public int askWhatEdit(TakingPrice tp) throws NumeroInvalidoException {
+	int askWhatEdit(TakingPrice tp) throws NumeroInvalidoException {
 		int respEdit = 0;
 
 		printer.printMsg(" A tomada de preço selecionada contém os seguintes dados: ");
@@ -112,10 +149,11 @@ public class TakingPriceControllerConsole {
 		NumberFormat monetaryFormatter = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
 		printer.printMsg("Preço do item :" + monetaryFormatter.format(tp.getPrice()));
 		printer.printMsg("Data da tomada de preço :" + tp.getDate());
-		printer.printMsg(" Digite para alterar: 1 -> Código do item, 2 -> Código do supermercado, 3 -> Preço do item");
+		printer.printMsg(
+				" Digite para alterar: 1 -> Código do item, 2 -> Código do supermercado, 3 -> Preço do item, 4 -> Data da tomada de preço");
 		respEdit = reader.readNumber();
 
-		if (respEdit != 1 & respEdit != 2 & respEdit != 3) {
+		if (respEdit != 1 & respEdit != 2 & respEdit != 3 & respEdit != 4) {
 			throw new NumeroInvalidoException(respEdit + " é um número inválido, tente novamente!");
 		}
 
@@ -125,29 +163,24 @@ public class TakingPriceControllerConsole {
 	/*
 	 * List all taking prices
 	 */
-	public List<String> getData() {
+	List<String> getData() {
 
 		List<String> data = new ArrayList<String>();
-		List<TakingPrice> takingPrices;
-		try {
-			takingPrices = takingPriceDao.getAll();
-			for (TakingPrice takingprice : takingPrices) {
-				StringBuilder sb = new StringBuilder();
-				sb.append("[Código do item] : " + takingprice.getCodeBarItem() + "\n");
-				sb.append("[Código do Supermercado]: " + takingprice.getCodeSupermarket() + "\n");
-				sb.append("Preço: " + takingprice.getPrice() + "\n");
-				sb.append("Data: " + takingprice.getDate() + "\n");
-				data.add(sb.toString());
-			}	} catch (PersistenceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		List<TakingPrice> takingPrices = null;
+		takingPrices = tpm.listAllTakingPrices();
 
-	
+		for (TakingPrice takingprice : takingPrices) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("[Código do item] : " + takingprice.getCodeBarItem() + "\n");
+			sb.append("[Código do Supermercado]: " + takingprice.getCodeSupermarket() + "\n");
+			sb.append("Preço: " + takingprice.getPrice() + "\n");
+			sb.append("Data: " + takingprice.getDate() + "\n");
+			data.add(sb.toString());
+		}
 		return data;
 	}
 
-	public void listTakingPrice() {
+	void listTakingPrice() {
 
 		List<String> data = getData();
 
@@ -159,22 +192,23 @@ public class TakingPriceControllerConsole {
 	/*
 	 * Delete a supermarket
 	 */
-	public void deleteTakingPrice() {
-		int codeBarItem = 0;
+	void deleteTakingPrice() {
+		int codebar_item = 0;
 		int codeSmkt = 0;
 
 		printer.printMsg("Digite o código do item com tomada de preço a ser excluído: ");
-		codeBarItem = 0;
-		codeBarItem = reader.readNumber();
+		codebar_item = 0;
+		codebar_item = reader.readNumber();
 
 		printer.printMsg("Digite o código do supermercado com tomada de preço a ser excluído: ");
 		codeSmkt = 0;
 		codeSmkt = reader.readNumber();
 
-		if (takingPriceDao.checksExistence(codeBarItem, codeSmkt)) {
-			takingPriceDao.delete(codeBarItem, codeSmkt);
+		if (tpm.deleteTakingPrice(codebar_item, codeSmkt)) {
+			printer.printMsg("Tomada de Preço excluído com sucesso!");
 		} else {
 			printer.printMsg("Não existe tomada de preço com estes códigos.");
 		}
 	}
+
 }

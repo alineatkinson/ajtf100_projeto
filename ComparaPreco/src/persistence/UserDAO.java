@@ -7,13 +7,13 @@ import model.User;
 
 public interface UserDAO {
 
-	public abstract void save(User object);
+	abstract void save(User object);
 
-	public abstract User get(String key);
+	abstract User get(String key);
 
-	public abstract boolean checksExistence(String key);
+	abstract boolean checksExistence(String key);
 
-	public abstract void delete(String key);
+	abstract void delete(String key);
 
-	public abstract List getAll();
+	abstract List getAll();
 }

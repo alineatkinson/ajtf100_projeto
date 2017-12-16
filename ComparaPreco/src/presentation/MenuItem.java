@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MenuItem {
-	int option;
+	public int option;
 	private String description;
 	private Handler handler;
 
@@ -249,9 +249,9 @@ class Item16Handler implements Handler {
 }
 
 class Item17Handler implements Handler {
-	ComparatorPriceConsole comparator;
+	PricesByItemControllerConsole comparator;
 
-	public Item17Handler(ComparatorPriceConsole comparator) { // ComparatorItemsControllerConsole comparator) {
+	public Item17Handler(PricesByItemControllerConsole comparator) { // ComparatorItemsControllerConsole comparator) {
 		super();
 		this.comparator = comparator;
 	}
@@ -263,9 +263,9 @@ class Item17Handler implements Handler {
 }
 
 class Item18Handler implements Handler {
-	SumPricesConsole comparator;
+	ItemsPricesBySupermarketControllerConsole comparator;
 
-	public Item18Handler(SumPricesConsole comparator) { // ComparatorItemsControllerConsole comparator) {
+	public Item18Handler(ItemsPricesBySupermarketControllerConsole comparator) { // ComparatorItemsControllerConsole comparator) {
 		super();
 		this.comparator = comparator;
 	}

@@ -32,7 +32,8 @@ public class SupermarketDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 		Connection conn = null;
 
 		try {
-			conn = ConnectionManager.getConnection();
+			conn = new ConnectionManager("pricecompator;create=true",
+					"jdbc:derby://localhost:1527/" + "pricecompator;create=true", "aline", "aline").getConnection();
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
@@ -71,7 +72,8 @@ public class SupermarketDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 
 		Connection conn = null;
 		try {
-			conn = ConnectionManager.getConnection();
+			conn = new ConnectionManager("pricecompator;create=true",
+					"jdbc:derby://localhost:1527/" + "pricecompator;create=true", "aline", "aline").getConnection();;
 		} catch (ConnectionException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();

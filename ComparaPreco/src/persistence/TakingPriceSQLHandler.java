@@ -7,8 +7,8 @@ import java.util.Date;
 
 import model.TakingPrice;
 
-public class TakingPriceSQLHandler implements SQLHandler<TakingPrice> {
-	ReadFileProperties rfp = new ReadFileProperties();
+class TakingPriceSQLHandler implements SQLHandler<TakingPrice> {
+	private ReadFileProperties rfp = new ReadFileProperties();
 
 	@Override
 	public String handle(TakingPrice e, Boolean exist) throws IOException {
@@ -46,21 +46,17 @@ public class TakingPriceSQLHandler implements SQLHandler<TakingPrice> {
 
 	@Override
 	public String getSelectSQL() throws IOException {
-		// String sql = "SELECT * FROM taking_prices WHERE codebar_item = ";
 		String sql = rfp.getQuery("selectTP");
 		return sql;
 	}
 
 	@Override
 	public String getDeleteSQL() throws IOException {
-		// String sql = "DELETE FROM taking_prices WHERE codebar_item = ";
 		String sql = rfp.getQuery("deleteTP");
 		return sql;
 	}
 
 	public String getDeleteSQLTP(Number codebar_item, Number code_supermarket) throws IOException {
-		// String sql = "DELETE FROM taking_prices WHERE codebar_item = "+codebar_item+"
-		// and code_supermarket = "+code_supermarket;
 		String sql = rfp.getQuery("deleteSQLTP");
 		sql = sql.replaceFirst("[?]", codebar_item.toString());
 		sql = sql.replaceFirst("[?]", code_supermarket.toString());
@@ -69,18 +65,21 @@ public class TakingPriceSQLHandler implements SQLHandler<TakingPrice> {
 
 	@Override
 	public String getSelectAll() throws IOException {
-		// String sql = "SELECT * FROM taking_prices";
 		String sql = rfp.getQuery("selectAllTP");
-		//System.out.println(sql);
 		return sql;
 	}
 
-	public String getSelectSQLTP(Number codebar_item, Number code_supermarket) throws IOException {
-		// String sql = "SELECT * FROM taking_prices WHERE codebar_item = " +
-		// codebar_item + " and code_supermarket = " + code_supermarket;
+	public String getSelectSQLTP(Number codebar_item, Number code_supermarket, Date date) throws IOException {
 		String sql = rfp.getQuery("selectSQLTP");
 		sql = sql.replaceFirst("[?]", codebar_item.toString());
 		sql = sql.replaceFirst("[?]", code_supermarket.toString());
+
+		String pattern = "yyyy-mm-dd hh:mm:ss";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+		System.out.println("" + simpleDateFormat.format(date));
+
+		sql = sql.replaceFirst("[?]", simpleDateFormat.format(date));
 		return sql;
 	}
 }

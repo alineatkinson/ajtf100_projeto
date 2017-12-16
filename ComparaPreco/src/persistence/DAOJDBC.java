@@ -18,7 +18,8 @@ public class DAOJDBC<E, K> {
 
 		Connection conn = null;
 		try {
-			conn = ConnectionManager.getConnection();
+			conn = new ConnectionManager("pricecompator;create=true",
+					"jdbc:derby://localhost:1527/" + "pricecompator;create=true", "aline", "aline").getConnection();
 		} catch (ConnectionException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -60,7 +61,8 @@ public class DAOJDBC<E, K> {
 
 		try {
 
-			conn = ConnectionManager.getConnection();
+			conn = new ConnectionManager("pricecompator;create=true",
+					"jdbc:derby://localhost:1527/" + "pricecompator;create=true", "aline", "aline").getConnection();
 			// System.out.println("PEGOU CONEXÃO");
 			stmt = conn.createStatement();
 			// System.out.println("CRIOU STATEMENT");
@@ -97,7 +99,8 @@ public class DAOJDBC<E, K> {
 		int qtdRemovidos = 0;
 
 		try {
-			conn = ConnectionManager.getConnection();
+			conn = new ConnectionManager("pricecompator;create=true",
+					"jdbc:derby://localhost:1527/" + "pricecompator;create=true", "aline", "aline").getConnection();
 			stmt = conn.prepareStatement(sql);
 			// stmt.setInt(1, code_supermarket);
 			qtdRemovidos = stmt.executeUpdate();
@@ -121,7 +124,8 @@ public class DAOJDBC<E, K> {
 
 		try {
 
-			conn = ConnectionManager.getConnection();
+			conn = new ConnectionManager("pricecompator;create=true",
+					"jdbc:derby://localhost:1527/" + "pricecompator;create=true", "aline", "aline").getConnection();
 			// System.out.println("PEGOU CONEXÃO");
 			stmt = conn.createStatement();
 			// System.out.println("CRIOU STATEMENT");

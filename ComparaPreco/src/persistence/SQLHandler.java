@@ -4,15 +4,14 @@ import java.io.IOException;
 
 interface SQLHandler<E> {
 
-	public RowMapper getRowMapper();
+	RowMapper getRowMapper();
 
-	public String getSelectSQL() throws IOException;
+	String getSelectSQL() throws IOException;
 
-	public String getDeleteSQL() throws IOException;
-	
-	public String getSelectAll() throws IOException;
+	String getDeleteSQL() throws IOException;
 
-	public String handle(E e, Boolean exist) throws IOException;
-	
+	String getSelectAll() throws IOException;
+
+	String handle(E e, Boolean exist) throws IOException;
 
 }

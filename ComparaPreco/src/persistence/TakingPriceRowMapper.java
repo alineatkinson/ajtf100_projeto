@@ -6,7 +6,7 @@ import java.util.Date;
 
 import model.TakingPrice;
 
-public class TakingPriceRowMapper implements RowMapper {
+class TakingPriceRowMapper implements RowMapper {
 
 	public Object map(ResultSet rs) throws SQLException {
 

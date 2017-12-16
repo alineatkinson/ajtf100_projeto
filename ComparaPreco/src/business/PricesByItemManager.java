@@ -12,13 +12,13 @@ import persistence.ComparePriceByNameDAO;
 import persistence.ComparePriceDAO;
 import persistence.DAOFactory;
 import persistence.ItemDAOJDBC;
-import persistence.PriceByItemDAO;
-import presentation.ComparatorPriceConsole;
+import persistence.PricesByItemDAO;
 
-public class ComparatorPrice {
+public class PricesByItemManager {
 
-	private ComparatorPriceConsole console = new ComparatorPriceConsole();
-	private PriceByItemDAO priceByItemDAO = new PriceByItemDAO();
+	// private PricesByItemControllerConsole console = new
+	// PricesByItemControllerConsole();
+	private PricesByItemDAO priceByItemDAO = new PricesByItemDAO();
 
 	// retornar obj priceByItem
 	public List<PricesByItem> createComparation(List<String> namesItems) throws SQLException, IOException {
@@ -35,7 +35,7 @@ public class ComparatorPrice {
 	}
 
 	public Item getItemByName(String name) {
-		//ComparePriceByNameDAO<Item> itemDao = new DAOFactory().getItemDAO();
+		// ComparePriceByNameDAO<Item> itemDao = new DAOFactory().getItemDAO();
 		// como deixo compare price pra pegar o get com nome???
 		ItemDAOJDBC itemDao = new ItemDAOJDBC();
 		Item selectedItem = itemDao.get(name);

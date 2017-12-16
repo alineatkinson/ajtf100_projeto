@@ -7,11 +7,23 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class ConnectionManager {
+	/*
 	private static final String NOME_BANCO = "pricecompator;create=true";
 	private static final String STR_CON = "jdbc:derby://localhost:1527/" + NOME_BANCO;
 	private static final String USER = "aline";
 	private static final String PASSWORD = "aline";
-
+	*/
+	private static String NOME_BANCO;
+	private static String STR_CON;
+	private static String USER;
+	private static String PASSWORD;
+	
+	ConnectionManager(String nameDatabase, String constant, String user, String password){
+		this.NOME_BANCO = nameDatabase;
+		this.STR_CON = constant;
+		this.USER = user;
+		this.PASSWORD = password;	
+	}
 	public static Connection getConnection() throws ConnectionException {
 
 		Connection conn = null;
@@ -28,8 +40,8 @@ public class ConnectionManager {
 
 	}
 
-	// código omitido idêntico ao exemplo anterior
-	private static void close(Connection conn) {
+	
+	public static void close(Connection conn) {
 		try {
 			if (conn != null) {
 				conn.close();

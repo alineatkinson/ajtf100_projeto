@@ -10,37 +10,25 @@ public class ItemsPricesBySupermarket {
 	private List<Item> items;
 	private Supermarket supermarket;
 	private double sumPrices;
-	
-	public ItemsPricesBySupermarket(List<TakingPrice> takingPrices, List<Item> items, Supermarket supermarket ){
+
+	public ItemsPricesBySupermarket(List<TakingPrice> takingPrices, List<Item> items, Supermarket supermarket) {
 		this.takingPrices = takingPrices;
 		this.items = items;
 		this.supermarket = supermarket;
 	}
-/*
-	public void setTakingPrices(List<TakingPrice> tps) {
-		this.takingPrices = tps;
-	}
 
-	public void setItems(List<Item> items) {
-		this.items = items;
-	}
-
-	public void setSupermarket(Supermarket supermarket) {
-		this.supermarket = supermarket;
-	}
-*/
 	public void sumPrices() {
 		System.out.println("tamanho tps: " + takingPrices.size());
-		
-		for(TakingPrice tp: takingPrices) {
+
+		for (TakingPrice tp : takingPrices) {
 			System.out.println("codigo item: " + tp.getCodeBarItem());
-			System.out.println("codigo do super: "+ tp.getCodeSupermarket());
-			System.out.println("data : "+ tp.getDate());
-			System.out.println("preço : "+ tp.getPrice());
-			
-			System.out.println("antes "+ sumPrices);
+			System.out.println("codigo do super: " + tp.getCodeSupermarket());
+			System.out.println("data : " + tp.getDate());
+			System.out.println("preço : " + tp.getPrice());
+
+			System.out.println("antes " + sumPrices);
 			sumPrices += tp.getPrice();
-			System.out.println("depois "+ sumPrices);
+			System.out.println("depois " + sumPrices);
 		}
 	}
 

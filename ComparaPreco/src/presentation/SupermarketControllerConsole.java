@@ -9,7 +9,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import business.SupermarketManager;
 import model.Supermarket;
+import model.User;
 import persistence.ComparePriceDAO;
 import persistence.DAOFactory;
 import persistence.PersistenceException;
@@ -17,15 +19,12 @@ import persistence.PersistenceException;
 /*
  * Create the supermarket
  */
-public class SupermarketControllerConsole {
-
+class SupermarketControllerConsole {
 	private Printer printer = new Printer();
 	private Console reader = new Console();
-	// ComparePriceDAO supermarketDao = new SupermarketDAOCollections(); new
-	// SupermarketDAOJDBC();
-	private ComparePriceDAO supermarketDao = new DAOFactory().getSupermarketDAO();
+	private SupermarketManager sm = new SupermarketManager();
 
-	public void createSupermarket() {
+	void createSupermarket() {
 
 		// Assign supermarket name attribute to the item
 		printer.printMsg("Qual o código do supermercado? (Código int) \n");
@@ -39,36 +38,35 @@ public class SupermarketControllerConsole {
 		// Ask the supermarket's code adress
 		printer.printMsg("Qual o cep deste supermercado? (utilize somente números) \n");
 		int cepSuper = reader.readNumber();
-		this.save(nameSuper, cepSuper, codeSupermarket);
+		this.saveSupermarket(nameSuper, cepSuper, codeSupermarket);
 	}
 
-	public void save(String nameSuper, int cepSuper, int codeSupermarket) {
-		// Create the supermarket with the name, address and code supermarket number
+	void saveSupermarket(String nameSuper, int cepSuper, int codeSupermarket) {
 		Supermarket supermarket = new Supermarket(nameSuper, cepSuper, codeSupermarket);
-		supermarketDao.save(supermarket);
+		sm.save(supermarket);
 	}
 
 	/*
 	 * Edit the data of a supermarket
 	 */
-	public void editSupermarket() {
+	void editSupermarket() {
 
 		printer.printMsg("Digite o código do supermercado a ser alterado: ");
 		int supermarketKey = reader.readNumber();
 		Supermarket supermarket = null;
 
-		if (supermarketDao.checksExistence(supermarketKey)) {
-			supermarket = (Supermarket) supermarketDao.get(supermarketKey);
+		if (sm.checksExistence(supermarketKey)) {
+			supermarket = (Supermarket) sm.get(supermarketKey);
 
 			int respEdit = 0;
-			supermarketDao.delete(supermarketKey);
+			sm.delete(supermarketKey);
 
 			do {
 				try {
 					respEdit = this.askWhatEdit(supermarket);
 				} catch (NumeroInvalidoException e) {
-					//printer.printMsg("Opção inválida, tente novamente! \n");
-					//e.printStackTrace();
+					// printer.printMsg("Opção inválida, tente novamente! \n");
+					// e.printStackTrace();
 				}
 				if (respEdit == 1) {
 					printer.printMsg(" Digite o novo nome do supermercado: ");
@@ -76,19 +74,19 @@ public class SupermarketControllerConsole {
 					newNome = " ";
 					newNome = reader.readText();
 					// newNome = reader.readText();
-					this.save(newNome, supermarket.getCEP(), supermarket.getCode());
+					this.saveSupermarket(newNome, supermarket.getCEP(), supermarket.getCode());
 
 				} else if (respEdit == 2) {
 					printer.printMsg(" Digite o novo código do supermercado: ");
 					int newCodeSupermarket = 0;
 					newCodeSupermarket = reader.readNumber();
-					this.save(supermarket.getName(), supermarket.getCEP(), newCodeSupermarket);
+					this.saveSupermarket(supermarket.getName(), supermarket.getCEP(), newCodeSupermarket);
 
 				} else if (respEdit == 3) {
 					printer.printMsg(" Digite o novo CEP do supermercado: ");
 					int newCEPSupermarket = 0;
 					newCEPSupermarket = reader.readNumber();
-					this.save(supermarket.getName(), newCEPSupermarket, supermarket.getCode());
+					this.saveSupermarket(supermarket.getName(), newCEPSupermarket, supermarket.getCode());
 				} else {
 					printer.printMsg("Nenhuma alternativa válida foi digitada. Tente outra vez!");
 				}
@@ -99,7 +97,7 @@ public class SupermarketControllerConsole {
 		}
 	}
 
-	public int askWhatEdit(Supermarket sm) throws NumeroInvalidoException {
+	int askWhatEdit(Supermarket sm) throws NumeroInvalidoException {
 		printer.printMsg(" O supermercado selecionado contém os seguintes dados: ");
 		printer.printMsg(" Nome : " + sm.getName());
 		printer.printMsg(" Código : " + sm.getCode());
@@ -113,31 +111,25 @@ public class SupermarketControllerConsole {
 		return respEdit;
 	}
 
-	public List<String> getData() {
-
+	List<String> getData() {
 		List<String> data = new ArrayList<String>();
 		List<Supermarket> supermarkets;
-		try {
-			supermarkets = supermarketDao.getAll();
-			for (Supermarket supermarket : supermarkets) {
-				StringBuilder sb = new StringBuilder();
-				String codigoSuper = "[Código do Supermercado] : " + supermarket.getCode() + " \n";
-				sb.append(codigoSuper);
-				String nomeSuper = "Nome do supermercado: " + supermarket.getName() + " \n";
-				sb.append(nomeSuper);
-				String cepSuper = "CEP do supermercado: " + supermarket.getCEP() + "\n";
-				sb.append(cepSuper);
-				data.add(sb.toString());
-			}
-		} catch (PersistenceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		supermarkets = sm.listAll();
 
+		for (Supermarket supermarket : supermarkets) {
+			StringBuilder sb = new StringBuilder();
+			String codigoSuper = "[Código do Supermercado] : " + supermarket.getCode() + " \n";
+			sb.append(codigoSuper);
+			String nomeSuper = "Nome do supermercado: " + supermarket.getName() + " \n";
+			sb.append(nomeSuper);
+			String cepSuper = "CEP do supermercado: " + supermarket.getCEP() + "\n";
+			sb.append(cepSuper);
+			data.add(sb.toString());
+		}
 		return data;
 	}
 
-	public void listSupermarkets() {
+	void listSupermarkets() {
 
 		List<String> data = getData();
 
@@ -149,16 +141,18 @@ public class SupermarketControllerConsole {
 	/*
 	 * Delete a supermarket
 	 */
-	public void deleteSupermarket() {
+	void deleteSupermarket() {
 		printer.printMsg("Digite o código do supermercado a ser deletado: ");
 		int supermarketKey = 0;
 		supermarketKey = reader.readNumber();
+		sm.delete(supermarketKey);
 
-		if (supermarketDao.checksExistence(supermarketKey)) {
-			supermarketDao.delete(supermarketKey);
+		if (sm.delete(supermarketKey)) {
+			printer.printMsg("Supermercado excluído com sucesso!");
 		} else {
 			printer.printMsg("Não há supermercado com este código.");
 		}
+
 	}
 
 }

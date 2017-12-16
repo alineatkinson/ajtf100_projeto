@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import model.User;
 import presentation.Printer;
 
-public class UserDAOCollections implements UserDAO {
+class UserDAOCollections implements UserDAO {
 	private ConcurrentHashMap users = new ConcurrentHashMap();
 
 	public void save(User user) {

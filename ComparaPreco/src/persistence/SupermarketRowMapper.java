@@ -21,19 +21,4 @@ class SupermarketRowMapper implements RowMapper {
 		return valor;
 	}
 
-	/*
-	 * public void execute (String sql) { Statement stmt = null; ResultSet rs =
-	 * null; Connection conn = null;
-	 * 
-	 * try { stmt = conn.createStatement(); stmt.executeUpdate(sql);
-	 * System.out.println("SQL = " + sql); // dbmd = conn.getMetaData(); // rs =
-	 * dbmd.getSchemas(); // schemas = rs.toString(); //
-	 * System.out.println(schemas); } catch (SQLException e) { throw new
-	 * RuntimeException("Erro na execucao da query " + sql, e); } finally {
-	 * ConnectionManager.close(conn, stmt); }
-	 * 
-	 * }
-	 * 
-	 */
-
 }

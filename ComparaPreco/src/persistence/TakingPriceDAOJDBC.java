@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import model.TakingPrice;
@@ -14,13 +15,7 @@ import presentation.Printer;
 
 public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceDAO<TakingPrice> {
 	private TakingPriceSQLHandler sh = new TakingPriceSQLHandler();
-	Printer printer = new Printer();
-
-	/*
-	 * public void createTable() { String sql = sh.getCreateTable(); int qdtEdited =
-	 * super.executeQuery(sql);
-	 * printer.printMsg("Tabela TakingPrices criada com sucesso"); }
-	 */
+	private Printer printer = new Printer();
 
 	public List<TakingPrice> getAll() throws PersistenceException {
 		// TODO melhorar exceção
@@ -36,13 +31,15 @@ public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 		Connection conn = null;
 
 		try {
-			conn = ConnectionManager.getConnection();
+			conn = new ConnectionManager("pricecompator;create=true",
+					"jdbc:derby://localhost:1527/" + "pricecompator;create=true", "aline", "aline").getConnection();
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 				int codebar_item = rs.getInt("codebar_item");
 				int code_supermarket = rs.getInt("code_supermarket");
-				takingprices.add(this.get(codebar_item, code_supermarket));
+				Date date = rs.getTimestamp("date");
+				takingprices.add(this.get(codebar_item, code_supermarket, date));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -76,8 +73,8 @@ public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 		Connection conn = null;
 		DatabaseMetaData dbmd = null;
 
-		Boolean exist = this.checksExistence(tp.getCodeBarItem(), tp.getCodeSupermarket());
-		//TODO MELHORAR EXCEÇÃO
+		Boolean exist = this.checksExistence(tp.getCodeBarItem(), tp.getCodeSupermarket(), tp.getDate());
+		// TODO MELHORAR EXCEÇÃO
 		try {
 			sql = sh.handle(tp, exist);
 		} catch (IOException e) {
@@ -86,7 +83,8 @@ public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 		}
 		try {
 
-			conn = ConnectionManager.getConnection();
+			conn = new ConnectionManager("pricecompator;create=true",
+					"jdbc:derby://localhost:1527/" + "pricecompator;create=true", "aline", "aline").getConnection();
 			stmt = conn.createStatement();
 			stmt.executeUpdate(sql);
 			System.out.println("SQL = " + sql);
@@ -112,11 +110,11 @@ public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 		return (TakingPrice) super.get(key, sh.getRowMapper(), sql);
 	}
 
-	public TakingPrice get(Number codebar_item, Number code_supermarket) {
+	public TakingPrice get(Number codebar_item, Number code_supermarket, Date date) {
 		// TODO melhorar exceção
 		String sql = null;
 		try {
-			sql = sh.getSelectSQLTP(codebar_item, code_supermarket);
+			sql = sh.getSelectSQLTP(codebar_item, code_supermarket, date);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -138,9 +136,8 @@ public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 		return exist;
 	}
 
-	public boolean checksExistence(Number code_item, Number code_supermkt) {
-
-		Object o = this.get(code_item, code_supermkt);
+	public boolean checksExistence(Number code_item, Number code_supermkt, Date date) {
+		Object o = this.get(code_item, code_supermkt, date);
 
 		if (o == null) {
 			return false;

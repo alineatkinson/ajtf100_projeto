@@ -1,9 +1,9 @@
 package presentation;
 
 
-public class NumeroInvalidoException extends Exception {
+class NumeroInvalidoException extends Exception {
 	
-	public NumeroInvalidoException(String mensage) {
+	NumeroInvalidoException(String mensage) {
 		super(mensage);
 	}
 }

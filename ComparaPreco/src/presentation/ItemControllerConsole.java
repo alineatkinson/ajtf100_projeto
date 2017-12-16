@@ -15,18 +15,16 @@ import persistence.ComparePriceDAO;
 import persistence.DAOFactory;
 import persistence.PersistenceException;
 
-public class ItemControllerConsole {
+class ItemControllerConsole {
 	private Printer printer = new Printer();
 	private Console reader = new Console();
-	// ComparePriceDAO itemDao = new ItemDAOCollections();
-	// ComparePriceDAO itemDao = new ItemDAOJDBC();
 	private ComparePriceDAO itemDao = new DAOFactory().getItemDAO();
 
 	/*
 	 * Create the item
 	 */
 
-	public void createItem() {
+	void createItem() {
 		// Ask and assign item's code bar
 		String msg = "Qual o código de barras do item? \n";
 		printer.printMsg(msg);
@@ -48,7 +46,7 @@ public class ItemControllerConsole {
 
 	}
 
-	private void save(int codeBar, String name, String description) {
+	void save(int codeBar, String name, String description) {
 		Item item = new Item(codeBar, name, description);
 		itemDao.save(item);
 	}
@@ -56,7 +54,7 @@ public class ItemControllerConsole {
 	/*
 	 * Edit the data of a item
 	 */
-	public void editItem() {
+	void editItem() {
 
 		printer.printMsg("Digite o código de barras do item a ser alterado: ");
 		int itemKey = reader.readNumber();
@@ -106,7 +104,7 @@ public class ItemControllerConsole {
 		}
 	}
 
-	public int askWhatEdit(Item item) throws NumeroInvalidoException {
+	int askWhatEdit(Item item) throws NumeroInvalidoException {
 		printer.printMsg(" O item selecionado contém os seguintes dados: ");
 		printer.printMsg(" Código de barras : " + item.getBarCode());
 		printer.printMsg(" Nome do  item: " + item.getName());
@@ -119,7 +117,7 @@ public class ItemControllerConsole {
 		return respEdit;
 	}
 
-	public List<String> getData() {
+	List<String> getData() {
 
 		List<String> data = new ArrayList<String>();
 		List<Item> items;
@@ -143,7 +141,7 @@ public class ItemControllerConsole {
 	/*
 	 * List all items
 	 */
-	public void listItems() {
+	void listItems() {
 
 		List<String> data = getData();
 
@@ -155,7 +153,7 @@ public class ItemControllerConsole {
 	/*
 	 * Delete a item
 	 */
-	public void deleteItem() {
+	void deleteItem() {
 
 		printer.printMsg("Digite o código de barras do item a ser deletado: ");
 		int itemKey = 0;

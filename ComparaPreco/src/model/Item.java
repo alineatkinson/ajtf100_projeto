@@ -4,17 +4,20 @@ public class Item {
 	private String name;
 	private int barCode;
 	private String description;
+
 	/*
 	 * Constructor of the item
 	 */
-	public Item (int barCode, String name, String description) {
+	public Item(int barCode, String name, String description) {
 		this.setName(name);
 		this.barCode = barCode;
 		this.setDescription(description);
 	}
-	public Item (int barCode, String name) {
+
+	public Item(int barCode, String name) {
 		this(barCode, name, null);
 	}
+
 	public Item(int barCode) {
 		this(barCode, null, null);
 	}
@@ -46,27 +49,19 @@ public class Item {
 	public int getBarCode() {
 		return barCode;
 	}
+
 	/*
 	 * Return the attribute barCode
 	 */
 	public String getDescription() {
 		return description;
 	}
+
 	/*
 	 * Return the attribute barCode
 	 */
 	public int hashCode() {
 		return barCode;
 	}
-	/*
-	 * Print all items' attribute
-	 */
-	public void print() {
-		System.out.println("Nome do item :" + name);
-		System.out.println("Código de barras do item :" + barCode);
-	}
-	
-	// fazer método equals
-	// fazer método compareTo
 
 }

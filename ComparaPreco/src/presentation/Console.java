@@ -38,7 +38,7 @@ class Console implements Reader {
 	 * O teclado lê o número digitado pelo usuário
 	 *
 	 */
-	public double readNumberDouble() {
+	double readNumberDouble() {
 		Double number = 0.0;
 		try {
 			// double c = Double.parseDouble(getValorSolic());

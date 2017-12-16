@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 import model.User;
 
-public class UserRowMapper  implements RowMapper {
+class UserRowMapper  implements RowMapper {
 	public Object map(ResultSet rs) throws SQLException {
 		String name = rs.getString("name");
 		String cpf = rs.getString("cpf");

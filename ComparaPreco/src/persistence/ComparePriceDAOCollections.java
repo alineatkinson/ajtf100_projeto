@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ComparePriceDAOCollections<E> implements ComparePriceDAO {
+class ComparePriceDAOCollections<E> implements ComparePriceDAO {
 	private ConcurrentHashMap objects = new ConcurrentHashMap();
 	private Printer printer = new Printer();
 

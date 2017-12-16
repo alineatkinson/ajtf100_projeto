@@ -11,7 +11,7 @@ import model.Item;
 import model.ItemsPricesBySupermarket;
 import model.Supermarket;
 import model.TakingPrice;
-import presentation.SumPricesConsole;
+import presentation.ItemsPricesBySupermarketControllerConsole;
 
 public class ItemsPricesBySupermarketTest {
 	List<TakingPrice> takingPrices;

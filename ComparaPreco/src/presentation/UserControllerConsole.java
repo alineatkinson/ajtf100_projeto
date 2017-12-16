@@ -7,49 +7,43 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import business.UserManager;
 import model.User;
-import persistence.DAOFactory;
-import persistence.UserDAO;
 
-public class UserControllerConsole {
+class UserControllerConsole {
 	private Printer printer = new Printer();
 	private Console reader = new Console();
-	// UserDAO userDao = new UserDAOCollections();= new UserDAOJDBC();
-	private UserDAO userDao = new DAOFactory().getUserDAO();
+	private UserManager userm = new UserManager();
 
-	public void createUser() {
+	void createUser() {
 
 		int rg = 0;
 		User newUser;
 
-		// Assign supermarket name attribute to the item
 		printer.printMsg("Qual o nome do usuário? \n");
 		String nameUser = reader.readText();
 
-		// Ask the supermarket's name
 		printer.printMsg("Qual o cpf do usuário? \n");
 		String cpfUser = reader.readText();
 
-		// save the user
-		save(nameUser, cpfUser);
+		this.save(nameUser, cpfUser);
 
 	}
 
-	public void save(String nameUser, String cpfUser) {
-		// Create the supermarket with the name, address and code supermarket number
+	void save(String nameUser, String cpfUser) {
 		User user = new User(nameUser, cpfUser);
-		userDao.save(user);
+		userm.saveUser(user);
 	}
 
-	public void editUser() {
+	void editUser() {
 		User user = null;
 		int respEdit = 0;
 
 		printer.printMsg("Digite o cpf do usuário a ser alterado: ");
 		String userKey = reader.readText();
 
-		if (userDao.checksExistence(userKey)) {
-			user = (User) userDao.get(userKey);
+		if (userm.checksExistence(userKey)) {
+			user = userm.getUser(userKey);
 			String nameUser = user.getName();
 			do {
 				try {
@@ -58,7 +52,7 @@ public class UserControllerConsole {
 					// e.printStackTrace();
 				}
 			} while (respEdit != 1 & respEdit != 2);
-			userDao.delete(userKey);
+			userm.deleteUser(userKey);
 
 			if (respEdit == 1) {
 				printer.printMsg(" Digite o novo nome: ");
@@ -83,7 +77,7 @@ public class UserControllerConsole {
 
 	}
 
-	public int askWhatEdit(User user) throws NumeroInvalidoException {
+	int askWhatEdit(User user) throws NumeroInvalidoException {
 		int respEdit = 0;
 
 		printer.printMsg(" O usuário selecionado contém os seguintes dados: ");
@@ -92,15 +86,10 @@ public class UserControllerConsole {
 		printer.printMsg(" Digite para alterar: 1 -> Nome, 2 -> CPF");
 
 		respEdit = reader.readNumber();
-		// String numero1 = JOptionPane.showInputDialog("Entre com um número");
-		// a=Integer.parseInt(respEdit);
-		// break;
 
 		if (respEdit != 1 & respEdit != 2) {
 			throw new NumeroInvalidoException(respEdit + " é um número inválido, tente novamente!");
 		}
-
-		// } while (respEdit != 1 || respEdit != 2);
 		return respEdit;
 
 	}
@@ -108,10 +97,10 @@ public class UserControllerConsole {
 	/*
 	 * List all taking prices
 	 */
-	public List<String> getData() {
+	List<String> getData() {
 
 		List<String> data = new ArrayList<String>();
-		List<User> users = userDao.getAll();
+		List<User> users = userm.listAllUsers();
 
 		for (User user : users) {
 			StringBuilder sb = new StringBuilder();
@@ -122,7 +111,7 @@ public class UserControllerConsole {
 		return data;
 	}
 
-	public void listUsers() {
+	void listUsers() {
 
 		List<String> data = getData();
 
@@ -131,12 +120,12 @@ public class UserControllerConsole {
 		}
 	}
 
-	public void deleteUser() {
+	void deleteUser() {
 		printer.printMsg("Digite o cpf do usuário a ser excluído: ");
 		String userKey = new String();
 		userKey = reader.readText();
-		if (userDao.checksExistence(userKey)) {
-			userDao.delete(userKey);
+		if (userm.deleteUser(userKey)) {
+			printer.printMsg("Usuário excluído com sucesso");
 		} else {
 			printer.printMsg("Não há usuário com este cpf");
 		}

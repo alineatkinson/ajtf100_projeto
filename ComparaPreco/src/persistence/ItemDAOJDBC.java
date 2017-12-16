@@ -16,12 +16,6 @@ public class ItemDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceByNa
 	private ItemSQLHandler sh = new ItemSQLHandler();
 	private Printer printer = new Printer();
 
-	/*
-	 * public void createTable() { String sql = sh.getCreateTable(); int qdtEdited =
-	 * super.executeQuery(sql);
-	 * printer.printMsg("Tabela TakingPrices criada com sucesso"); }
-	 */
-
 	public List<Item> getAll() {
 		// TODO MELHORAR EXCEÇÃO
 		String sql = null;
@@ -86,7 +80,8 @@ public class ItemDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceByNa
 
 		Connection conn = null;
 		try {
-			conn = ConnectionManager.getConnection();
+			conn = new ConnectionManager("pricecompator;create=true",
+					"jdbc:derby://localhost:1527/" + "pricecompator;create=true", "aline", "aline").getConnection();
 		} catch (ConnectionException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();

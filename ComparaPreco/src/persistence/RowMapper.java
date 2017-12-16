@@ -5,12 +5,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public interface RowMapper {
+interface RowMapper {
 	
-	public Object map (ResultSet rs) throws SQLException;
+	Object map (ResultSet rs) throws SQLException;
 	
-	
-	public default Object executeQueryMap(String sql, RowMapper m) {
+	// TODO PRECISA?
+	default Object executeQueryMap(String sql, RowMapper m) {
 
 		Connection conn = null;
 		Statement stmt = null;

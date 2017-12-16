@@ -1,7 +1,7 @@
 package presentation;
 
-import business.ComparatorPrice;
-import business.SumPrices;
+import business.PricesByItemManager;
+import business.ItemsPricesBySupermarketManager;
 import model.Item;
 import model.PricesByItem;
 import model.TakingPrice;
@@ -11,11 +11,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ComparatorPriceConsole {
+class PricesByItemControllerConsole {
 	private Printer printer = new Printer();
 	private List<String> namesItems = new ArrayList();
 
-	protected List<String> askItemsToCompare() {
+	List<String> askItemsToCompare() {
 		Console reader = new Console();
 		printer.printMsg("Digite os itens que deseja comparar/somar: ");
 
@@ -41,8 +41,8 @@ public class ComparatorPriceConsole {
 
 	}
 
-	protected void createComparation() throws SQLException {
-		ComparatorPrice comparator = new ComparatorPrice();
+	void createComparation() throws SQLException {
+		PricesByItemManager comparator = new PricesByItemManager();
 		namesItems = this.askItemsToCompare();
 		List<PricesByItem> list = null;
 		// TODO MELHORAR EXCEÇÃO
@@ -55,7 +55,7 @@ public class ComparatorPriceConsole {
 		this.showResults(list);
 	}
 
-	private void showResults(List<PricesByItem> pricesByItem) {
+	void showResults(List<PricesByItem> pricesByItem) {
 		List<String> data = this.getData(pricesByItem);
 
 		for (String item : data) {
@@ -64,7 +64,7 @@ public class ComparatorPriceConsole {
 
 	}
 
-	private List<String> getData(List<PricesByItem> pricesByItem) {
+	List<String> getData(List<PricesByItem> pricesByItem) {
 		List<String> data = new ArrayList<String>();
 
 		for (PricesByItem pbi : pricesByItem) {

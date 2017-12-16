@@ -12,9 +12,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ComparePriceDAOJDBC<E, K> {
+class ComparePriceDAOJDBC<E, K> {
 
-	public void save(E e, K k, SQLHandler ir) {
+	void save(E e, K k, SQLHandler ir) {
 
 		Statement stmt = null;
 		String sql = null;
@@ -22,7 +22,8 @@ public class ComparePriceDAOJDBC<E, K> {
 
 		Connection conn = null;
 		try {
-			conn = ConnectionManager.getConnection();
+			conn = new ConnectionManager("pricecompator;create=true",
+					"jdbc:derby://localhost:1527/" + "pricecompator;create=true", "aline", "aline").getConnection();
 		} catch (ConnectionException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -50,17 +51,17 @@ public class ComparePriceDAOJDBC<E, K> {
 		}
 	}
 
-	public E get(K k, RowMapper rm, String sql) {
+	E get(K k, RowMapper rm, String sql) {
 		sql += "" + k;
 		return (E) executeQueryMap(sql, rm);
 	}
 
-	public E get(String name, RowMapper rm, String sql) { // Precisa?
+	E get(String name, RowMapper rm, String sql) { // Precisa?
 		sql += "" + name + "'";
 		return (E) executeQueryMap(sql, rm);
 	}
 
-	public Object executeQueryMap(String sql, RowMapper m) {
+	Object executeQueryMap(String sql, RowMapper m) {
 
 		Connection conn = null;
 		Statement stmt = null;
@@ -70,7 +71,8 @@ public class ComparePriceDAOJDBC<E, K> {
 		System.out.println(sql);
 		try {
 
-			conn = ConnectionManager.getConnection();
+			conn = new ConnectionManager("pricecompator;create=true",
+					"jdbc:derby://localhost:1527/" + "pricecompator;create=true", "aline", "aline").getConnection();
 			// System.out.println("PEGOU CONEXÃO");
 			stmt = conn.createStatement();
 			// System.out.println("CRIOU STATEMENT");
@@ -89,7 +91,7 @@ public class ComparePriceDAOJDBC<E, K> {
 
 	}
 
-	public boolean checksExistence(K k, RowMapper rm, String sql) {
+	boolean checksExistence(K k, RowMapper rm, String sql) {
 
 		Object o = this.get(k, rm, sql);
 
@@ -101,7 +103,7 @@ public class ComparePriceDAOJDBC<E, K> {
 
 	}
 
-	public boolean checksExistence(String name, RowMapper rm, String sql) {
+	boolean checksExistence(String name, RowMapper rm, String sql) {
 		Object o = this.get(name, rm, sql);
 		if (o == null) {
 			return false;
@@ -110,13 +112,14 @@ public class ComparePriceDAOJDBC<E, K> {
 		}
 	}
 
-	public int executeQuery(String sql) {
+	int executeQuery(String sql) {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		int qtdRemovidos = 0;
 
 		try {
-			conn = ConnectionManager.getConnection();
+			conn = new ConnectionManager("pricecompator;create=true",
+					"jdbc:derby://localhost:1527/" + "pricecompator;create=true", "aline", "aline").getConnection();
 			stmt = conn.prepareStatement(sql);
 			// stmt.setInt(1, code_supermarket);
 			qtdRemovidos = stmt.executeUpdate();
@@ -132,7 +135,7 @@ public class ComparePriceDAOJDBC<E, K> {
 		return qtdRemovidos;
 	}
 
-	public ResultSet executeSql(String sql) {
+	ResultSet executeSql(String sql) {
 
 		Connection conn = null;
 		Statement stmt = null;
@@ -140,7 +143,8 @@ public class ComparePriceDAOJDBC<E, K> {
 
 		try {
 
-			conn = ConnectionManager.getConnection();
+			conn = new ConnectionManager("pricecompator;create=true",
+					"jdbc:derby://localhost:1527/" + "pricecompator;create=true", "aline", "aline").getConnection();
 			// System.out.println("PEGOU CONEXÃO");
 			stmt = conn.createStatement();
 			// System.out.println("CRIOU STATEMENT");

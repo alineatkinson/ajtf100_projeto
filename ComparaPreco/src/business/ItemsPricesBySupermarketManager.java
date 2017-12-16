@@ -9,18 +9,16 @@ import persistence.DAOFactory;
 import persistence.ItemDAOJDBC;
 import persistence.ItemsPricesBySupermarketDAO;
 import persistence.SupermarketDAOJDBC;
-import presentation.SumPricesConsole;
 import model.Item;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SumPrices {
+public class ItemsPricesBySupermarketManager {
 
 	private List<ItemsPricesBySupermarket> list = new ArrayList();
 
-	// retornar para console objeto lista
 	public List<ItemsPricesBySupermarket> sumPricesBySupermarket(List<Item> items) throws SQLException {
 		List<Supermarket> supermarkets = new ArrayList();
 		SupermarketDAOJDBC supermarketDAO = new SupermarketDAOJDBC();
@@ -61,9 +59,9 @@ public class SumPrices {
 	}
 	
 	public Item getItemByName(String name) {
-		//Não deu certo dessa forma:
+		//TODO //Não deu certo dessa forma:
 		//ComparePriceByNameDAO<Item> itemDao = new DAOFactory().getItemDAO();
-		// como deixo compare price pra pegar o get com nome???
+		//TODO // como deixo compare price pra pegar o get com nome???
 		ItemDAOJDBC itemDao = new ItemDAOJDBC();
 		Item selectedItem = itemDao.get(name);
 		return selectedItem;

@@ -4,26 +4,26 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import business.SumPrices;
+import business.ItemsPricesBySupermarketManager;
 import model.Item;
 import model.PricesByItem;
 import model.Supermarket;
 import model.TakingPrice;
 import model.ItemsPricesBySupermarket;
 
-public class SumPricesConsole {
+class ItemsPricesBySupermarketControllerConsole {
 	private Printer printer = new Printer();
 
-	public void createSumPrices() throws SQLException {
-		ComparatorPriceConsole consoleComparator = new ComparatorPriceConsole();
-		SumPrices sumPrices = new SumPrices();
+	void createSumPrices() throws SQLException {
+		PricesByItemControllerConsole consoleComparator = new PricesByItemControllerConsole();
+		ItemsPricesBySupermarketManager sumPrices = new ItemsPricesBySupermarketManager();
 		List<String> namesItems = consoleComparator.askItemsToCompare();
 		List<Item> items = sumPrices.getItems(namesItems);
 		List<ItemsPricesBySupermarket> list = sumPrices.sumPricesBySupermarket(items);
 		this.showResults(list);
 	}
 	
-	public void showResults(List<ItemsPricesBySupermarket> itemsPricesBySupermarket) {
+	void showResults(List<ItemsPricesBySupermarket> itemsPricesBySupermarket) {
 		List<String> data = this.getData(itemsPricesBySupermarket);
 
 		for (String itemBySuper : data) {
@@ -31,7 +31,7 @@ public class SumPricesConsole {
 		}
 	}
 
-	public List<String> getData(List<ItemsPricesBySupermarket> itemsPricesBySupermarket) {
+	List<String> getData(List<ItemsPricesBySupermarket> itemsPricesBySupermarket) {
 		List<String> data = new ArrayList<String>();
 		printer.printMsg("-------------------------------------------------------\n");
 		printer.printMsg("TOTALIZAÇÃO POR SUPERMERCADO: ");

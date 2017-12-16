@@ -10,13 +10,13 @@ import java.util.Map;
  * 2. Selecionar um item
  * 3. Executar o item selecionado
  */
-public class Menu {
+class Menu {
 	UserControllerConsole controllerUserConsole = new UserControllerConsole();
 	ItemControllerConsole controllerItemConsole = new ItemControllerConsole();
 	SupermarketControllerConsole controllerSuperarketConsole = new SupermarketControllerConsole();
 	TakingPriceControllerConsole controllerTakingPriceConsole = new TakingPriceControllerConsole();
-	ComparatorPriceConsole comparatorPrice = new ComparatorPriceConsole();
-	SumPricesConsole sumConsole = new SumPricesConsole();
+	PricesByItemControllerConsole comparatorPrice = new PricesByItemControllerConsole();
+	ItemsPricesBySupermarketControllerConsole sumConsole = new ItemsPricesBySupermarketControllerConsole();
 
 	MenuItem menu1 = new MenuItem(1, " Cadastrar usuário.", new Item1Handler(controllerUserConsole));
 	MenuItem menu2 = new MenuItem(2, " Editar usuário.", new Item2Handler(controllerUserConsole));
@@ -45,7 +45,7 @@ public class Menu {
 
 	Map<Integer, MenuItem> map = new HashMap<>();
 
-	public Menu() {
+	Menu() {
 
 		list.add(menu1);
 		list.add(menu2);
@@ -71,7 +71,7 @@ public class Menu {
 		}
 	}
 
-	public void toShow() {
+	void toShow() {
 		System.out.println("Digite o que deseja fazer:");
 		for (MenuItem item : list) {
 			System.out.println(item.toString());
@@ -79,7 +79,7 @@ public class Menu {
 
 	}
 
-	public int readAnswer() throws NumeroInvalidoException {
+	int readAnswer() throws NumeroInvalidoException {
 		Console readerConsole = new Console();
 		int option;
 
@@ -92,7 +92,7 @@ public class Menu {
 
 	}
 
-	public void executeOption(int option) {
+	void executeOption(int option) {
 		MenuItem menu = map.get(option);
 		menu.execute();
 	}

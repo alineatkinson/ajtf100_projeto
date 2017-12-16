@@ -6,9 +6,9 @@ import java.util.List;
 import model.Item;
 import model.Supermarket;
 
-public class ItemsPricesBySupermarketSQLHandler {
+class ItemsPricesBySupermarketSQLHandler {
 
-	public String getSelectSQL(List<Item> items, Supermarket supermarket) throws IOException {
+	String getSelectSQL(List<Item> items, Supermarket supermarket) throws IOException {
 
 		System.out.println(" tamanho de items: " + items.size());
 		if (items != null & supermarket != null) {
@@ -46,7 +46,7 @@ public class ItemsPricesBySupermarketSQLHandler {
 
 	}
 
-	public RowMapper getRowMapper() {
+	RowMapper getRowMapper() {
 		RowMapper rm = new TakingPriceRowMapper();
 		return rm;
 	}

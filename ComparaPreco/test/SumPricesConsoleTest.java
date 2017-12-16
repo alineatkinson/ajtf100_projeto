@@ -12,7 +12,7 @@ import model.Item;
 import model.ItemsPricesBySupermarket;
 import model.Supermarket;
 import model.TakingPrice;
-import presentation.SumPricesConsole;
+import presentation.ItemsPricesBySupermarketControllerConsole;
 
 public class SumPricesConsoleTest {
 
@@ -39,7 +39,7 @@ public class SumPricesConsoleTest {
 		// ipbs.setTakingPrices(tps);
 		ItemsPricesBySupermarket ipbs = new ItemsPricesBySupermarket(tps, items, supermarket);
 
-		SumPricesConsole console = new SumPricesConsole();
+		ItemsPricesBySupermarketControllerConsole console = new ItemsPricesBySupermarketControllerConsole();
 
 		List<ItemsPricesBySupermarket> list = new ArrayList();
 
