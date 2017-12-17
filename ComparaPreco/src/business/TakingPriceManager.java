@@ -28,8 +28,8 @@ public class TakingPriceManager {
 		return tps;
 	}
 
-	public boolean deleteTakingPrice(int codebar_item, int code_supermarket) {
-		if (tpDao.checksExistence(codebar_item, code_supermarket)) {
+	public boolean deleteTakingPrice(int codebar_item, int code_supermarket, Date date) {
+		if (tpDao.checksExistence(codebar_item, code_supermarket, date)) {
 			tpDao.delete(codebar_item, code_supermarket);
 			return true;
 		} else {
@@ -37,13 +37,13 @@ public class TakingPriceManager {
 		}
 	}
 
-	public TakingPrice getTakingPrice(int codebar_item, int code_supermarket) {
-		TakingPrice tp = (TakingPrice) tpDao.get(codebar_item, code_supermarket);
+	public TakingPrice getTakingPrice(int codebar_item, int code_supermarket, Date date) {
+		TakingPrice tp = (TakingPrice) tpDao.get(codebar_item, code_supermarket, date);
 		return tp;
 	}
 
-	public boolean checksExistence(int codebar_item, int code_supermarket) {
-		if (tpDao.checksExistence(codebar_item, code_supermarket)) {
+	public boolean checksExistence(int codebar_item, int code_supermarket, Date date) {
+		if (tpDao.checksExistence(codebar_item, code_supermarket, date)) {
 			return true;
 		} else {
 			return false;

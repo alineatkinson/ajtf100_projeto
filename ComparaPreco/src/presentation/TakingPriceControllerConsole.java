@@ -77,17 +77,30 @@ class TakingPriceControllerConsole {
 		printer.printMsg("Digite o código do supermercado a ser alterado? ");
 		code_supermarket = reader.readNumber();
 
+		printer.printMsg(
+				" Digite a data da tomada de preço do item: (Ex.Formato: '2017-12-16 10:55:53' para 16 de dezembro de 2017, 10 horas 55 min e 53 seg)");
+		String dateTP = reader.readText();
+		dateTP = reader.readText();
+
+		String pattern = "yyyy-mm-dd hh:mm:ss";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+		Date dateTPF = null;
+		try {
+			dateTPF = simpleDateFormat.parse(dateTP);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		// pensando em cadastrar o novo preço sem editar o preço antigo. Senão terei que
 		// controlar por muitos atributos.
 
-		if (tpm.checksExistence(codebar_item, code_supermarket)) {
-			tp = tpm.getTakingPrice(codebar_item, code_supermarket);
+		if (tpm.checksExistence(codebar_item, code_supermarket, dateTPF)) {
+			tp = tpm.getTakingPrice(codebar_item, code_supermarket, dateTPF);
 			int codeSupermarket = tp.getCodeSupermarket();
 			double priceItem = tp.getPrice();
-			Date dateTP = tp.getDate();
+			Date dateTPE = tp.getDate();
 			int respEdit = 0;
 
-			tpm.deleteTakingPrice(codebar_item, code_supermarket);
+			tpm.deleteTakingPrice(codebar_item, code_supermarket, dateTPE);
 
 			do {
 				try {
@@ -100,25 +113,25 @@ class TakingPriceControllerConsole {
 				if (respEdit == 1) {
 					printer.printMsg(" Digite o novo código do item: ");
 					newCodeItem = reader.readNumber();
-					this.saveTakingPrice(newCodeItem, priceItem, codeSupermarket, dateTP);
+					this.saveTakingPrice(newCodeItem, priceItem, codeSupermarket, dateTPE);
 				} else if (respEdit == 2) {
 					printer.printMsg(" Digite o novo código do supermercado: ");
 					int newCodeSupermarket = 0;
 					newCodeSupermarket = reader.readNumber();
-					this.saveTakingPrice(codebar_item, priceItem, newCodeSupermarket, dateTP);
+					this.saveTakingPrice(codebar_item, priceItem, newCodeSupermarket, dateTPE);
 				} else if (respEdit == 3) {
 					printer.printMsg(" Digite o novo preço do item: ");
 					double newPriceItem = 0;
 					newPriceItem = reader.readNumberDouble();
-					this.saveTakingPrice(codebar_item, newPriceItem, codeSupermarket, dateTP);
+					this.saveTakingPrice(codebar_item, newPriceItem, codeSupermarket, dateTPE);
 				} else if (respEdit == 4) {
 					printer.printMsg(
 							" Digite a nova data da tomada de preço do item: (Ex.Formato: '2017-12-16 10:55:53' para 16 de dezembro de 2017, 10 horas 55 min e 53 seg)");
 					String date = reader.readText();
 					date = reader.readText();
 
-					String pattern = "yyyy-mm-dd hh:mm:ss";
-					SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+					// String pattern = "yyyy-mm-dd hh:mm:ss";
+					// SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 					Date newDateTP = null;
 					try {
 						newDateTP = simpleDateFormat.parse(date);
@@ -204,7 +217,21 @@ class TakingPriceControllerConsole {
 		codeSmkt = 0;
 		codeSmkt = reader.readNumber();
 
-		if (tpm.deleteTakingPrice(codebar_item, codeSmkt)) {
+		printer.printMsg(
+				" Digite a data da tomada de preço do item: (Ex.Formato: '2017-12-16 10:55:53' para 16 de dezembro de 2017, 10 horas 55 min e 53 seg)");
+		String dateTP = reader.readText();
+		dateTP = reader.readText();
+
+		String pattern = "yyyy-mm-dd hh:mm:ss";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+		Date dateTPF = null;
+		try {
+			dateTPF = simpleDateFormat.parse(dateTP);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		if (tpm.deleteTakingPrice(codebar_item, codeSmkt, dateTPF)) {
 			printer.printMsg("Tomada de Preço excluído com sucesso!");
 		} else {
 			printer.printMsg("Não existe tomada de preço com estes códigos.");

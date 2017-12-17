@@ -74,7 +74,7 @@ class TakingPriceSQLHandler implements SQLHandler<TakingPrice> {
 		sql = sql.replaceFirst("[?]", codebar_item.toString());
 		sql = sql.replaceFirst("[?]", code_supermarket.toString());
 
-		String pattern = "yyyy-mm-dd hh:mm:ss";
+		String pattern = "yyyy-MM-dd hh:mm:ss";
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
 		System.out.println("" + simpleDateFormat.format(date));

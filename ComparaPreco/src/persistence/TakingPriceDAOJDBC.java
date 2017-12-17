@@ -39,6 +39,7 @@ public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 				int codebar_item = rs.getInt("codebar_item");
 				int code_supermarket = rs.getInt("code_supermarket");
 				Date date = rs.getTimestamp("date");
+				System.out.println("Data do rs: "+ date);
 				takingprices.add(this.get(codebar_item, code_supermarket, date));
 			}
 		} catch (SQLException e) {
