@@ -19,6 +19,8 @@ class ItemsPricesBySupermarketControllerConsole {
 	void createSumPrices() throws SQLException, PresentationException {
 		PricesByItemControllerConsole consoleComparator = new PricesByItemControllerConsole();
 		ItemsPricesBySupermarketManager sumPrices = new ItemsPricesBySupermarketManager();
+		Console reader = new Console();
+
 		List<String> namesItems = consoleComparator.askItemsToCompare();
 		List<Item> items = sumPrices.getItems(namesItems);
 		List<ItemsPricesBySupermarket> list;
@@ -26,11 +28,12 @@ class ItemsPricesBySupermarketControllerConsole {
 			list = sumPrices.sumPricesBySupermarket(items);
 		} catch (BusinessException e) {
 			throw new PresentationException("Não foi possível recuperar todas as somas de itens por supermercado", e);
-			//e.printStackTrace();
+			// e.printStackTrace();
 		}
 		this.showResults(list);
+
 	}
-	
+
 	void showResults(List<ItemsPricesBySupermarket> itemsPricesBySupermarket) {
 		List<String> data = this.getData(itemsPricesBySupermarket);
 

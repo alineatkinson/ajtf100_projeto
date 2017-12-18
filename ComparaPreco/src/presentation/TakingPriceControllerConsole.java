@@ -21,6 +21,7 @@ class TakingPriceControllerConsole {
 	private TakingPriceManager tpm = new TakingPriceManager();
 
 	void createTakingPrice() throws PresentationException {
+		String option = null;
 
 		printer.printMsg("Qual o código do item? \n");
 		int codeBarItem = reader.readNumber();
@@ -79,7 +80,7 @@ class TakingPriceControllerConsole {
 	/*
 	 * Edit the data of a supermarket
 	 */
-	void editTakingPrice() {
+	void editTakingPrice() throws PresentationException {
 		TakingPrice tp = null;
 		int codebar_item;
 		int code_supermarket;
@@ -102,7 +103,8 @@ class TakingPriceControllerConsole {
 		try {
 			dateTPF = simpleDateFormat.parse(dateTP);
 		} catch (ParseException e) {
-			e.printStackTrace();
+			throw new PresentationException("Não foi possível executar a formatação da data no padrão definido", e);
+			// e.printStackTrace();
 		}
 		// pensando em cadastrar o novo preço sem editar o preço antigo. Senão terei que
 		// controlar por muitos atributos.
@@ -121,7 +123,7 @@ class TakingPriceControllerConsole {
 					respEdit = this.askWhatEdit(tp);
 
 				} catch (NumeroInvalidoException e) {
-
+					throw new PresentationException("A opção digitada não é uma opção válida", e);
 				}
 
 				if (respEdit == 1) {
@@ -162,7 +164,8 @@ class TakingPriceControllerConsole {
 					try {
 						newDateTP = simpleDateFormat.parse(date);
 					} catch (ParseException e) {
-						e.printStackTrace();
+						throw new PresentationException("A opção digitada não é uma opção válida", e);
+						// e.printStackTrace();
 					}
 					System.out.println("Date:" + date);
 
@@ -245,7 +248,7 @@ class TakingPriceControllerConsole {
 	/*
 	 * Delete a supermarket
 	 */
-	void deleteTakingPrice() {
+	void deleteTakingPrice() throws PresentationException {
 		int codebar_item = 0;
 		int codeSmkt = 0;
 
@@ -268,7 +271,8 @@ class TakingPriceControllerConsole {
 		try {
 			dateTPF = simpleDateFormat.parse(dateTP);
 		} catch (ParseException e) {
-			e.printStackTrace();
+			throw new PresentationException("Não foi possível formatar a data no padrão definido", e);
+			// e.printStackTrace();
 		}
 
 		if (tpm.deleteTakingPrice(codebar_item, codeSmkt, dateTPF)) {

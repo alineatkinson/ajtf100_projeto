@@ -25,6 +25,7 @@ class ItemControllerConsole {
 	 */
 
 	void createItem() {
+
 		// Ask and assign item's code bar
 		String msg = "Qual o código de barras do item? \n";
 		printer.printMsg(msg);
@@ -54,7 +55,7 @@ class ItemControllerConsole {
 	/*
 	 * Edit the data of a item
 	 */
-	void editItem() {
+	void editItem() throws PresentationException {
 
 		printer.printMsg("Digite o código de barras do item a ser alterado: ");
 		int itemKey = reader.readNumber();
@@ -71,6 +72,7 @@ class ItemControllerConsole {
 				} catch (NumeroInvalidoException e) {
 					// printer.printMsg("Escolha a opção novamente: ");
 					// e.printStackTrace();
+					throw new PresentationException("A opção digitada não é uma opção válida", e);
 				}
 				if (respEdit == 1) {
 					printer.printMsg(" Digite o novo código de barras: ");
@@ -156,8 +158,8 @@ class ItemControllerConsole {
 		int itemKey = 0;
 		itemKey = reader.readNumber();
 
-		if (im.checksExistence(itemKey)) {
-			im.delete(itemKey);
+		if (im.delete(itemKey)) {
+			printer.printMsg("Iem excluído com sucesso.");
 		} else {
 			printer.printMsg("Não há item com este código.");
 		}

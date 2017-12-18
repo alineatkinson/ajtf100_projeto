@@ -79,16 +79,66 @@ class Menu {
 
 	}
 
-	int readAnswer() throws NumeroInvalidoException {
+	String readAnswer() throws PresentationException {
 		Console readerConsole = new Console();
-		int option;
+		// int optionT, optionE = 20;
+		// String option = null;
 
-		option = readerConsole.readNumber();
+		String option = readerConsole.nextLine();
+		System.out.println(option);
+		// System.out.println("Parse int: " + Integer.parseInt(option));
+		// if (Integer.parseInt(option) > 18 || Integer.parseInt(option) < 1 ||
+		// !option.equals("")|| !option.equals(" ")) {
 
-		if (option > 18 || option < 1) {
-			throw new NumeroInvalidoException(option + " não é uma opção inválida, tente novamente!");
+		if (option.equals("")) {
+			System.out.println("Entrou no else 11");
+			return option;
+		} else if (option.equals(" ")) {
+			System.out.println("Entrou no else 222");
+			return option;
+		} else if ((Integer.parseInt(option) <= 18 & Integer.parseInt(option) >= 1)) {
+			System.out.println("Entrou no if");
+			return option;
+		} else {
+			throw new PresentationException(option + " não é uma opção válida, tente novamente!", null);
 		}
-		return option;
+
+		/*
+		 * int option; option = readerConsole.readNumber();
+		 * 
+		 * if (option > 18 || option < 1) { throw new NumeroInvalidoException(option +
+		 * " não é uma opção inválida, tente novamente!"); } return option;
+		 */
+		// Scanner scanner = new Scanner(System.in);
+
+		/*
+		 * atual String option = readerConsole.nextLine(); System.out.println(option);
+		 * if (option.equals("")) { System.out.println("Enter Key pressed."); optionT =
+		 * 19; } else if (option.equals(" ")) { optionT = 99;
+		 * System.out.println("Aplicação finalizada"); } else { optionE =
+		 * Integer.parseInt(option); System.out.println("Opção transofrmada :" +
+		 * optionE); if (optionE >= 1 & optionE <= 18) {
+		 * System.out.println("Opção válida " + optionE); optionT = optionE; } else if
+		 * (optionE < 1 || optionE > 18) { optionT = 20;
+		 * System.out.println("Opção não válida 2"); } else { optionT = 20; throw new
+		 * NumeroInvalidoException(option +
+		 * " não é uma opção válida, tente novamente!"); }
+		 * 
+		 * }
+		 */
+
+		// if (readerConsole.hasNextLine())
+		// option = readerConsole.nextLine();
+		// else
+		// option = null;
+		// if (Integer.parseInt(option) > 18 || Integer.parseInt(option) < 1 ||
+		// !option.equals("")
+		// || !option.equals(" ")) {
+		// throw new NumeroInvalidoException(option + " não é uma opção válida, tente
+		// novamente!");
+		// }
+
+		// return optionT;
 
 	}
 

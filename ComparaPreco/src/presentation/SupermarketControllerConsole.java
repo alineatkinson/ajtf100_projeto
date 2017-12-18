@@ -39,6 +39,7 @@ class SupermarketControllerConsole {
 		printer.printMsg("Qual o cep deste supermercado? (utilize somente números) \n");
 		int cepSuper = reader.readNumber();
 		this.saveSupermarket(nameSuper, cepSuper, codeSupermarket);
+
 	}
 
 	void saveSupermarket(String nameSuper, int cepSuper, int codeSupermarket) {
@@ -49,7 +50,7 @@ class SupermarketControllerConsole {
 	/*
 	 * Edit the data of a supermarket
 	 */
-	void editSupermarket() {
+	void editSupermarket() throws PresentationException {
 
 		printer.printMsg("Digite o código do supermercado a ser alterado: ");
 		int supermarketKey = reader.readNumber();
@@ -67,6 +68,7 @@ class SupermarketControllerConsole {
 				} catch (NumeroInvalidoException e) {
 					// printer.printMsg("Opção inválida, tente novamente! \n");
 					// e.printStackTrace();
+					throw new PresentationException("A opção digitada não é uma opção válida", e);
 				}
 				if (respEdit == 1) {
 					printer.printMsg(" Digite o novo nome do supermercado: ");

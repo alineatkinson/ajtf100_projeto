@@ -70,4 +70,12 @@ class Console implements Reader {
 		return number;
 	}
 
+	public boolean hasNextLine() {
+		return keyboard.hasNextLine();
+	}
+
+	public String nextLine() {
+		return keyboard.nextLine();
+	}
+
 }

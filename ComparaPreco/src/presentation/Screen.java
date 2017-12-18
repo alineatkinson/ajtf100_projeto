@@ -13,28 +13,42 @@ import persistence.ConnectionException;
 public class Screen {
 	static Menu menu;
 
-	public static void main(String[] args) throws ConnectionException, NumeroInvalidoException {
+	public static void main(String[] args) {
 		Printer printer = new Printer();
 		Console reader = new Console();
 		int resposta2;
-		int resp = 0;
+		// int resp = 0;
+		String resp = null;
 		menu = new Menu();
 
 		do {
-			do {
-				menu.toShow();
+
+			// do {
+			menu.toShow();
+			// try {
+			
 				try {
 					resp = menu.readAnswer();
-				} catch (NumeroInvalidoException e) {
-					printer.printMsg("Tente novamente");
+				} catch (PresentationException e) {
+					e.printStackTrace();
 				}
-			} while (resp > 18 || resp < 1);
+				// } catch (NumeroInvalidoException e) {
+				// printer.printMsg("Tente novamente");
 
-			menu.executeOption(resp);
 
-			printer.printMsg("Deseja utilizar a aplicação novamente? (1 = SIM | 2 = Não) \n");
-			resposta2 = reader.readNumber();
-		} while (resposta2 != 2);
+			// }
 
+			// } while (Integer.parseInt(resp) > 18 || Integer.parseInt(resp) < 1 ||
+			// !resp.equals(" ")
+			// || !resp.equals(""));
+
+			if (Integer.parseInt(resp) >= 1 & Integer.parseInt(resp) <= 18) {
+				// if (resp >= 1 & resp <= 18) {
+				// menu.executeOption(resp);
+				menu.executeOption(Integer.parseInt(resp));
+			}
+
+		} while (!resp.equals(""));
+		// } while (resp != 99);
 	}
 }

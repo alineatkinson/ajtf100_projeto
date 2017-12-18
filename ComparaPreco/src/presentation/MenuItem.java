@@ -18,12 +18,22 @@ public class MenuItem {
 
 	// tá correto isso?
 	public void execute() {
-		try {
-			handler.execute();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Printer printer = new Printer();
+		Console reader = new Console();
+		String answer;
+		do {
+			try {
+				handler.execute();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			printer.printMsg("Pressione ENTER para efetuar a mesma ação!");
+			answer = reader.nextLine();
+			//System.out.println(option);
+
+		} while (answer.equals(""));
 	}
 
 	public String toString() {
@@ -60,7 +70,11 @@ class Item2Handler implements Handler {
 
 	public void execute() {
 		System.out.println(this.controllerUserConsole.hashCode());
-		this.controllerUserConsole.editUser();
+		try {
+			this.controllerUserConsole.editUser();
+		} catch (PresentationException e) {
+			e.printStackTrace();
+		}
 	}
 }
 
@@ -114,7 +128,11 @@ class Item6Handler implements Handler {
 	}
 
 	public void execute() {
-		controllerItemConsole.editItem();
+		try {
+			controllerItemConsole.editItem();
+		} catch (PresentationException e) {
+			e.printStackTrace();
+		}
 	}
 }
 
@@ -166,7 +184,11 @@ class Item10Handler implements Handler {
 	}
 
 	public void execute() {
-		controllerSuperarketConsole.editSupermarket();
+		try {
+			controllerSuperarketConsole.editSupermarket();
+		} catch (PresentationException e) {
+			e.printStackTrace();
+		}
 	}
 }
 
@@ -222,7 +244,11 @@ class Item14Handler implements Handler {
 	}
 
 	public void execute() {
-		controllerTakingPriceConsole.editTakingPrice();
+		try {
+			controllerTakingPriceConsole.editTakingPrice();
+		} catch (PresentationException e) {
+			e.printStackTrace();
+		}
 	}
 }
 
@@ -235,7 +261,11 @@ class Item15Handler implements Handler {
 	}
 
 	public void execute() {
-		controllerTakingPriceConsole.deleteTakingPrice();
+		try {
+			controllerTakingPriceConsole.deleteTakingPrice();
+		} catch (PresentationException e) {
+			e.printStackTrace();
+		}
 	}
 }
 
@@ -262,14 +292,14 @@ class Item17Handler implements Handler {
 
 	public void execute() throws SQLException {
 		comparator.createComparation();
-		// comparator.createComparation();
 	}
 }
 
 class Item18Handler implements Handler {
 	ItemsPricesBySupermarketControllerConsole comparator;
 
-	public Item18Handler(ItemsPricesBySupermarketControllerConsole comparator) { // ComparatorItemsControllerConsole comparator) {
+	public Item18Handler(ItemsPricesBySupermarketControllerConsole comparator) { // ComparatorItemsControllerConsole
+																					// comparator) {
 		super();
 		this.comparator = comparator;
 	}

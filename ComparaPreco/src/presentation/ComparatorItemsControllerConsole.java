@@ -45,6 +45,7 @@ public class ComparatorItemsControllerConsole {
 		} else {
 			printer.printMsg("\n Não foi encontrado item com este nome na base de dados.");
 		}
+
 	}
 
 	public List<String> askItemsToCompare() {

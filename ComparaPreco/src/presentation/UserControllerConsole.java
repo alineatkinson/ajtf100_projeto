@@ -42,11 +42,11 @@ class UserControllerConsole {
 			userm.saveUser(user);
 		} catch (BusinessException e) {
 			throw new PresentationException("Não foi possível salvar o usuário", e);
-			//e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 
-	void editUser() {
+	void editUser() throws PresentationException {
 		User user = null;
 		int respEdit = 0;
 
@@ -61,6 +61,7 @@ class UserControllerConsole {
 					respEdit = askWhatEdit(user);
 				} catch (NumeroInvalidoException e) {
 					// e.printStackTrace();
+					throw new PresentationException("A opção digitada não é uma opção válida", e);
 				}
 			} while (respEdit != 1 & respEdit != 2);
 			userm.deleteUser(userKey);
@@ -124,7 +125,7 @@ class UserControllerConsole {
 			users = userm.listAllUsers();
 		} catch (BusinessException e) {
 			throw new PresentationException("Não foi possível executar o sql de seleção de todos usuários", e);
-			//e.printStackTrace();
+			// e.printStackTrace();
 		}
 
 		for (User user : users) {
