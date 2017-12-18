@@ -14,16 +14,21 @@ import persistence.UserDAO;
 public class TakingPriceManager {
 	private TakingPriceDAOJDBC tpDao = new TakingPriceDAOJDBC();
 
-	public void save(TakingPrice tp) {
-		tpDao.save(tp);
+	public void save(TakingPrice tp) throws BusinessException {
+		try {
+			tpDao.save(tp);
+		} catch (PersistenceException e) {
+			throw new BusinessException("Erro ao salvar tomada de preço", e);
+			//e.printStackTrace();
+		}
 	}
 
-	public List<TakingPrice> listAllTakingPrices() {
-		List<TakingPrice> tps = null; // TODO MELHORAR EXCEÇÕES
+	public List<TakingPrice> listAllTakingPrices() throws BusinessException {
+		List<TakingPrice> tps = null; 
 		try {
 			tps = tpDao.getAll();
-		} catch (PersistenceException e) { // TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (PersistenceException e) { 
+			throw new BusinessException("Erro ao listar todas tomadas de preços", e);
 		}
 		return tps;
 	}

@@ -7,7 +7,7 @@ import model.User;
 
 public interface UserDAO {
 
-	abstract void save(User object);
+	abstract void save(User object) throws PersistenceException;
 
 	abstract User get(String key);
 
@@ -15,5 +15,5 @@ public interface UserDAO {
 
 	abstract void delete(String key);
 
-	abstract List getAll();
+	abstract List getAll() throws PersistenceException;
 }

@@ -17,18 +17,18 @@ import model.Item;
 
 public class ItemsPricesBySupermarketDAO {
 
-	public ItemsPricesBySupermarket getItemsPricesBySupermarket(List<Item> items, Supermarket supermarket)
-			throws SQLException {
+	public ItemsPricesBySupermarket getItemsPricesBySupermarket(List<Item> items, Supermarket supermarket) throws PersistenceException {
 
 		ItemsPricesBySupermarketSQLHandler ipbs = new ItemsPricesBySupermarketSQLHandler();
 		String sql = null;
 		// TODO MELHORAR EXCEÇÃO
+
 		try {
 			sql = ipbs.getSelectSQL(items, supermarket);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (PersistenceException e) {
 			e.printStackTrace();
 		}
+
 		System.out.println("execução sql :" + sql);
 
 		SQLHandler tphandler = new TakingPriceSQLHandler();
@@ -36,12 +36,20 @@ public class ItemsPricesBySupermarketDAO {
 		List<TakingPrice> tps = new ArrayList();
 
 		ComparePriceDAOJDBC cp = new ComparePriceDAOJDBC();
-		ResultSet rs = cp.executeSql(sql);
-		Object valor = null;
+		ResultSet rs = null;
+		try {
+			rs = cp.executeSql(sql);
 
-		while (rs.next()) {
-			valor = tprm.map(rs);
-			tps.add((TakingPrice) valor);
+			Object valor = null;
+			while (rs.next()) {
+				valor = tprm.map(rs);
+				tps.add((TakingPrice) valor);
+			}
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new PersistenceException("Erro na execucao do select: " + sql, e);
+			//e.printStackTrace();
 		}
 
 		ItemsPricesBySupermarket ipbi = new ItemsPricesBySupermarket(tps, items, supermarket);

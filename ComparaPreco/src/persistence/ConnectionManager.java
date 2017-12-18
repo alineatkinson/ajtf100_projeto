@@ -7,24 +7,20 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class ConnectionManager {
-	/*
-	private static final String NOME_BANCO = "pricecompator;create=true";
-	private static final String STR_CON = "jdbc:derby://localhost:1527/" + NOME_BANCO;
-	private static final String USER = "aline";
-	private static final String PASSWORD = "aline";
-	*/
+
 	private static String NOME_BANCO;
 	private static String STR_CON;
 	private static String USER;
 	private static String PASSWORD;
-	
-	ConnectionManager(String nameDatabase, String constant, String user, String password){
+
+	ConnectionManager(String nameDatabase, String constant, String user, String password) {
 		this.NOME_BANCO = nameDatabase;
 		this.STR_CON = constant;
 		this.USER = user;
-		this.PASSWORD = password;	
+		this.PASSWORD = password;
 	}
-	public static Connection getConnection() throws ConnectionException {
+
+	public static Connection getConnection() throws PersistenceException {
 
 		Connection conn = null;
 		try {
@@ -34,52 +30,50 @@ public class ConnectionManager {
 			System.out.printf("%s %s %n", conn.getMetaData().getDatabaseProductName(),
 					conn.getMetaData().getDatabaseProductVersion());
 		} catch (SQLException e) {
-			throw new ConnectionException("Erro ao obter a conexao", e);
+			// throw new ConnectionException("Erro ao obter a conexao", e);
+			throw new PersistenceException("Erro ao obter a conexao", e);
 		}
 		return conn;
 
 	}
 
-	
-	public static void close(Connection conn) {
+	public static void close(Connection conn) throws PersistenceException {
 		try {
 			if (conn != null) {
 				conn.close();
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
+			throw new PersistenceException("Não foi fechar a conexão (1)", e);
 		}
 	}
 
-	public static void close(Connection conn, Statement stmt) {
+	public static void close(Connection conn, Statement stmt) throws PersistenceException {
 		try {
 			if (stmt != null) {
 				stmt.close();
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
+			throw new PersistenceException("Não foi fechar a conexão (2)", e);
 		}
 		ConnectionManager.close(conn);
 	}
 
-	public static void close(Connection conn, Statement stmt, ResultSet rs) {
+	public static void close(Connection conn, Statement stmt, ResultSet rs) throws PersistenceException {
 		try {
 			if (rs != null) {
 				rs.close();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			// e.printStackTrace();
+			throw new PersistenceException("Não foi fechar a conexão (3)", e);
 		}
 		ConnectionManager.close(conn, stmt);
 	}
-
-	public static void close(ResultSet rs) {
-		try {
-			if (rs != null) {
-				rs.close();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	/*
+	 * public static void close(ResultSet rs) throws PersistenceException { try { if
+	 * (rs != null) { rs.close(); } } catch (Exception e) { //e.printStackTrace();
+	 * throw new PersistenceException("Não foi fechar a conexão (4)",e); } }
+	 */
 }

@@ -45,13 +45,7 @@ class PricesByItemControllerConsole {
 		PricesByItemManager comparator = new PricesByItemManager();
 		namesItems = this.askItemsToCompare();
 		List<PricesByItem> list = null;
-		// TODO MELHORAR EXCEÇÃO
-		try {
-			list = comparator.createComparation(this.namesItems);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		list = comparator.createComparation(this.namesItems);
 		this.showResults(list);
 	}
 

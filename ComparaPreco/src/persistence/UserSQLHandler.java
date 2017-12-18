@@ -10,17 +10,27 @@ class UserSQLHandler implements SQLHandler<User> {
 	private ReadFileProperties rfp = new ReadFileProperties();
 
 	@Override
-	public String handle(User user, Boolean exist) throws IOException {
+	public String handle(User user, Boolean exist) throws PersistenceException {
 
 		String sql;
 
 		if (!exist) {
-			sql = rfp.getQuery("insertUser");
+			try {
+				sql = rfp.getQuery("insertUser");
+			} catch (IOException e) {
+				throw new PersistenceException("Não foi possível obter a propriedade de inclusão de usuário", e);
+				// e.printStackTrace();
+			}
 			sql = sql.replaceFirst("[?]", user.getName());
 			sql = sql.replaceFirst("[?]", user.getCpf());
 
 		} else {
-			sql = rfp.getQuery("updateUser");
+			try {
+				sql = rfp.getQuery("updateUser");
+			} catch (IOException e) {
+				throw new PersistenceException("Não foi possível obter a propriedade de atualização de usuário", e);
+				// e.printStackTrace();
+			}
 			sql = sql.replaceFirst("[?]", user.getName());
 			sql = sql.replaceFirst("[?]", user.getCpf());
 		}
@@ -35,20 +45,38 @@ class UserSQLHandler implements SQLHandler<User> {
 	}
 
 	@Override
-	public String getSelectSQL() throws IOException {
-		String sql = rfp.getQuery("selectUser");
+	public String getSelectSQL() throws PersistenceException {
+		String sql;
+		try {
+			sql = rfp.getQuery("selectUser");
+		} catch (IOException e) {
+			throw new PersistenceException("Não foi possível obter a propriedade de seleção de usuário", e);
+			// e.printStackTrace();
+		}
 		return sql;
 	}
 
 	@Override
-	public String getDeleteSQL() throws IOException {
-		String sql = rfp.getQuery("deletUser");
+	public String getDeleteSQL() throws PersistenceException {
+		String sql;
+		try {
+			sql = rfp.getQuery("deletUser");
+		} catch (IOException e) {
+			throw new PersistenceException("Não foi possível obter a propriedade de deleção de usuário", e);
+			// e.printStackTrace();
+		}
 		return sql;
 	}
 
 	@Override
-	public String getSelectAll() throws IOException {
-		String sql = rfp.getQuery("selectAllUsers");
+	public String getSelectAll() throws PersistenceException {
+		String sql;
+		try {
+			sql = rfp.getQuery("selectAllUsers");
+		} catch (IOException e) {
+			throw new PersistenceException("Não foi possível obter a propriedade de deleção de usuário", e);
+			// e.printStackTrace();
+		}
 		return sql;
 	}
 

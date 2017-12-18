@@ -10,7 +10,7 @@ import java.util.Map;
 
 public interface ComparePriceDAO<E> {
 
-	public abstract void save(E object);
+	public abstract void save(E object) throws PersistenceException;
 
 	public abstract E get(Number key);
 

@@ -4,22 +4,30 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import business.BusinessException;
 import business.ItemsPricesBySupermarketManager;
 import model.Item;
 import model.PricesByItem;
 import model.Supermarket;
 import model.TakingPrice;
+import persistence.PersistenceException;
 import model.ItemsPricesBySupermarket;
 
 class ItemsPricesBySupermarketControllerConsole {
 	private Printer printer = new Printer();
 
-	void createSumPrices() throws SQLException {
+	void createSumPrices() throws SQLException, PresentationException {
 		PricesByItemControllerConsole consoleComparator = new PricesByItemControllerConsole();
 		ItemsPricesBySupermarketManager sumPrices = new ItemsPricesBySupermarketManager();
 		List<String> namesItems = consoleComparator.askItemsToCompare();
 		List<Item> items = sumPrices.getItems(namesItems);
-		List<ItemsPricesBySupermarket> list = sumPrices.sumPricesBySupermarket(items);
+		List<ItemsPricesBySupermarket> list;
+		try {
+			list = sumPrices.sumPricesBySupermarket(items);
+		} catch (BusinessException e) {
+			throw new PresentationException("Não foi possível recuperar todas as somas de itens por supermercado", e);
+			//e.printStackTrace();
+		}
 		this.showResults(list);
 	}
 	

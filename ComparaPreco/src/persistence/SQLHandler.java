@@ -6,12 +6,12 @@ interface SQLHandler<E> {
 
 	RowMapper getRowMapper();
 
-	String getSelectSQL() throws IOException;
+	String getSelectSQL() throws PersistenceException;
 
-	String getDeleteSQL() throws IOException;
+	String getDeleteSQL() throws PersistenceException;
 
-	String getSelectAll() throws IOException;
+	String getSelectAll() throws PersistenceException;
 
-	String handle(E e, Boolean exist) throws IOException;
+	String handle(E e, Boolean exist) throws PersistenceException;
 
 }

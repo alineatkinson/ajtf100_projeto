@@ -205,7 +205,11 @@ class Item13Handler implements Handler {
 	}
 
 	public void execute() {
-		controllerTakingPriceConsole.createTakingPrice();
+		try {
+			controllerTakingPriceConsole.createTakingPrice();
+		} catch (PresentationException e) {
+			e.printStackTrace();
+		}
 	}
 }
 
@@ -271,6 +275,10 @@ class Item18Handler implements Handler {
 	}
 
 	public void execute() throws SQLException {
-		comparator.createSumPrices();
+		try {
+			comparator.createSumPrices();
+		} catch (PresentationException e) {
+			e.printStackTrace();
+		}
 	}
 }

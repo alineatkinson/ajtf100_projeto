@@ -10,15 +10,15 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import business.ItemManager;
+import business.SupermarketManager;
 import model.Item;
-import persistence.ComparePriceDAO;
-import persistence.DAOFactory;
-import persistence.PersistenceException;
 
 class ItemControllerConsole {
 	private Printer printer = new Printer();
 	private Console reader = new Console();
-	private ComparePriceDAO itemDao = new DAOFactory().getItemDAO();
+	// private ComparePriceDAO itemDao = new DAOFactory().getItemDAO();
+	private ItemManager im = new ItemManager();
 
 	/*
 	 * Create the item
@@ -48,7 +48,7 @@ class ItemControllerConsole {
 
 	void save(int codeBar, String name, String description) {
 		Item item = new Item(codeBar, name, description);
-		itemDao.save(item);
+		im.save(item);
 	}
 
 	/*
@@ -60,10 +60,10 @@ class ItemControllerConsole {
 		int itemKey = reader.readNumber();
 		Item item = null;
 
-		if (itemDao.checksExistence(itemKey)) {
-			item = (Item) itemDao.get(itemKey);
+		if (im.checksExistence(itemKey)) {
+			item = (Item) im.get(itemKey);
 			int respEdit = 0;
-			itemDao.delete(itemKey);
+			im.delete(itemKey);
 
 			do {
 				try {
@@ -121,18 +121,15 @@ class ItemControllerConsole {
 
 		List<String> data = new ArrayList<String>();
 		List<Item> items;
-		try {
-			items = itemDao.getAll();
 
-			for (Item item : items) {
-				StringBuilder sb = new StringBuilder();
-				sb.append("[Código de barra do item] : " + item.getBarCode() + "\n");
-				sb.append("Nome do item: " + item.getName() + "\n");
-				sb.append("Descrição do item: " + item.getDescription() + "\n");
-				data.add(sb.toString());
-			}
-		} catch (PersistenceException e) {
-			printer.printMsg(e.getMessage());
+		items = im.listAll();
+
+		for (Item item : items) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("[Código de barra do item] : " + item.getBarCode() + "\n");
+			sb.append("Nome do item: " + item.getName() + "\n");
+			sb.append("Descrição do item: " + item.getDescription() + "\n");
+			data.add(sb.toString());
 		}
 
 		return data;
@@ -159,8 +156,8 @@ class ItemControllerConsole {
 		int itemKey = 0;
 		itemKey = reader.readNumber();
 
-		if (itemDao.checksExistence(itemKey)) {
-			itemDao.delete(itemKey);
+		if (im.checksExistence(itemKey)) {
+			im.delete(itemKey);
 		} else {
 			printer.printMsg("Não há item com este código.");
 		}

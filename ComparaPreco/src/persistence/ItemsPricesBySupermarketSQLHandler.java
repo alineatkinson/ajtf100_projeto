@@ -8,7 +8,7 @@ import model.Supermarket;
 
 class ItemsPricesBySupermarketSQLHandler {
 
-	String getSelectSQL(List<Item> items, Supermarket supermarket) throws IOException {
+	String getSelectSQL(List<Item> items, Supermarket supermarket) throws PersistenceException {
 
 		System.out.println(" tamanho de items: " + items.size());
 		if (items != null & supermarket != null) {
@@ -37,7 +37,12 @@ class ItemsPricesBySupermarketSQLHandler {
 			String sql;
 			ReadFileProperties rfp = new ReadFileProperties();
 
-			sql = rfp.getQuery("selectItemPriceBysupermarket");
+			try {
+				sql = rfp.getQuery("selectItemPriceBysupermarket");
+			} catch (IOException e) {
+				throw new PersistenceException("Não foi possível obter a propriedade de seleção de preços por supermercado", e);
+				//e.printStackTrace();
+			}
 			sql = sql.replaceFirst("[?]", codes.toString());
 			sql = sql.replaceFirst("[?]", code_supermarket + "");
 			return sql;

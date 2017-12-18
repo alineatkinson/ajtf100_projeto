@@ -16,16 +16,17 @@ public class SupermarketDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 
 	private SQLHandler<model.Supermarket> sh = new SupermarketSQLHandler();
 
-	public List<Supermarket> getAll() {
+	public List<Supermarket> getAll() throws PersistenceException {
 		String sql = null;
-		
+
 		// TODO MELHORAR EXCEÇÃO
+
 		try {
 			sql = sh.getSelectAll();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+		} catch (PersistenceException e1) {
 			e1.printStackTrace();
 		}
+
 		List<Supermarket> supermarkets = new ArrayList<>();
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -41,8 +42,8 @@ public class SupermarketDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 				supermarkets.add(this.get(code_supermarket));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new PersistenceException("Não foi possível executar a consulta de seleção de todos supermercados", e);
+			// e.printStackTrace();
 		} finally {
 			ConnectionManager.close(conn, stmt, rs);
 		}
@@ -52,20 +53,25 @@ public class SupermarketDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 	public void delete(Number codebar_item) {
 		// TODO MELHORAR EXCEÇÃO
 		String sql = null;
+
 		try {
 			sql = sh.getDeleteSQL() + codebar_item;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (PersistenceException e) {
 			e.printStackTrace();
 		}
+
 		int qtdRemovidos = 0;
 
-		qtdRemovidos = executeQuery(sql);
+		try {
+			qtdRemovidos = executeQuery(sql);
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+		}
 		System.out.println("supermercado excluído do banco com sucesso!" + qtdRemovidos + " linhas excluidas");
 	}
 
 	@Override
-	public void save(Supermarket object) {
+	public void save(Supermarket object) throws PersistenceException {
 		Statement stmt = null;
 		String sql = null;
 		ResultSet rs = null;
@@ -73,10 +79,11 @@ public class SupermarketDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 		Connection conn = null;
 		try {
 			conn = new ConnectionManager("pricecompator;create=true",
-					"jdbc:derby://localhost:1527/" + "pricecompator;create=true", "aline", "aline").getConnection();;
+					"jdbc:derby://localhost:1527/" + "pricecompator;create=true", "aline", "aline").getConnection();
+			;
 		} catch (ConnectionException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
+			throw new PersistenceException("Não foi possível conectar no banco de dados ao salvar o supermercado", e2);
+			// e2.printStackTrace();
 		}
 		DatabaseMetaData dbmd = null;
 
@@ -88,24 +95,27 @@ public class SupermarketDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 	public Supermarket get(Number key) {
 		// TODO MELHORAR EXCEÇÃO
 		String sql = null;
+
 		try {
 			sql = sh.getSelectSQL();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (PersistenceException e) {
 			e.printStackTrace();
 		}
+
 		return (Supermarket) super.get(key, sh.getRowMapper(), sql);
 	}
 
 	@Override
 	public boolean checksExistence(Number key) {
 		boolean exist = false;
+
 		try {
 			exist = super.checksExistence(key, sh.getRowMapper(), sh.getSelectSQL());
-		} catch (IOException e) {
+		} catch (PersistenceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 		return exist;
 	}
 

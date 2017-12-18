@@ -12,6 +12,7 @@ import persistence.ComparePriceByNameDAO;
 import persistence.ComparePriceDAO;
 import persistence.DAOFactory;
 import persistence.ItemDAOJDBC;
+import persistence.PersistenceException;
 import persistence.PricesByItemDAO;
 
 public class PricesByItemManager {
@@ -21,14 +22,19 @@ public class PricesByItemManager {
 	private PricesByItemDAO priceByItemDAO = new PricesByItemDAO();
 
 	// retornar obj priceByItem
-	public List<PricesByItem> createComparation(List<String> namesItems) throws SQLException, IOException {
+	public List<PricesByItem> createComparation(List<String> namesItems)  {
 		List<PricesByItem> pricesByItem = new ArrayList();
 		List<Item> items = new ArrayList();
 
 		for (String name : namesItems) {
 			Item item = this.getItemByName(name);
 			items.add(item);
-			PricesByItem pbi = this.getPriceByItem(item);
+			PricesByItem pbi = null;
+			try {
+				pbi = this.getPriceByItem(item);
+			} catch (BusinessException e) {
+				e.printStackTrace();
+			}
 			pricesByItem.add(pbi);
 		}
 		return pricesByItem;
@@ -42,9 +48,14 @@ public class PricesByItemManager {
 		return selectedItem;
 	}
 
-	public PricesByItem getPriceByItem(Item item) throws SQLException, IOException {
+	public PricesByItem getPriceByItem(Item item) throws BusinessException {
 		PricesByItem pbi;
-		pbi = priceByItemDAO.getPriceByItem(item);
+		try {
+			pbi = priceByItemDAO.getPriceByItem(item);
+		} catch (PersistenceException e) {
+			throw new BusinessException("Erro ao recuperar um preço por item", e);
+			// e.printStackTrace();
+		}
 		return pbi;
 	}
 }

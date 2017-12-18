@@ -12,16 +12,18 @@ class ComparePriceManager<E> {
 	//private ComparePriceDAO objectDao;
 
 	public void save(E object, ComparePriceDAO objectDao) {
-		objectDao.save(object);
+		try {
+			objectDao.save(object);
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public List<E> listAll(ComparePriceDAO objectDao) {
 		List<E> objects = null;
-		// TODO MELHORAR EXCEÇÕES
 		try {
 			objects = objectDao.getAll();
 		} catch (PersistenceException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return objects;

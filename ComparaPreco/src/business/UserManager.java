@@ -12,12 +12,23 @@ import persistence.PersistenceException;
 public class UserManager extends ComparePriceManager {
 	private UserDAO userDAO = new DAOFactory().getUserDAO();
 
-	public void saveUser(User user) {
-		userDAO.save(user);
+	public void saveUser(User user) throws BusinessException {
+		try {
+			userDAO.save(user);
+		} catch (PersistenceException e) {
+			throw new BusinessException("Erro ao salvar usuário", e);
+			// e.printStackTrace();
+		}
 	}
-	public List<User> listAllUsers() {
+
+	public List<User> listAllUsers() throws BusinessException {
 		List<User> users = null;
-		users = userDAO.getAll();
+		try {
+			users = userDAO.getAll();
+		} catch (PersistenceException e) {
+			throw new BusinessException("Erro ao salvar usuário", e);
+			// e.printStackTrace();
+		}
 		return users;
 	}
 

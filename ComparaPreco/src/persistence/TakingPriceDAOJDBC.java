@@ -18,13 +18,14 @@ public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 	private Printer printer = new Printer();
 
 	public List<TakingPrice> getAll() throws PersistenceException {
-		// TODO melhorar exceção
+
 		String sql = null;
 		try {
 			sql = sh.getSelectAll();
-		} catch (IOException e1) {
-			throw new PersistenceException("Não foi possível obter todas tomadas de preço", e1);
+		} catch (PersistenceException e1) {
+			e1.printStackTrace();
 		}
+
 		List<TakingPrice> takingprices = new ArrayList<>();
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -39,12 +40,12 @@ public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 				int codebar_item = rs.getInt("codebar_item");
 				int code_supermarket = rs.getInt("code_supermarket");
 				Date date = rs.getTimestamp("date");
-				System.out.println("Data do rs: "+ date);
+				System.out.println("Data do rs: " + date);
 				takingprices.add(this.get(codebar_item, code_supermarket, date));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new PersistenceException("Erro ao executar sql "+ sql, e);
+			//e.printStackTrace();
 		} finally {
 			ConnectionManager.close(conn, stmt, rs);
 		}
@@ -56,17 +57,20 @@ public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 		String sql = null;
 		try {
 			sql = sh.getDeleteSQLTP(codebar_item, code_supermarket);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (PersistenceException e) {
 			e.printStackTrace();
 		}
 		int qtdRemovidos = 0;
 
-		qtdRemovidos = executeQuery(sql);
+		try {
+			qtdRemovidos = executeQuery(sql);
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+		}
 		System.out.println("taking_prices excluído do banco com sucesso!" + qtdRemovidos + " linhas excluidas");
 	}
 
-	public void save(TakingPrice tp) {
+	public void save(TakingPrice tp) throws PersistenceException {
 		Statement stmt = null;
 		String sql = null;
 		ResultSet rs = null;
@@ -75,11 +79,9 @@ public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 		DatabaseMetaData dbmd = null;
 
 		Boolean exist = this.checksExistence(tp.getCodeBarItem(), tp.getCodeSupermarket(), tp.getDate());
-		// TODO MELHORAR EXCEÇÃO
 		try {
 			sql = sh.handle(tp, exist);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (PersistenceException e) {
 			e.printStackTrace();
 		}
 		try {
@@ -91,7 +93,7 @@ public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 			System.out.println("SQL = " + sql);
 
 		} catch (SQLException ex) {
-			throw new RuntimeException("Erro na execucao do select: " + sql, ex);
+			throw new PersistenceException("Erro na execucao do select: " + sql, ex);
 		} finally {
 			ConnectionManager.close(conn, stmt);
 		}
@@ -104,8 +106,7 @@ public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 		String sql = null;
 		try {
 			sql = sh.getSelectSQL();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (PersistenceException e) {
 			e.printStackTrace();
 		}
 		return (TakingPrice) super.get(key, sh.getRowMapper(), sql);
@@ -116,11 +117,15 @@ public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 		String sql = null;
 		try {
 			sql = sh.getSelectSQLTP(codebar_item, code_supermarket, date);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (PersistenceException e) {
 			e.printStackTrace();
 		}
-		return (TakingPrice) super.executeQueryMap(sql, sh.getRowMapper());
+		try {
+			return (TakingPrice) super.executeQueryMap(sql, sh.getRowMapper());
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@Override
@@ -130,8 +135,7 @@ public class TakingPriceDAOJDBC extends ComparePriceDAOJDBC implements ComparePr
 		boolean exist = false;
 		try {
 			exist = super.checksExistence(key, sh.getRowMapper(), sh.getSelectSQL());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (PersistenceException e) {
 			e.printStackTrace();
 		}
 		return exist;

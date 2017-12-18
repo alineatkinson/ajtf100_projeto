@@ -10,15 +10,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import business.BusinessException;
 import business.TakingPriceManager;
 import model.TakingPrice;
+import persistence.PersistenceException;
 
 class TakingPriceControllerConsole {
 	private Printer printer = new Printer();
 	private Console reader = new Console();
 	private TakingPriceManager tpm = new TakingPriceManager();
 
-	void createTakingPrice() {
+	void createTakingPrice() throws PresentationException {
 
 		printer.printMsg("Qual o código do item? \n");
 		int codeBarItem = reader.readNumber();
@@ -45,21 +47,33 @@ class TakingPriceControllerConsole {
 		// String dt = "2017-05-08 10:05:55";
 		String pattern = "yyyy-mm-dd hh:mm:ss";
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
 		Date date = null;
 		try {
 			date = simpleDateFormat.parse(dateTP);
 		} catch (ParseException e) {
-			e.printStackTrace();
+			throw new PresentationException("Não foi possível executar a formatação da data no padrão definido", e);
+			// e.printStackTrace();
 		}
 		System.out.println("Date:" + date);
 
-		this.saveTakingPrice(codeBarItem, priceItem, codeSupermarket, date);
+		try {
+			this.saveTakingPrice(codeBarItem, priceItem, codeSupermarket, date);
+		} catch (PresentationException e) {
+			e.printStackTrace();
+		}
 
 	}
 
-	public void saveTakingPrice(int codeBarItem, double priceItem, int codeSupermarket, Date date) { // Create the
+	public void saveTakingPrice(int codeBarItem, double priceItem, int codeSupermarket, Date date)
+			throws PresentationException { // Create the
 		TakingPrice takingPrice = new TakingPrice(codeBarItem, priceItem, codeSupermarket, date);
-		tpm.save(takingPrice);
+		try {
+			tpm.save(takingPrice);
+		} catch (BusinessException e) {
+			throw new PresentationException("Não foi possível salvar a tomada de preço", e);
+			// e.printStackTrace();
+		}
 	}
 
 	/*
@@ -113,17 +127,29 @@ class TakingPriceControllerConsole {
 				if (respEdit == 1) {
 					printer.printMsg(" Digite o novo código do item: ");
 					newCodeItem = reader.readNumber();
-					this.saveTakingPrice(newCodeItem, priceItem, codeSupermarket, dateTPE);
+					try {
+						this.saveTakingPrice(newCodeItem, priceItem, codeSupermarket, dateTPE);
+					} catch (PresentationException e) {
+						e.printStackTrace();
+					}
 				} else if (respEdit == 2) {
 					printer.printMsg(" Digite o novo código do supermercado: ");
 					int newCodeSupermarket = 0;
 					newCodeSupermarket = reader.readNumber();
-					this.saveTakingPrice(codebar_item, priceItem, newCodeSupermarket, dateTPE);
+					try {
+						this.saveTakingPrice(codebar_item, priceItem, newCodeSupermarket, dateTPE);
+					} catch (PresentationException e) {
+						e.printStackTrace();
+					}
 				} else if (respEdit == 3) {
 					printer.printMsg(" Digite o novo preço do item: ");
 					double newPriceItem = 0;
 					newPriceItem = reader.readNumberDouble();
-					this.saveTakingPrice(codebar_item, newPriceItem, codeSupermarket, dateTPE);
+					try {
+						this.saveTakingPrice(codebar_item, newPriceItem, codeSupermarket, dateTPE);
+					} catch (PresentationException e) {
+						e.printStackTrace();
+					}
 				} else if (respEdit == 4) {
 					printer.printMsg(
 							" Digite a nova data da tomada de preço do item: (Ex.Formato: '2017-12-16 10:55:53' para 16 de dezembro de 2017, 10 horas 55 min e 53 seg)");
@@ -140,7 +166,11 @@ class TakingPriceControllerConsole {
 					}
 					System.out.println("Date:" + date);
 
-					this.saveTakingPrice(codebar_item, priceItem, codeSupermarket, newDateTP);
+					try {
+						this.saveTakingPrice(codebar_item, priceItem, codeSupermarket, newDateTP);
+					} catch (PresentationException e) {
+						e.printStackTrace();
+					}
 
 				}
 			} while (respEdit != 1 & respEdit != 2 & respEdit != 3 & respEdit != 4);
@@ -176,11 +206,16 @@ class TakingPriceControllerConsole {
 	/*
 	 * List all taking prices
 	 */
-	List<String> getData() {
+	List<String> getData() throws PresentationException {
 
 		List<String> data = new ArrayList<String>();
 		List<TakingPrice> takingPrices = null;
-		takingPrices = tpm.listAllTakingPrices();
+		try {
+			takingPrices = tpm.listAllTakingPrices();
+		} catch (BusinessException e) {
+			throw new PresentationException("Não foi possível listar todas tomadas de preços", e);
+			// e.printStackTrace();
+		}
 
 		for (TakingPrice takingprice : takingPrices) {
 			StringBuilder sb = new StringBuilder();
@@ -195,7 +230,12 @@ class TakingPriceControllerConsole {
 
 	void listTakingPrice() {
 
-		List<String> data = getData();
+		List<String> data = null;
+		try {
+			data = getData();
+		} catch (PresentationException e) {
+			e.printStackTrace();
+		}
 
 		for (String item : data) {
 			printer.printMsg(item);

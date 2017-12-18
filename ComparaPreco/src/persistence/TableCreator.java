@@ -34,7 +34,8 @@ class TableCreator {
 		int qtdRemovidos = 0;
 
 		try {
-			conn = ConnectionManager.getConnection();
+			conn = new ConnectionManager("pricecompator;create=true",
+					"jdbc:derby://localhost:1527/" + "pricecompator;create=true", "aline", "aline").getConnection();
 			DatabaseMetaData dbmd = conn.getMetaData();
 			ResultSet rs = dbmd.getTables(null, "ALINE", nomeTabela, null);
 			if (!rs.next()) {
@@ -48,12 +49,18 @@ class TableCreator {
 				} catch (SQLException e) {
 					throw new RuntimeException("Erro ao executar sql " + sql, e);
 				} finally {
-					ConnectionManager.close(conn, stmt);
+					try {
+						ConnectionManager.close(conn, stmt);
+					} catch (PersistenceException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		} catch (SQLException e3) {
 			System.out.println("Erro ao tentar conexão!");
 			e3.printStackTrace();
+		} catch (PersistenceException e1) {
+			e1.printStackTrace();
 		}
 	}
 

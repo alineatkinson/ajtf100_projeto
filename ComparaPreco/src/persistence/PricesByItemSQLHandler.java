@@ -3,10 +3,15 @@ package persistence;
 import java.io.IOException;
 
 class PricesByItemSQLHandler {
-	String getSelectSQL(int codebar_item) throws IOException {
+	String getSelectSQL(int codebar_item) throws PersistenceException {
 		ReadFileProperties rfp = new ReadFileProperties();
 		String sql;
-		sql = rfp.getQuery("selectPryceByItem");
+		try {
+			sql = rfp.getQuery("selectPryceByItem");
+		} catch (IOException e) {
+			throw new PersistenceException("Não foi possível obter a propriedade de seleção de preços por item", e);
+			// e.printStackTrace();
+		}
 		sql = sql.replaceFirst("[?]", codebar_item + "");
 
 		return sql;

@@ -7,8 +7,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import business.BusinessException;
 import business.UserManager;
 import model.User;
+import persistence.PersistenceException;
 
 class UserControllerConsole {
 	private Printer printer = new Printer();
@@ -26,13 +28,22 @@ class UserControllerConsole {
 		printer.printMsg("Qual o cpf do usuário? \n");
 		String cpfUser = reader.readText();
 
-		this.save(nameUser, cpfUser);
+		try {
+			this.save(nameUser, cpfUser);
+		} catch (PresentationException e) {
+			e.printStackTrace();
+		}
 
 	}
 
-	void save(String nameUser, String cpfUser) {
+	void save(String nameUser, String cpfUser) throws PresentationException {
 		User user = new User(nameUser, cpfUser);
-		userm.saveUser(user);
+		try {
+			userm.saveUser(user);
+		} catch (BusinessException e) {
+			throw new PresentationException("Não foi possível salvar o usuário", e);
+			//e.printStackTrace();
+		}
 	}
 
 	void editUser() {
@@ -59,14 +70,22 @@ class UserControllerConsole {
 				String newNome = new String();
 				newNome = reader.readText();
 				// newNome = reader.readText();
-				this.save(newNome, userKey);
+				try {
+					this.save(newNome, userKey);
+				} catch (PresentationException e) {
+					e.printStackTrace();
+				}
 			} else if (respEdit == 2) {
 				printer.printMsg(" Digite o novo CPF: ");
 				String newCPF = new String();
 				newCPF = " ";
 				newCPF = reader.readText();
 				// newCPF = reader.readText();
-				this.save(nameUser, newCPF);
+				try {
+					this.save(nameUser, newCPF);
+				} catch (PresentationException e) {
+					e.printStackTrace();
+				}
 			} else {
 				printer.printMsg("Nenhuma alternativa válida foi digitada. Tente outra vez!");
 			}
@@ -97,10 +116,16 @@ class UserControllerConsole {
 	/*
 	 * List all taking prices
 	 */
-	List<String> getData() {
+	List<String> getData() throws PresentationException {
 
 		List<String> data = new ArrayList<String>();
-		List<User> users = userm.listAllUsers();
+		List<User> users = null;
+		try {
+			users = userm.listAllUsers();
+		} catch (BusinessException e) {
+			throw new PresentationException("Não foi possível executar o sql de seleção de todos usuários", e);
+			//e.printStackTrace();
+		}
 
 		for (User user : users) {
 			StringBuilder sb = new StringBuilder();
@@ -113,7 +138,12 @@ class UserControllerConsole {
 
 	void listUsers() {
 
-		List<String> data = getData();
+		List<String> data = null;
+		try {
+			data = getData();
+		} catch (PresentationException e) {
+			e.printStackTrace();
+		}
 
 		for (String user : data) {
 			printer.printMsg(user);

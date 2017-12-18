@@ -16,13 +16,12 @@ public class ItemDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceByNa
 	private ItemSQLHandler sh = new ItemSQLHandler();
 	private Printer printer = new Printer();
 
-	public List<Item> getAll() {
+	public List<Item> getAll() throws PersistenceException {
 		// TODO MELHORAR EXCEÇÃO
 		String sql = null;
 		try {
 			sql = sh.getSelectAll();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+		} catch (PersistenceException e1) {
 			e1.printStackTrace();
 		}
 		List<Item> items = new ArrayList<>();
@@ -32,7 +31,8 @@ public class ItemDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceByNa
 		Connection conn = null;
 
 		try {
-			conn = ConnectionManager.getConnection();
+			conn = new ConnectionManager("pricecompator;create=true",
+					"jdbc:derby://localhost:1527/" + "pricecompator;create=true", "aline", "aline").getConnection();
 			System.out.println(sql);
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
@@ -44,11 +44,11 @@ public class ItemDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceByNa
 				items.add(this.get(codebar_item));
 			}
 		} catch (ConnectionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new PersistenceException("Não foi obter a conexão do banco de dados ao recuperar todos itens", e);
+			// e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new PersistenceException("Não foi possível executar o slq de seleção de todos itens", e);
+			// e.printStackTrace();
 		} finally {
 			ConnectionManager.close(conn, stmt, rs);
 		}
@@ -60,19 +60,22 @@ public class ItemDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceByNa
 		String sql = null;
 		try {
 			sql = sh.getDeleteSQL() + codebar_item;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (PersistenceException e) {
 			e.printStackTrace();
 		}
 		int qtdRemovidos = 0;
 
-		qtdRemovidos = executeQuery(sql);
+		try {
+			qtdRemovidos = executeQuery(sql);
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+		}
 		System.out.println("item excluído do banco com sucesso!" + qtdRemovidos + " linhas excluidas");
 	}
 
 	@Override
 	// pq não consigo colocar o parâmetro como item?
-	public void save(Object object) {
+	public void save(Object object) throws PersistenceException {
 		Item item = (Item) object;
 		Statement stmt = null;
 		String sql = null;
@@ -83,8 +86,10 @@ public class ItemDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceByNa
 			conn = new ConnectionManager("pricecompator;create=true",
 					"jdbc:derby://localhost:1527/" + "pricecompator;create=true", "aline", "aline").getConnection();
 		} catch (ConnectionException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
+			throw new PersistenceException("Erro ao obter a conexao", e2);
+			//e2.printStackTrace();
+		} catch (PersistenceException e) {
+			e.printStackTrace();
 		}
 		DatabaseMetaData dbmd = null;
 
@@ -104,8 +109,7 @@ public class ItemDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceByNa
 		String sql = null;
 		try {
 			sql = sh.getSelectSQL();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (PersistenceException e) {
 			e.printStackTrace();
 		}
 		return (Item) super.get(key, sh.getRowMapper(), sql);
@@ -116,8 +120,7 @@ public class ItemDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceByNa
 		String sql = null;
 		try {
 			sql = sh.getSelectNameSQL();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (PersistenceException e) {
 			e.printStackTrace();
 		}
 		return (Item) super.get(name, sh.getRowMapper(), sql);
@@ -125,24 +128,20 @@ public class ItemDAOJDBC extends ComparePriceDAOJDBC implements ComparePriceByNa
 
 	@Override
 	public boolean checksExistence(Number key) {
-		// TODO MELHORAR EXCEÇÃO
 		boolean exist = false;
 		try {
 			exist = super.checksExistence(key, sh.getRowMapper(), sh.getSelectSQL());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (PersistenceException e) {
 			e.printStackTrace();
 		}
 		return exist;
 	}
 
 	public boolean checksExistence(String name) {
-		// TODO MELHORAR EXCEÇÃO
 		boolean exist = false;
 		try {
 			exist = super.checksExistence(name, sh.getRowMapper(), sh.getSelectNameSQL());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (PersistenceException e) {
 			e.printStackTrace();
 		}
 		return exist;
